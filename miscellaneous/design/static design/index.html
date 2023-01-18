@@ -2,14 +2,14 @@
 <html lang="hu">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Könyvesbolt</title>
-    <link rel="stylesheet" href="./../../../page/css/bootstrap.css">
-    <link rel="stylesheet" href="./../../../page/css/style.css">
+    <link rel="stylesheet" href="./../../../page/css/bootstrap.css" />
+    <link rel="stylesheet" href="./../../../page/css/style.css" />
     <script src="./../../../page/js/bootstrap.bundle.js"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
     <style>
         nav * {
@@ -20,19 +20,16 @@
 
 <body>
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-
-        <div class="container d-flex">
-            
-
-            <div class="row no-wrap">
+        <div class="container">
+            <div class="row no-wrap container-fluid">
                 <div class="col">
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <a class="navbar-brand" href="javascript:void(0)">Könyvesbolt</a>
                 </div>
-                <div class="collapse navbar-collapse" id="mynavbar">
-                    <div class="col">
+                <div class="collapse navbar-collapse container-fluid" id="mynavbar">
+                    <div class="col-md-4">
                         <ul class="navbar-nav me-auto">
                             <li class="nav-item">
                                 <a class="nav-link" href="javascript:void(0)">
@@ -51,81 +48,15 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="col">
+                    <div class="col-md-6">
                         <form class="d-flex">
-                            <input class="form-control me-2" type="text" placeholder="Search">
+                            <input class="form-control me-2" type="text" placeholder="Search" />
                             <button class="btn btn-primary" type="button">Search</button>
                         </form>
                     </div>
                 </div>
-
-
             </div>
         </div>
-
-
-    </nav>
-    <br>
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-        <!--elérni, hogy egy sorban jelenjenek meg-->
-        <div class="container d-flex flex-nowrap">
-            <div class="flex-row">
-                <div class="flex-fill">
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <a class="navbar-brand" href="javascript:void(0)">Könyvesbolt</a>
-                </div>
-                <div class="flex-fill">
-                    <div class="collapse navbar-collapse" id="mynavbar">
-                        <div>
-                            <ul class="navbar-nav me-auto">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="javascript:void(0)">
-                                        <i class="material-icons">home</i> Home
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="javascript:void(0)">
-                                        <i class="material-icons">settings</i> Settings
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="javascript:void(0)">
-                                        <i class="material-icons">logout</i> Log out
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div>
-                            <form class="d-flex">
-                                <input class="form-control me-2" type="text" placeholder="Search">
-                                <button class="btn btn-primary" type="button">Search</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
-
-            <div class="row no-wrap">
-                <div class="col">
-                    
-                </div>
-                <div class="collapse navbar-collapse" id="mynavbar">
-                    <div class="col">
-                        
-                    </div>
-                    <div class="col">
-                        
-                    </div>
-                </div>
-
-
-            </div>
-        </div>
-
-
     </nav>
 </body>
 
