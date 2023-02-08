@@ -7,6 +7,12 @@ CREATE TABLE felhasznalotipusok (
     PRIMARY KEY (tipusid)
 );
 
+-- beillesztem az előző táblába a felhasználó típusokat
+INSERT INTO felhasznalotipusok (tipusnev) VALUES
+("adminisztrátor"),
+("moderátor"),
+("felhasználó");
+
 -- tábla a felhaszálói adatok tárolására
 CREATE TABLE felhasznalok (
     felhasznaloid INT AUTO_INCREMENT NOT NULL,
@@ -16,15 +22,21 @@ CREATE TABLE felhasznalok (
     keresztnev VARCHAR(50) CHARACTER SET UTF8MB4 NULL,
     nem ENUM('nő', 'férfi', 'na') NOT NULL DEFAULT 'na',
     szuldatum DATE NULL,
+    telszam VARCHAR(12) NULL,
     PRIMARY KEY (felhasznaloid),
     FOREIGN KEY (tipusid) REFERENCES felhasznalotipusok(tipusid)
 );
 
--- beillesztem az előző táblába a felhasználó típusokat
-INSERT INTO felhasznalotipusok (tipusnev) VALUES
-("adminisztrátor"),
-("moderátor"),
-("felhasználó");
+-- tábla a szállítási címek tárolására
+CREATE TABLE szallitasicimek (
+    szallitasicimid INT AUTO_INCREMENT NOT NULL,
+    cegnev VARCHAR(100) NULL,
+    megye ENUM('Bács-Kiskun','Baranya','Békés','Borsod-Abaúj-Zemplén','Csongrád-Csanád','Fejér','Győr-Moson-Sopron','Hajdú-Bihar','Heves','Jász-Nagykun-Szolnok','Komárom-Esztergom','Nógrád','Pest','Somogy','Szabolcs-Szatmár-Bereg','Tolna','Vas','Veszprém','Zala') NOT NULL,
+    varos VARCHAR(50) NOT NULL,
+    kozterulet VARCHAR(50) NOT NULL,
+    megjegyzes VARCHAR(50) NULL
+    PRIMARY KEY (szallitasicimid)
+);
 
 -- tábla a belépési adatok tárolására (európai szabvány: GDPR)
 CREATE TABLE belepesiadatok (

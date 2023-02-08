@@ -35,12 +35,12 @@ CREATE TABLE konyvek (
     kiadoid INT NOT NULL,
     suly INT UNSIGNED NOT NULL, -- grammban adjuk meg
     konyvcim VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL,
-    boritokep VARCHAR(255) CHARACTER SET UTF8MB4 NULL, -- fájlnevet tárol; az elérési út: ./covers/{fájlnév}
+    -- boritokep VARCHAR(255) CHARACTER SET UTF8MB4 NULL, -- új megoldás: ./covers/{ISBN}.png
     sorozatid INT NULL,
     kotestipus BIT NOT NULL, -- 0: puhakötésű, 1: keménykötésű
     kiadasdatuma DATE NOT NULL,
-    nettoar SMALLINT UNSIGNED NOT NULL, -- forintban adjuk meg
-    afakulcs TINYINT UNSIGNED NOT NULL, -- százalékként adjuk meg
+    ar SMALLINT UNSIGNED NOT NULL, -- forintban adjuk meg
+    akcio TINYINT UNSIGNED NOT NULL DEFAULT 0, -- százalékban adjuk meg
     nyelvid INT NOT NULL,
     keszlet SMALLINT UNSIGNED NOT NULL,
     leiras TEXT NOT NULL,

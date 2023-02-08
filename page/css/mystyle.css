@@ -1,0 +1,22 @@
+.bookcard {
+    border-radius: 5px;
+    background-color: antiquewhite;
+    width: 12rem;
+}
+
+.bookcover {
+    width: 10rem;
+}
+
+.bookinfo {
+    margin: 1rem;
+
+}
+
+.bookdesc-text {
+    padding-top: 0.7rem;
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}

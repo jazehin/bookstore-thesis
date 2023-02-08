@@ -8,20 +8,32 @@ USE rendelesadatok;
 --     FOREIGN KEY (felhasznaloid) REFERENCES felhasznaloadatok.felhasznalok(felhasznaloid)
 -- );
 
--- tábla a kosarak tartalmának tárolására
-CREATE TABLE kosartartalmak (
-    tartalomid INT AUTO_INCREMENT NOT NULL,
+-- tábla a rendelés összesítésére
+CREATE TABLE rendelesek (
+    rendelesid INT AUTO_INCREMENT NOT NULL,
     felhasznaloid INT NOT NULL,
+    ido TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    osszesar INT NOT NULL,
+    PRIMARY KEY (rendelesid),
+    FOREIGN KEY (felhasznaloid) REFERENCES felhasznaloadatok.felhasznalok(felhasznaloid)
+);
+
+-- tábla a kosarak tartalmának tárolására
+CREATE TABLE rendelesreszletek (
+    rendelesid INT NOT NULL,
     ISBN VARCHAR(13) CHARACTER SET UTF8MB4 NOT NULL,
+
     mennyiseg INT UNSIGNED NOT NULL,
-    PRIMARY KEY (tartalomid),
+    eredetiar INT NOT NULL,
+    akciosar INT NULL,
+    PRIMARY KEY (rendelesid, ISBN),
     FOREIGN KEY (felhasznaloid) REFERENCES felhasznaloadatok.felhasznalok(felhasznaloid),
     FOREIGN KEY (ISBN) REFERENCES konyvadatok.konyvek(ISBN)
 );
 
 -- nézet egy adott felhasználó kosarának tartalmának lekérdezésére
 DELIMITER //
-CREATE PROCEDURE GetKosar(felhasznaloid INT)
+CREATE PROCEDURE GetReszletesKosar(felhasznaloid INT)
 BEGIN
     SELECT 
         kosartartalmak.ISBN AS ISBN,
@@ -32,5 +44,3 @@ BEGIN
     WHERE felhasznaloid = kosartartalmak.felhasznaloid; 
 END
 // DELIMITER ;
-
--- tábla a szállítási címeknek
