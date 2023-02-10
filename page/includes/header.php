@@ -16,14 +16,14 @@ include("includes/sql.php");
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
     <link rel="stylesheet" type="text/css" href="css/mystyle.css">
     <script src="js/myscript.js"></script>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-md sticky-top navbar-light" style="background-color: #E1D3B4;">
+    <nav class="navbar navbar-expand-md navbar-light" style="background-color: #E1D3B4;">
         <div class="container">
             <a class="navbar-brand" href="index.php">Könyváruház</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas"
@@ -66,7 +66,7 @@ include("includes/sql.php");
                     </ul>
                     <form class="d-flex" role="search" method="get">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-light" style="background-color: #8B5E3C; color: white;" type="submit">Search</button>
+                        <button class="btn" style="background-color: #8B5E3C; color: white;" type="submit">Search</button>
                     </form>
 
                 </div>

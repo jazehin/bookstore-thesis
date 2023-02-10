@@ -1,0 +1,6 @@
+- könyv hozzáadása oldal
+- könyv oldal/adatlap
+    -> komment szekció: minden kommentet betölt, de rejtettek, megvalósítható a pagination js-tel
+        -> adminnak/modoknak: új kommentek oldal?
+- user adatlap
+- szerző adatlap
