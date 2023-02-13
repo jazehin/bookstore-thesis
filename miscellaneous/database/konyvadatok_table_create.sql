@@ -28,35 +28,43 @@ CREATE TABLE mufajok (
     PRIMARY KEY (mufajid)
 );
 
+-- tábla a kötéstípusok tárolására
+CREATE TABLE kotestipusok (
+    kotestipusid INT AUTO_INCREMENT NOT NULL,
+    kotestipusnev VARCHAR(30) CHARACTER SET UTF8MB4,
+    PRIMARY KEY (kotestipusid)
+);
+
 -- tábla könyvek tárolására
 CREATE TABLE konyvek (
-    ISBN VARCHAR(13) CHARACTER SET UTF8MB4 NOT NULL,
+    isbn VARCHAR(13) CHARACTER SET UTF8MB4 NOT NULL,
     oldalszam SMALLINT UNSIGNED NOT NULL,
     kiadoid INT NOT NULL,
-    suly INT UNSIGNED NOT NULL, -- grammban adjuk meg
+    suly INT UNSIGNED NULL, -- grammban adjuk meg
     konyvcim VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL,
-    -- boritokep VARCHAR(255) CHARACTER SET UTF8MB4 NULL, -- új megoldás: ./covers/{ISBN}.png
+    -- boritokep VARCHAR(255) CHARACTER SET UTF8MB4 NULL, -- új megoldás: ./covers/{isbn}.png
     sorozatid INT NULL,
-    kotestipus BIT NOT NULL, -- 0: puhakötésű, 1: keménykötésű
+    kotestipusid INT NOT NULL,
     kiadasdatuma DATE NOT NULL,
     ar SMALLINT UNSIGNED NOT NULL, -- forintban adjuk meg
-    akcio TINYINT UNSIGNED NOT NULL DEFAULT 0, -- százalékban adjuk meg
+    akciosar SMALLINT UNSIGNED NULL, -- forintban adjuk meg
     nyelvid INT NOT NULL,
     keszlet SMALLINT UNSIGNED NOT NULL,
     leiras TEXT NOT NULL,
-    PRIMARY KEY (ISBN),
+    PRIMARY KEY (isbn),
     FOREIGN key (kiadoid) REFERENCES kiadok(kiadoid),
     FOREIGN KEY (sorozatid) REFERENCES konyvsorozatok(sorozatid),
-    FOREIGN KEY (nyelvid) REFERENCES nyelvek(nyelvid)
+    FOREIGN KEY (nyelvid) REFERENCES nyelvek(nyelvid),
+    FOREIGN KEY (kotestipusid) REFERENCES kotestipusok(kotestipusid)
 );
 
 -- tábla a könyvek és műfajok összekötésére
 CREATE TABLE konyvek_mufajok (
     id INT AUTO_INCREMENT NOT NULL,
-    ISBN VARCHAR(13) CHARACTER SET UTF8MB4 NOT NULL,
+    isbn VARCHAR(13) CHARACTER SET UTF8MB4 NOT NULL,
     mufajid INT NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (ISBN) REFERENCES konyvek(ISBN),
+    FOREIGN KEY (isbn) REFERENCES konyvek(isbn),
     FOREIGN KEY (mufajid) REFERENCES mufajok(mufajid)
 );
 
@@ -70,10 +78,10 @@ CREATE TABLE irok (
 -- tábla a könyvek és műfajok összekötésére
 CREATE TABLE konyvek_irok (
     id INT AUTO_INCREMENT NOT NULL,
-    ISBN VARCHAR(13) CHARACTER SET UTF8MB4 NOT NULL,
+    isbn VARCHAR(13) CHARACTER SET UTF8MB4 NOT NULL,
     iroid INT NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (ISBN) REFERENCES konyvek(ISBN),
+    FOREIGN KEY (isbn) REFERENCES konyvek(isbn),
     FOREIGN KEY (iroid) REFERENCES irok(iroid)
 );
 
@@ -82,3 +90,4 @@ CREATE VIEW legujabb_konyvek AS
 SELECT * FROM konyvek
 ORDER BY kiadasdatuma DESC
 LIMIT 15;
+

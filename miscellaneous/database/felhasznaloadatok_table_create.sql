@@ -27,6 +27,16 @@ CREATE TABLE felhasznalok (
     FOREIGN KEY (tipusid) REFERENCES felhasznalotipusok(tipusid)
 );
 
+-- tábla az értékelések tárolására
+CREATE TABLE ertekelesek (
+    felhasznaloid INT NOT NULL,
+    isbn VARCHAR(13) CHARACTER SET UTF8MB4 NOT NULL,
+    ertekeles TINYINT NOT NULL,
+    PRIMARY KEY (felhasznaloid, isbn),
+    FOREIGN KEY (felhasznaloid) REFERENCES felhasznalok(felhasznaloid),
+    FOREIGN KEY (isbn) REFERENCES konyvadatok.konyvek(isbn)
+);
+
 -- tábla a szállítási címek tárolására
 CREATE TABLE szallitasicimek (
     szallitasicimid INT AUTO_INCREMENT NOT NULL,
@@ -34,7 +44,7 @@ CREATE TABLE szallitasicimek (
     megye ENUM('Bács-Kiskun','Baranya','Békés','Borsod-Abaúj-Zemplén','Csongrád-Csanád','Fejér','Győr-Moson-Sopron','Hajdú-Bihar','Heves','Jász-Nagykun-Szolnok','Komárom-Esztergom','Nógrád','Pest','Somogy','Szabolcs-Szatmár-Bereg','Tolna','Vas','Veszprém','Zala') NOT NULL,
     varos VARCHAR(50) NOT NULL,
     kozterulet VARCHAR(50) NOT NULL,
-    megjegyzes VARCHAR(50) NULL
+    megjegyzes VARCHAR(50) NULL,
     PRIMARY KEY (szallitasicimid)
 );
 
@@ -43,7 +53,7 @@ CREATE TABLE belepesiadatok (
     belepesid INT AUTO_INCREMENT NOT NULL,
     felhasznaloid INT NOT NULL,
     email VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL,
-    jelszo VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL,
+    jelszo CHAR(64) CHARACTER SET UTF8MB4 NOT NULL,
     PRIMARY KEY (belepesid),
     FOREIGN KEY (felhasznaloid) REFERENCES felhasznalok(felhasznaloid)
 );
@@ -52,21 +62,22 @@ CREATE TABLE belepesiadatok (
 CREATE TABLE kommentek (
     kommentid INT AUTO_INCREMENT NOT NULL,
     felhasznaloid INT NOT NULL, -- ki írta?
-    ISBN VARCHAR(13) CHARACTER SET UTF8MB4 NOT NULL, -- melyik könyv oldala alá írta?
+    isbn VARCHAR(13) CHARACTER SET UTF8MB4 NOT NULL, -- melyik könyv oldala alá írta?
     szoveg TEXT CHARACTER SET UTF8MB4 NOT NULL, -- mit írt?
     datum TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(), -- mikor írta? (ez alapján lesz rendezve)
     PRIMARY KEY (kommentid),
     FOREIGN KEY (felhasznaloid) REFERENCES felhasznalok(felhasznaloid),
-    FOREIGN KEY (ISBN) REFERENCES konyvadatok.konyvek(ISBN)
+    FOREIGN KEY (isbn) REFERENCES konyvadatok.konyvek(isbn)
 )
 
 -- nézet a kommentek lekérdezésére
 DELIMITER //
-CREATE PROCEDURE GetKommentek(ISBN VARCHAR(13))
+CREATE PROCEDURE GetKommentek(isbn VARCHAR(13))
 BEGIN
     SELECT felhasznalok.felhasznaloid AS fid, felhasznalok.felhasznalonev AS fnev, kommentek.szoveg AS szoveg, kommentek.datum AS datum 
     FROM kommentek INNER JOIN felhasznalok ON kommentek.felhasznaloid = felhasznalok.felhasznaloid
-    WHERE kommentek.ISBN = ISBN
+    WHERE kommentek.isbn = isbn
     ORDER BY datum DESC;
 END
 // DELIMITER ;
+

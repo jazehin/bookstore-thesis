@@ -21,14 +21,12 @@ CREATE TABLE rendelesek (
 -- tábla a kosarak tartalmának tárolására
 CREATE TABLE rendelesreszletek (
     rendelesid INT NOT NULL,
-    ISBN VARCHAR(13) CHARACTER SET UTF8MB4 NOT NULL,
-
+    isbn VARCHAR(13) CHARACTER SET UTF8MB4 NOT NULL,
     mennyiseg INT UNSIGNED NOT NULL,
     eredetiar INT NOT NULL,
     akciosar INT NULL,
-    PRIMARY KEY (rendelesid, ISBN),
-    FOREIGN KEY (felhasznaloid) REFERENCES felhasznaloadatok.felhasznalok(felhasznaloid),
-    FOREIGN KEY (ISBN) REFERENCES konyvadatok.konyvek(ISBN)
+    PRIMARY KEY (rendelesid, isbn),
+    FOREIGN KEY (isbn) REFERENCES konyvadatok.konyvek(isbn)
 );
 
 -- nézet egy adott felhasználó kosarának tartalmának lekérdezésére
@@ -36,11 +34,12 @@ DELIMITER //
 CREATE PROCEDURE GetReszletesKosar(felhasznaloid INT)
 BEGIN
     SELECT 
-        kosartartalmak.ISBN AS ISBN,
+        rendelesreszletek.isbn AS isbn,
         konyvek.konyvcim AS cim,
-        kosartartalmak.mennyiseg AS mennyiseg, 
-        (kosartartalmak.mennyiseg * konyvek.nettoar * (1 + konyvek.afakulcs)) AS ar
-    FROM rendelesadatok.kosartartalmak INNER JOIN konyvadatok.konyvek ON kosartartalmak.ISBN = konyvek.ISBN
+        rendelesreszletek.mennyiseg AS mennyiseg, 
+        (rendelesreszletek.mennyiseg * konyvek.nettoar) AS ar
+    FROM rendelesadatok.rendelesreszletek INNER JOIN konyvadatok.konyvek ON rendelesreszletek.isbn = konyvek.isbn
     WHERE felhasznaloid = kosartartalmak.felhasznaloid; 
 END
 // DELIMITER ;
+

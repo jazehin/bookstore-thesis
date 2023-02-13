@@ -1,1 +1,0 @@
-Used website: https://coolors.co/image-picker
