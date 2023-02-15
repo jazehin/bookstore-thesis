@@ -80,5 +80,46 @@ $covertypes = GetCoverTypes();
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-sm-6">
+            <label for="genre-1" class="form-label">Műfaj(ok): <span class="text-danger">*</span><br><span class="small">Nyomja meg a + gombot további mezők felvételéhez és a - gombot az eltávolításukhoz.</span></label>
+            <div class="row" id="genre-fields">
+                <div class="col-12 mb-3">
+                    <datalist id="genres">
+                        <option value="thriller"></option>
+                    </datalist>
+                    <input type="text" class="form-control genre-field" name="genre-1" id="genre-1" list="genres" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 mb-3">
+                    <input type="button" class="form-control" value="+" onclick="AddField('genre')">
+                </div>
+                <div class="col-6 mb-3">
+                    <input type="button" class="form-control" value="-" onclick="RemoveField('genre')">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <label for="writer-1" class="form-label">Író(k): <span class="text-danger">*</span><br><span class="small">Nyomja meg a + gombot további mezők felvételéhez és a - gombot az eltávolításukhoz.</span></label>
+            <div class="row" id="writer-fields">
+                <div class="col-12 mb-3">
+                    <datalist id="writers">
+                        
+                    </datalist>
+                    <input type="text" class="form-control writer-field" name="writer-1" id="writer-1" list="writers" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 mb-3">
+                    <input type="button" class="form-control" value="+" onclick="AddField('writer')">
+                </div>
+                <div class="col-6 mb-3">
+                    <input type="button" class="form-control" value="-" onclick="RemoveField('writer')">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <input type="submit" class="form-control" value="Felvétel">
 </form>
