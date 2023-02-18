@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteRule ^/$ /?p=main [L]
+RewriteRule ^addbook$ /?p=addbook [L]

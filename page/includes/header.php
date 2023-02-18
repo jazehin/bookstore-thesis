@@ -25,7 +25,7 @@ include("includes/sql.php");
 <body>
     <nav class="navbar navbar-expand-md navbar-light" style="background-color: #E1D3B4;">
         <div class="container">
-            <a class="navbar-brand" href="./?p=main">Könyváruház</a>
+            <a class="navbar-brand" href="./">Könyváruház</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas"
                 aria-controls="offcanvas">
                 <span class="navbar-toggler-icon"></span>
@@ -33,7 +33,7 @@ include("includes/sql.php");
             <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel"
                 style="background-color: #E1D3B4;">
                 <div class="offcanvas-header">
-                    <a class="offcanvas-title" id="offcanvasLabel" href="./?p=main">Könyváruház</a>
+                    <a class="navbar-brand" id="offcanvasLabel" href="./">Könyváruház</a>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
@@ -42,7 +42,7 @@ include("includes/sql.php");
                             <a class="nav-link" href="#">Könyvek</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="./?p=addbook">Könyv hozzáadása</a>
+                            <a class="nav-link" href="./addbook">Könyv hozzáadása</a>
                         </li>
                         <!--
                         <li class="nav-item dropdown">

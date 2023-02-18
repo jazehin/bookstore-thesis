@@ -156,7 +156,7 @@ CREATE TABLE belepesiadatok (
     belepesid INT AUTO_INCREMENT NOT NULL,
     felhasznaloid INT NOT NULL,
     email VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL,
-    jelszo VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL,
+    jelszo CHAR(64) CHARACTER SET UTF8MB4 NOT NULL,
     PRIMARY KEY (belepesid),
     FOREIGN KEY (felhasznaloid) REFERENCES felhasznalok(felhasznaloid)
 );

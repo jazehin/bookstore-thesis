@@ -90,4 +90,3 @@ CREATE VIEW legujabb_konyvek AS
 SELECT * FROM konyvek
 ORDER BY kiadasdatuma DESC
 LIMIT 15;
-

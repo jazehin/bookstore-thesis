@@ -14,7 +14,7 @@ switch ($p) {
         $content = 'addbook.php';
         break;
     default:
-        $content = 'mainpage.php';
+        header("Location: ./main");
         break;
 }
 
