@@ -90,3 +90,34 @@ CREATE VIEW legujabb_konyvek AS
 SELECT * FROM konyvek
 ORDER BY kiadasdatuma DESC
 LIMIT 15;
+
+-- tárolt eljárás egy könyv adatainak lekérésére ISBN alapján
+DEIMITER //
+CREATE PROCEDURE `GetBookByISBN`(IN _isbn VARCHAR(13))
+BEGIN
+    SELECT 
+		isbn,
+		oldalszam,
+		kiadonev AS kiado,
+        suly, 
+        konyvcim, 
+        sorozatnev AS sorozat, 
+        kotestipusnev AS kotestipus, 
+        kiadasdatuma,
+        ar,
+        akciosar,
+        nyelvnev AS nyelv,
+        keszlet,
+        leiras
+	FROM
+		konyvadatok.konyvek 
+        INNER JOIN konyvadatok.kiadok ON konyvek.kiadoid = kiadok.kiadoid
+        LEFT JOIN konyvadatok.konyvsorozatok ON konyvek.sorozatid = konyvsorozatok.sorozatid -- lehet hogy nem sorozat része!
+        INNER JOIN konyvadatok.kotestipusok ON konyvek.kotestipusid = kotestipusok.kotestipusid
+        INNER JOIN konyvadatok.nyelvek ON konyvek.nyelvid = nyelvek.nyelvid
+	WHERE
+		isbn = _isbn;
+END //
+DELIMITER ;
+
+-- TODO: tárolt eljárások egy könyv íróinak és műfajainak lekérdezésére

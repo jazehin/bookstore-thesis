@@ -23,7 +23,7 @@ include("includes/sql.php");
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-md navbar-light" style="background-color: #E1D3B4;">
+    <nav class="navbar navbar-expand-md navbar-light" style="background-color: rgba(225, 211, 180, 1);">
         <div class="container">
             <a class="navbar-brand" href="./">Könyváruház</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas"
@@ -31,7 +31,7 @@ include("includes/sql.php");
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel"
-                style="background-color: #E1D3B4;">
+                style="background-color: rgba(225, 211, 180, 1);">
                 <div class="offcanvas-header">
                     <a class="navbar-brand" id="offcanvasLabel" href="./">Könyváruház</a>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -66,7 +66,7 @@ include("includes/sql.php");
                     </ul>
                     <form class="d-flex" role="search" method="get">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn" style="background-color: #8B5E3C; color: white;" type="submit">Search</button>
+                        <button class="btn" style="background-color: rgba(139, 94, 60, 1); color: white;" type="submit">Search</button>
                     </form>
 
                 </div>

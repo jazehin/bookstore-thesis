@@ -20,17 +20,17 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-md navbar-light" style="background-color: #E1D3B4;">
+    <nav class="navbar navbar-expand-md navbar-light" style="background-color: rgba(225, 211, 180, 1);">
         <div class="container">
-            <a class="navbar-brand" href="index.php">Könyváruház</a>
+            <a class="navbar-brand" href="./">Könyváruház</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas"
                 aria-controls="offcanvas">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel"
-                style="background-color: #E1D3B4;">
+                style="background-color: rgba(225, 211, 180, 1);">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasLabel">Könyváruház</h5>
+                    <a class="navbar-brand" id="offcanvasLabel" href="./">Könyváruház</a>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
@@ -39,7 +39,7 @@
                             <a class="nav-link" href="#">Könyvek</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
+                            <a class="nav-link" href="./addbook">Könyv hozzáadása</a>
                         </li>
                         <!--
                         <li class="nav-item dropdown">
@@ -63,7 +63,7 @@
                     </ul>
                     <form class="d-flex" role="search" method="get">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn" style="background-color: #8B5E3C; color: white;" type="submit">Search</button>
+                        <button class="btn" style="background-color: rgba(139, 94, 60, 1); color: white;" type="submit">Search</button>
                     </form>
 
                 </div>
@@ -121,150 +121,194 @@
 -->
 
 
-<div class="bookcard-container d-flex flex-lg-wrap overflow-scroll mt-4">
-            <div class="bookcard flex-column position-relative m-2 p-2 ms-0 shadow-sm">
-            <img class="bookcover" src="https://s04.static.libri.hu/cover/b3/5/4468082_5.jpg" alt="borító"
-                title="borító">
+<form class="card my-3 p-3" action="./addbook" method="post" enctype="multipart/form-data"
+    style="background-color: rgba(225, 211, 180, 0.2);">
+    <h1 class="fs-2">Könyv hozzáadása</h1>
+    <p><span class="text-danger">*</span> kötelező mező</p>
 
-            <div class="bookinfo m-2">
-                <span class="booktitle fw-bold fs-5 lh-1 mb-0">The subtle art of not giving a fuckity fuck</span><br>
-                <span class="fst-italic">Kathleen Glasgow</span>
-                <div class="flex-row pt-2">
-                    <span class="text-decoration-line-through">2499 Ft</span>
-                    <span class="text-danger fw-bold">1699 Ft</span>
-                </div>
-                <a href="" class="btn w-100 stretched-link" style="background-color: #8B5E3C; color: white;">Megnézem</a>
-            </div>
-        </div>
-            <div class="bookcard flex-column position-relative m-2 p-2 ms-0 shadow-sm">
-            <img class="bookcover" src="https://s04.static.libri.hu/cover/b3/5/4468082_5.jpg" alt="borító"
-                title="borító">
-
-            <div class="bookinfo m-2">
-                <span class="booktitle fw-bold fs-5 lh-1 mb-0">The subtle art of not giving a fuckity fuck</span><br>
-                <span class="fst-italic">Kathleen Glasgow</span>
-                <div class="flex-row pt-2">
-                    <span class="text-decoration-line-through">2499 Ft</span>
-                    <span class="text-danger fw-bold">1699 Ft</span>
-                </div>
-                <a href="" class="btn w-100 stretched-link" style="background-color: #8B5E3C; color: white;">Megnézem</a>
-            </div>
-        </div>
-            <div class="bookcard flex-column position-relative m-2 p-2 ms-0 shadow-sm">
-            <img class="bookcover" src="https://s04.static.libri.hu/cover/b3/5/4468082_5.jpg" alt="borító"
-                title="borító">
-
-            <div class="bookinfo m-2">
-                <span class="booktitle fw-bold fs-5 lh-1 mb-0">The subtle art of not giving a fuckity fuck</span><br>
-                <span class="fst-italic">Kathleen Glasgow</span>
-                <div class="flex-row pt-2">
-                    <span class="text-decoration-line-through">2499 Ft</span>
-                    <span class="text-danger fw-bold">1699 Ft</span>
-                </div>
-                <a href="" class="btn w-100 stretched-link" style="background-color: #8B5E3C; color: white;">Megnézem</a>
-            </div>
-        </div>
-            <div class="bookcard flex-column position-relative m-2 p-2 ms-0 shadow-sm">
-            <img class="bookcover" src="https://s04.static.libri.hu/cover/b3/5/4468082_5.jpg" alt="borító"
-                title="borító">
-
-            <div class="bookinfo m-2">
-                <span class="booktitle fw-bold fs-5 lh-1 mb-0">The subtle art of not giving a fuckity fuck</span><br>
-                <span class="fst-italic">Kathleen Glasgow</span>
-                <div class="flex-row pt-2">
-                    <span class="text-decoration-line-through">2499 Ft</span>
-                    <span class="text-danger fw-bold">1699 Ft</span>
-                </div>
-                <a href="" class="btn w-100 stretched-link" style="background-color: #8B5E3C; color: white;">Megnézem</a>
-            </div>
-        </div>
-            <div class="bookcard flex-column position-relative m-2 p-2 ms-0 shadow-sm">
-            <img class="bookcover" src="https://s04.static.libri.hu/cover/b3/5/4468082_5.jpg" alt="borító"
-                title="borító">
-
-            <div class="bookinfo m-2">
-                <span class="booktitle fw-bold fs-5 lh-1 mb-0">The subtle art of not giving a fuckity fuck</span><br>
-                <span class="fst-italic">Kathleen Glasgow</span>
-                <div class="flex-row pt-2">
-                    <span class="text-decoration-line-through">2499 Ft</span>
-                    <span class="text-danger fw-bold">1699 Ft</span>
-                </div>
-                <a href="" class="btn w-100 stretched-link" style="background-color: #8B5E3C; color: white;">Megnézem</a>
-            </div>
-        </div>
-            <div class="bookcard flex-column position-relative m-2 p-2 ms-0 shadow-sm">
-            <img class="bookcover" src="https://s04.static.libri.hu/cover/b3/5/4468082_5.jpg" alt="borító"
-                title="borító">
-
-            <div class="bookinfo m-2">
-                <span class="booktitle fw-bold fs-5 lh-1 mb-0">The subtle art of not giving a fuckity fuck</span><br>
-                <span class="fst-italic">Kathleen Glasgow</span>
-                <div class="flex-row pt-2">
-                    <span class="text-decoration-line-through">2499 Ft</span>
-                    <span class="text-danger fw-bold">1699 Ft</span>
-                </div>
-                <a href="" class="btn w-100 stretched-link" style="background-color: #8B5E3C; color: white;">Megnézem</a>
-            </div>
-        </div>
-            <div class="bookcard flex-column position-relative m-2 p-2 ms-0 shadow-sm">
-            <img class="bookcover" src="https://s04.static.libri.hu/cover/b3/5/4468082_5.jpg" alt="borító"
-                title="borító">
-
-            <div class="bookinfo m-2">
-                <span class="booktitle fw-bold fs-5 lh-1 mb-0">The subtle art of not giving a fuckity fuck</span><br>
-                <span class="fst-italic">Kathleen Glasgow</span>
-                <div class="flex-row pt-2">
-                    <span class="text-decoration-line-through">2499 Ft</span>
-                    <span class="text-danger fw-bold">1699 Ft</span>
-                </div>
-                <a href="" class="btn w-100 stretched-link" style="background-color: #8B5E3C; color: white;">Megnézem</a>
-            </div>
-        </div>
-            <div class="bookcard flex-column position-relative m-2 p-2 ms-0 shadow-sm">
-            <img class="bookcover" src="https://s04.static.libri.hu/cover/b3/5/4468082_5.jpg" alt="borító"
-                title="borító">
-
-            <div class="bookinfo m-2">
-                <span class="booktitle fw-bold fs-5 lh-1 mb-0">The subtle art of not giving a fuckity fuck</span><br>
-                <span class="fst-italic">Kathleen Glasgow</span>
-                <div class="flex-row pt-2">
-                    <span class="text-decoration-line-through">2499 Ft</span>
-                    <span class="text-danger fw-bold">1699 Ft</span>
-                </div>
-                <a href="" class="btn w-100 stretched-link" style="background-color: #8B5E3C; color: white;">Megnézem</a>
-            </div>
-        </div>
-            <div class="bookcard flex-column position-relative m-2 p-2 ms-0 shadow-sm">
-            <img class="bookcover" src="https://s04.static.libri.hu/cover/b3/5/4468082_5.jpg" alt="borító"
-                title="borító">
-
-            <div class="bookinfo m-2">
-                <span class="booktitle fw-bold fs-5 lh-1 mb-0">The subtle art of not giving a fuckity fuck</span><br>
-                <span class="fst-italic">Kathleen Glasgow</span>
-                <div class="flex-row pt-2">
-                    <span class="text-decoration-line-through">2499 Ft</span>
-                    <span class="text-danger fw-bold">1699 Ft</span>
-                </div>
-                <a href="" class="btn w-100 stretched-link" style="background-color: #8B5E3C; color: white;">Megnézem</a>
-            </div>
-        </div>
-            <div class="bookcard flex-column position-relative m-2 p-2 ms-0 shadow-sm">
-            <img class="bookcover" src="https://s04.static.libri.hu/cover/b3/5/4468082_5.jpg" alt="borító"
-                title="borító">
-
-            <div class="bookinfo m-2">
-                <span class="booktitle fw-bold fs-5 lh-1 mb-0">The subtle art of not giving a fuckity fuck</span><br>
-                <span class="fst-italic">Kathleen Glasgow</span>
-                <div class="flex-row pt-2">
-                    <span class="text-decoration-line-through">2499 Ft</span>
-                    <span class="text-danger fw-bold">1699 Ft</span>
-                </div>
-                <a href="" class="btn w-100 stretched-link" style="background-color: #8B5E3C; color: white;">Megnézem</a>
-            </div>
-        </div>
+    
+    <div class="row">
+        <div class="col-sm-4 mb-3">
+            <label for="isbn" class="form-label">ISBN: <span class="text-danger">*</span></label>
+            <input type="text" name="isbn" id="isbn" class="form-control" value="">
+                            <p class="text-danger">
+                    Kérem adjon meg egy helyes ISBN-t! Az ISBN 10 vagy 13 karakter hosszú és csak számokat tartalmaz!                </p>
+                    </div>
+        <div class="col-sm-4 mb-3">
+            <label for="title" class="form-label">Könyvcím: <span class="text-danger">*</span></label>
+            <input type="text" name="title" id="title" class="form-control">
+                            <p class="text-danger">
+                    Kérem adja meg a könyv címét!                </p>
+                    </div>
+        <div class="col-sm-4 mb-3">
+            <label for="series" class="form-label">Könyvsorozat:</label>
+            <input type="text" name="series" id="series" list="serieses" class="form-control">
+            <datalist id="serieses">
+                                    <option value="Harry Potter">
+                                        <option value="Egy ropi naplója">
+                                </datalist>
+                    </div>
     </div>
 
-</main>
+    <div class="row">
+        <div class="col-sm-3 mb-3">
+            <label for="date-of-publishing" class="form-label">Kiadás dátuma: <span class="text-danger">*</span></label>
+            <input type="date" name="date-of-publishing" id="date-of-publishing" class="form-control">
+                            <p class="text-danger">
+                    Kérem adjon meg egy dátumot!                </p>
+                    </div>
+        <div class="col-sm-3 mb-3">
+            <label for="stock" class="form-label">Készlet: <span class="text-danger">*</span></label>
+            <div class="input-group">
+                <input type="text" name="stock" id="stock" class="form-control">
+                <span class="input-group-text">db</span>
+            </div>
+                            <p class="text-danger">
+                    Kérem 0-t, vagy nagyobb számot adjon meg készletnek!                </p>
+                    </div>
+        <div class="col-sm-3 mb-3">
+            <label for="number-of-pages" class="form-label">Oldalszám: <span class="text-danger">*</span></label>
+            <input type="text" name="number-of-pages" id="number-of-pages" class="form-control">
+                            <p class="text-danger">
+                    Kérem pozitív számot adjon meg az oldalak számának!                </p>
+                    </div>
+        <div class="col-sm-3 mb-3">
+            <label for="weight" class="form-label">Súly:</label>
+            <div class="input-group">
+                <input type="text" name="weight" id="weight" class="form-control">
+                <span class="input-group-text">gramm</span>
+            </div>
+                    </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4 mb-3">
+            <label for="publisher" class="form-label">Kiadó: <span class="text-danger">*</span></label>
+            <input type="text" name="publisher" id="publisher" list="publishers" class="form-control">
+            <datalist id="publishers">
+                                    <option value="Park Könyvkiadó">
+                                        <option value="Álomgyár Kiadó">
+                                        <option value="Athenaeum Kiadó Kft.">
+                                        <option value="Kocsis Kiadó">
+                                        <option value="69420 kiadó">
+                                        <option value="dsfdg">
+                                        <option value="fgfd">
+                                </datalist>
+                            <p class="text-danger">
+                    Kérem adjon meg egy kiadót!                </p>
+                    </div>
+        <div class="col-sm-4 mb-3">
+            <label for="covertype" class="form-label">Kötéstípus: <span class="text-danger">*</span></label>
+            <input type="text" name="covertype" id="covertype" list="covertypes" class="form-control">
+            <datalist id="covertypes">
+                                    <option value="keménykötésű">
+                                        <option value="papírkötésű">
+                                        <option value="kartonált">
+                                        <option value="dgggbdg">
+                                        <option value="gfgfh">
+                                </datalist>
+                            <p class="text-danger">
+                    Kérem adjon meg egy kötéstípust!                </p>
+                    </div>
+        <div class="col-sm-4 mb-3">
+            <label for="language" class="form-label">Nyelv: <span class="text-danger">*</span></label>
+            <input type="text" name="language" id="language" list="languages" class="form-control">
+            <datalist id="languages">
+                                    <option value="magyar">
+                                        <option value="angol">
+                                        <option value="görög">
+                                        <option value="nem">
+                                        <option value="gdgfg">
+                                        <option value="gf">
+                                </datalist>
+                            <p class="text-danger">
+                    Kérem adjon meg egy nyelvet!                </p>
+                    </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 mb-3">
+            <label for="description" class="form-label">Leírás: <span class="text-danger">*</span></label>
+            <textarea name="description" id="description" class="form-control" rows="7"></textarea>
+        </div>
+                    <p class="text-danger">
+                Kérem írjon leírást a könyvhöz!            </p>
+            </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <label for="genre-1" class="form-label">Műfaj(ok): <span class="text-danger">*</span><br><span
+                    class="small">Nyomja meg a + gombot további mezők felvételéhez és a - gombot az
+                    eltávolításukhoz.</span></label>
+            <div class="row" id="genre-fields">
+                <datalist id="genres">
+                                    </datalist>
+                <div class="col-12 mb-3">
+                    <input type="text" class="form-control genre-field" name="genre-1" id="genre-1" list="genres">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 mb-3">
+                    <input type="button" class="form-control" value="+" onclick="AddField('genre')">
+                </div>
+                <div class="col-6 mb-3">
+                    <input type="button" class="form-control" value="-" onclick="RemoveField('genre')">
+                </div>
+            </div>
+                            <p class="text-danger">
+                    Kérem adjon meg annyi műfajt ahány mező van!                </p>
+                    </div>
+        <div class="col-sm-6">
+            <label for="writer-1" class="form-label">Író(k): <span class="text-danger">*</span><br><span
+                    class="small">Nyomja meg a + gombot további mezők felvételéhez és a - gombot az
+                    eltávolításukhoz.</span></label>
+            <div class="row" id="writer-fields">
+                <datalist id="writers">
+                                    </datalist>
+                <div class="col-12 mb-3">
+                    <input type="text" class="form-control writer-field" name="writer-1" id="writer-1" list="writers">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 mb-3">
+                    <input type="button" class="form-control" value="+" onclick="AddField('writer')">
+                </div>
+                <div class="col-6 mb-3">
+                    <input type="button" class="form-control" value="-" onclick="RemoveField('writer')">
+                </div>
+            </div>
+                            <p class="text-danger">
+                    Kérem adjon meg annyi írót ahány mező van!                </p>
+                    </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4 mb-3">
+            <label for="price" class="form-label">Ár: <span class="text-danger">*</span></label>
+            <div class="input-group">
+                <input type="text" name="price" id="price" class="form-control">
+                <span class="input-group-text">Ft</span>
+            </div>
+                            <p class="text-danger">
+                    Kérem pozitív számot adjon meg a könyv árának!                </p>
+                    </div>
+        <div class="col-sm-4 mb-3">
+            <label for="discounted-price" class="form-label">Akciós ár:</label>
+            <div class="input-group">
+                <input type="text" name="discounted-price" id="discounted-price" class="form-control">
+                <span class="input-group-text">Ft</span>
+            </div>
+                    </div>
+        <div class="col-sm-4 mb-3">
+            <label for="cover" class="form-label">Borítókép:</label>
+            <input type="file" name="cover" id="cover" class="form-control">
+                            <p class="text-danger">
+                    A borító feltöltéséhez szükség van a könyv ISBN-ére!                </p>
+                    </div>
+    </div>
+
+    <input type="submit" class="form-control" value="Felvétel" style="background-color: rgba(139, 94, 60, 1); color: white;">
+</form></main>
 
 <footer>
     <div class="container-fluid" style="background-color: #E1D3B4;">

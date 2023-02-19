@@ -99,9 +99,7 @@ CREATE TABLE konyvek_irok (
 CREATE VIEW legujabb_konyvek AS
 SELECT * FROM konyvek
 ORDER BY kiadasdatuma DESC
-LIMIT 15;
-
-USE felhasznaloadatok;
+LIMIT 15;USE felhasznaloadatok;
 
 -- tábla a felhasználótípusok tárolására
 CREATE TABLE felhasznalotipusok (

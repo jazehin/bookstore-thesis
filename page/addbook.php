@@ -202,7 +202,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // checking cover
     $targetFile = "";
-    if ($isIsbnValid) {
+    if ($isIsbnValid && !empty($_FILES["cover"]["name"])) {
+        print_r($_FILES);
         $targetDirectory = "covers/";
         $imageFileType = strtolower(pathinfo(basename($_FILES["cover"]["name"]), PATHINFO_EXTENSION));
         $targetFile = $targetDirectory . $bookdata['isbn'] . '.' . $imageFileType;
@@ -246,7 +247,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     } else {
-        $errors["cover"] = "A borító feltöltéséhez szükség van a könyv ISBN-ére!";
+        if (!$isIsbnValid) {
+            $errors["cover"] = "A borító feltöltéséhez szükség van a könyv ISBN-ére!";
+        }
     }
 
     if (!array_filter($errors)) {
@@ -269,7 +272,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 // TODO: on failed form submission load the erroneus data back into the form
-// TODO: add genres and writes to db
 ?>
 
 
@@ -278,13 +280,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     style="background-color: rgba(225, 211, 180, 0.2);">
     <h1 class="fs-2">Könyv hozzáadása</h1>
     <p><span class="text-danger">*</span> kötelező mező</p>
+
     <?php if ($success) { ?>
         <p class="text-success">Könyv hozzáadása sikerült!</p>
     <?php } ?>
+
     <div class="row">
         <div class="col-sm-4 mb-3">
             <label for="isbn" class="form-label">ISBN: <span class="text-danger">*</span></label>
-            <input type="text" name="isbn" id="isbn" class="form-control">
+            <input type="text" name="isbn" id="isbn" class="form-control" value="<?php if ($display) echo $bookdata["isbn"]; ?>">
             <?php if (!empty($errors["isbn"])) { ?>
                 <p class="text-danger">
                     <?php echo $errors["isbn"]; ?>
@@ -293,7 +297,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <div class="col-sm-4 mb-3">
             <label for="title" class="form-label">Könyvcím: <span class="text-danger">*</span></label>
-            <input type="text" name="title" id="title" class="form-control">
+            <input type="text" name="title" id="title" class="form-control" value="<?php if ($display) echo $bookdata["title"]; ?>">
             <?php if (!empty($errors["title"])) { ?>
                 <p class="text-danger">
                     <?php echo $errors["title"]; ?>
@@ -452,7 +456,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     class="small">Nyomja meg a + gombot további mezők felvételéhez és a - gombot az
                     eltávolításukhoz.</span></label>
             <div class="row" id="writer-fields">
-                <datalist id="genres">
+                <datalist id="writers">
                     <?php for ($i = 0; $i < count($writers); $i++) { ?>
                         <option value="<?php echo $writers[$i]; ?>">
                         <?php } ?>
@@ -513,5 +517,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
-    <input type="submit" class="form-control" value="Felvétel">
+    <input type="submit" class="form-control" value="Felvétel" style="background-color: rgba(139, 94, 60, 1); color: white;">
 </form>
