@@ -140,7 +140,6 @@ function InsertBook($bookdata)
         ' . $stock . ',
         ' . $description . '
     );';
-    echo $sql;
     mysqli_query($con, $sql);
 
     // genres: for each genre, if it isn't already in the db, add it, then connect it to the book in the separate connecting table
