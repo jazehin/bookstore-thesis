@@ -17,14 +17,15 @@
     width: 12rem;
 }
 
-.bookcover {
+.bookcard-cover {
     width: 10rem;
     margin: 0.5rem 0.5rem 0.5rem 0.5rem;
 }
 
 
-.booktitle {
+.bookcard-title {
     display: inline-block;
     height: 4ex;
     overflow: hidden;
 }
+

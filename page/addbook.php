@@ -72,6 +72,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors["title"] = "Kérem adja meg a könyv címét!";
     }
 
+    // store series
+    $bookdata["series"] = $_POST["series"];
+
     // checking the date of publishing
     $bookdata["date-of-publishing"] = $_POST["date-of-publishing"];
 
@@ -194,12 +197,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // checking discounted price
-    $bookdata["discounted-price"] = intval($_POST["discounted-price"]) || null;
+    $bookdata["discounted-price"] = "";
+    if (!isset($_POST["discounted-price"]) || $_POST["discounted-price"] === "") {
+        $bookdata["discounted-price"] = null;
+    } else if ($_POST["discounted-price"] == "0" || $_POST["discounted-price"] == "-0") {
+        $bookdata["discounted-price"] = 0;
+    } else {
+        if (is_numeric($_POST["discounted-price"])) {
+            $bookdata["discounted-price"] = intval($_POST["discounted-price"]);
+        } else {
+            $bookdata["discounted-price"] = $_POST["discounted-price"];
+        }
+    }
 
-    $isDiscountedPriceValid = strlen($bookdata['discounted-price']) == 0 || (is_numeric($bookdata["discounted-price"]) && $bookdata["discounted-price"] > 0);
+    $isDiscountedPriceValid = is_null($bookdata["discounted-price"]) || (is_numeric($bookdata["discounted-price"]) && $bookdata["discounted-price"] > 0);
 
     if (!$isDiscountedPriceValid) {
-        $errors["discounted-price"] = "Kérem pozitív számot adjon meg a könyv akciós árának!";
+        $errors["discounted-price"] = "Kérem pozitív számot adjon meg a könyv akciós árának, vagy hagyja üresen!";
     }
 
     // checking cover
@@ -277,7 +291,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 
-<form class="card my-3 p-3" action="./addbook" method="post" enctype="multipart/form-data"
+<form class="card my-3 p-3" action="./addbook" method="post" autocomplete="off" enctype="multipart/form-data"
     style="background-color: rgba(225, 211, 180, 0.2);">
     <h1 class="fs-2">Könyv hozzáadása</h1>
     <p><span class="text-danger">*</span> kötelező mező</p>
@@ -424,8 +438,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="row">
         <div class="col-sm-12 mb-3">
             <label for="description" class="form-label">Leírás: <span class="text-danger">*</span></label>
-            <textarea name="description" id="description" class="form-control" rows="7" value="<?php if ($display)
-                echo $bookdata["description"]; ?>"></textarea>
+            <textarea name="description" id="description" class="form-control" rows="7"><?php if ($display)
+                echo $bookdata["description"]; ?></textarea>
         </div>
         <?php if (!empty($errors["description"])) { ?>
             <p class="text-danger">
@@ -482,8 +496,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php } ?>
                 </datalist>
                 <div class="col-12 mb-3">
-                    <input type="text" class="form-control writer-field" name="writer-1" id="writer-1" list="writers">
+                    <input type="text" class="form-control writer-field" name="writer-1" id="writer-1" list="writers"
+                        value="<?php if ($display)
+                            echo $bookdata["writers"][0]; ?>">
                 </div>
+                <?php for ($i = 1; $i < count($bookdata["writers"]); $i++) { ?>
+                    <div class="col-12 mb-3">
+                        <input type="text" class="form-control writer-field" name="writer-<?php echo $i + 1; ?>"
+                            id="writer-<?php echo $i + 1; ?>" list="writers" value="<?php if ($display)
+                                     echo $bookdata["writers"][$i]; ?>">
+                    </div>
+                <?php } ?>
             </div>
             <div class="row">
                 <div class="col-6 mb-3">

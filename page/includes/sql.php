@@ -39,7 +39,7 @@ function GetLanguages()
 
 function GetSerieses()
 {
-    $resultset = GetResultSetOfSingleColumn("sorozatnev", "konyvadatok.konyvsorozatok");
+    $resultset = GetResultSetOfSingleColumn("sorozatnev", "konyvadatok.sorozatok");
     return GetArrayFromResultSet($resultset);
 }
 
@@ -175,6 +175,14 @@ function InsertBook($bookdata)
     }
 
     mysqli_close($con);
+}
+
+function GetBookByISBN($isbn) {
+    $con = GetConnection();
+    $sql = 'CALL konyvadatok.GetBookByISBN("' . $isbn . '")';
+    $rs = mysqli_query($con, $sql);
+    $assoc = mysqli_fetch_assoc($rs);
+    return $assoc;
 }
 
 function ArrayToString($array)

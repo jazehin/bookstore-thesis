@@ -28,10 +28,11 @@ CREATE TABLE felhasznalok (
 );
 
 -- tábla az értékelések tárolására
-CREATE TABLE ertekelesek (
+CREATE TABLE olvasottak (
     felhasznaloid INT NOT NULL,
     isbn VARCHAR(13) CHARACTER SET UTF8MB4 NOT NULL,
-    ertekeles TINYINT NOT NULL,
+    olvasott BIT NOT NULL,
+    ertekeles TINYINT NULL,
     PRIMARY KEY (felhasznaloid, isbn),
     FOREIGN KEY (felhasznaloid) REFERENCES felhasznalok(felhasznaloid),
     FOREIGN KEY (isbn) REFERENCES konyvadatok.konyvek(isbn)

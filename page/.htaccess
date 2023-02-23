@@ -1,3 +1,8 @@
 RewriteEngine On
 RewriteRule ^/$ /?p=main [L]
+RewriteRule ^main$ /?p=main [L]
+
+RewriteRule ^books$ /?p=books [L]
+RewriteRule ^books/([0-9]+)/?$ /?p=book&isbn=$1 [NC,L]
+
 RewriteRule ^addbook$ /?p=addbook [L]

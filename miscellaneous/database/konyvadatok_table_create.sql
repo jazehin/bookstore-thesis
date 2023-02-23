@@ -1,7 +1,7 @@
 USE konyvadatok;
 
 -- tábla a könyvsorozatok tárolására
-CREATE TABLE konyvsorozatok (
+CREATE TABLE sorozatok (
     sorozatid INT AUTO_INCREMENT NOT NULL,
     sorozatnev VARCHAR(255) CHARACTER SET UTF8MB4,
     PRIMARY KEY (sorozatid)
@@ -53,7 +53,7 @@ CREATE TABLE konyvek (
     leiras TEXT NOT NULL,
     PRIMARY KEY (isbn),
     FOREIGN key (kiadoid) REFERENCES kiadok(kiadoid),
-    FOREIGN KEY (sorozatid) REFERENCES konyvsorozatok(sorozatid),
+    FOREIGN KEY (sorozatid) REFERENCES sorozatok(sorozatid),
     FOREIGN KEY (nyelvid) REFERENCES nyelvek(nyelvid),
     FOREIGN KEY (kotestipusid) REFERENCES kotestipusok(kotestipusid)
 );
@@ -112,7 +112,7 @@ BEGIN
 	FROM
 		konyvadatok.konyvek 
         INNER JOIN konyvadatok.kiadok ON konyvek.kiadoid = kiadok.kiadoid
-        LEFT JOIN konyvadatok.konyvsorozatok ON konyvek.sorozatid = konyvsorozatok.sorozatid -- lehet hogy nem sorozat része!
+        LEFT JOIN konyvadatok.sorozatok ON konyvek.sorozatid = sorozatok.sorozatid -- lehet hogy nem sorozat része!
         INNER JOIN konyvadatok.kotestipusok ON konyvek.kotestipusid = kotestipusok.kotestipusid
         INNER JOIN konyvadatok.nyelvek ON konyvek.nyelvid = nyelvek.nyelvid
 	WHERE
