@@ -21,37 +21,37 @@ function GetArrayFromResultSet($resultset)
 
 function GetPublishers()
 {
-    $resultset = GetResultSetOfSingleColumn("kiadonev", "konyvadatok.kiadok");
+    $resultset = GetResultSetOfSingleColumn("publisher", "publishers");
     return GetArrayFromResultSet($resultset);
 }
 
 function GetCoverTypes()
 {
-    $resultset = GetResultSetOfSingleColumn("kotestipusnev", "konyvadatok.kotestipusok");
+    $resultset = GetResultSetOfSingleColumn("cover", "covers");
     return GetArrayFromResultSet($resultset);
 }
 
 function GetLanguages()
 {
-    $resultset = GetResultSetOfSingleColumn("nyelvnev", "konyvadatok.nyelvek");
+    $resultset = GetResultSetOfSingleColumn("language", "languages");
     return GetArrayFromResultSet($resultset);
 }
 
 function GetSerieses()
 {
-    $resultset = GetResultSetOfSingleColumn("sorozatnev", "konyvadatok.sorozatok");
+    $resultset = GetResultSetOfSingleColumn("series", "serieses");
     return GetArrayFromResultSet($resultset);
 }
 
 function GetGenres()
 {
-    $resultset = GetResultSetOfSingleColumn("mufajnev", "konyvadatok.mufajok");
+    $resultset = GetResultSetOfSingleColumn("genre", "genres");
     return GetArrayFromResultSet($resultset);
 }
 
 function GetWriters()
 {
-    $resultset = GetResultSetOfSingleColumn("ironev", "konyvadatok.irok");
+    $resultset = GetResultSetOfSingleColumn("writer", "writers");
     return GetArrayFromResultSet($resultset);
 }
 
@@ -62,13 +62,13 @@ function InsertBook($bookdata)
     // simple data
     $isbn = "'" . mysqli_real_escape_string($con, $bookdata["isbn"]) . "'";
     $title = "'" . mysqli_real_escape_string($con, $bookdata["title"]) . "'";
-    $dateOfPublishing = "'" . mysqli_real_escape_string($con, $bookdata["date-of-publishing"]) . "'";
+    $dateOfPublishing = "'" . mysqli_real_escape_string($con, $bookdata["date_published"]) . "'";
     $stock = mysqli_real_escape_string($con, $bookdata["stock"]);
-    $numberOfPages = mysqli_real_escape_string($con, $bookdata["number-of-pages"]);
+    $numberOfPages = mysqli_real_escape_string($con, $bookdata["pages"]);
     $weight = (empty($bookdata["weight"]) ? "NULL" : mysqli_real_escape_string($con, $bookdata["weight"]));
     $description = "'" . mysqli_real_escape_string($con, $bookdata["description"]) . "'";
     $price = mysqli_real_escape_string($con, $bookdata["price"]);
-    $discountedPrice = (empty($bookdata["discounted-price"]) ? "NULL" : mysqli_real_escape_string($con, $bookdata["discounted-price"]));
+    $discountedPrice = (empty($bookdata["discounted_price"]) ? "NULL" : mysqli_real_escape_string($con, $bookdata["discounted_price"]));
 
     // foreign keys that go into the book table
     // methodology: if the value is not already stored in the current table, insert it -> then get its index
@@ -76,56 +76,56 @@ function InsertBook($bookdata)
     // series (can also be empty)
     $series = 'NULL';
     if (!empty($bookdata["series"])) {
-        $sql = "SELECT sorozatid FROM konyvadatok.sorozatok WHERE sorozatnev = '" . mysqli_real_escape_string($con, $bookdata["series"]) . "';";
+        $sql = "SELECT series_id FROM serieses WHERE series = '" . mysqli_real_escape_string($con, $bookdata["series"]) . "';";
         $rs = mysqli_query($con, $sql);
         if (mysqli_num_rows($rs) == 0) {
-            $sql = "INSERT INTO konyvadatok.sorozatok (sorozatnev) VALUES ('" . mysqli_real_escape_string($con, $bookdata["series"]) . "');";
+            $sql = "INSERT INTO serieses (series) VALUES ('" . mysqli_real_escape_string($con, $bookdata["series"]) . "');";
             mysqli_query($con, $sql);
         }
-        $sql = "SELECT sorozatid FROM konyvadatok.sorozatok WHERE sorozatnev = '" . mysqli_real_escape_string($con, $bookdata["series"]) . "';";
+        $sql = "SELECT series_id FROM serieses WHERE series = '" . mysqli_real_escape_string($con, $bookdata["series"]) . "';";
         $rs = mysqli_query($con, $sql);
         $row = mysqli_fetch_row($rs);
         $series = $row[0];
     }
 
     // publisher
-    $sql = "SELECT kiadoid FROM konyvadatok.kiadok WHERE kiadonev = '" . mysqli_real_escape_string($con, $bookdata["publisher"]) . "';";
+    $sql = "SELECT publisher_id FROM publishers WHERE publisher = '" . mysqli_real_escape_string($con, $bookdata["publisher"]) . "';";
     $rs = mysqli_query($con, $sql);
     if (mysqli_num_rows($rs) == 0) {
-        $sql = "INSERT INTO konyvadatok.kiadok (kiadonev) VALUES ('" . mysqli_real_escape_string($con, $bookdata["publisher"]) . "');";
+        $sql = "INSERT INTO publishers (publisher) VALUES ('" . mysqli_real_escape_string($con, $bookdata["publisher"]) . "');";
         mysqli_query($con, $sql);
     }
-    $sql = "SELECT kiadoid FROM konyvadatok.kiadok WHERE kiadonev = '" . mysqli_real_escape_string($con, $bookdata["publisher"]) . "';";
+    $sql = "SELECT publisher_id FROM publishers WHERE publisher = '" . mysqli_real_escape_string($con, $bookdata["publisher"]) . "';";
     $rs = mysqli_query($con, $sql);
     $row = mysqli_fetch_row($rs);
     $publisher = $row[0];
 
     // covertype
-    $sql = "SELECT kotestipusid FROM konyvadatok.kotestipusok WHERE kotestipusnev = '" . mysqli_real_escape_string($con, $bookdata["covertype"]) . "';";
+    $sql = "SELECT cover_id FROM covers WHERE cover = '" . mysqli_real_escape_string($con, $bookdata["covertype"]) . "';";
     $rs = mysqli_query($con, $sql);
     if (mysqli_num_rows($rs) == 0) {
-        $sql = "INSERT INTO konyvadatok.kotestipusok (kotestipusnev) VALUES ('" . mysqli_real_escape_string($con, $bookdata["covertype"]) . "');";
+        $sql = "INSERT INTO covers (cover) VALUES ('" . mysqli_real_escape_string($con, $bookdata["covertype"]) . "');";
         mysqli_query($con, $sql);
     }
-    $sql = "SELECT kotestipusid FROM konyvadatok.kotestipusok WHERE kotestipusnev = '" . mysqli_real_escape_string($con, $bookdata["covertype"]) . "';";
+    $sql = "SELECT cover_id FROM covers WHERE cover = '" . mysqli_real_escape_string($con, $bookdata["covertype"]) . "';";
     $rs = mysqli_query($con, $sql);
     $row = mysqli_fetch_row($rs);
     $covertype = $row[0];
 
     // language
-    $sql = "SELECT nyelvid FROM konyvadatok.nyelvek WHERE nyelvnev = '" . mysqli_real_escape_string($con, $bookdata["language"]) . "';";
+    $sql = "SELECT language_id FROM languages WHERE language = '" . mysqli_real_escape_string($con, $bookdata["language"]) . "';";
     $rs = mysqli_query($con, $sql);
     if (mysqli_num_rows($rs) == 0) {
-        $sql = "INSERT INTO konyvadatok.nyelvek (nyelvnev) VALUES ('" . mysqli_real_escape_string($con, $bookdata["language"]) . "');";
+        $sql = "INSERT INTO languages (language) VALUES ('" . mysqli_real_escape_string($con, $bookdata["language"]) . "');";
         mysqli_query($con, $sql);
     }
-    $sql = "SELECT nyelvid FROM konyvadatok.nyelvek WHERE nyelvnev = '" . mysqli_real_escape_string($con, $bookdata["language"]) . "';";
+    $sql = "SELECT language_id FROM languages WHERE language = '" . mysqli_real_escape_string($con, $bookdata["language"]) . "';";
     $rs = mysqli_query($con, $sql);
     $row = mysqli_fetch_row($rs);
     $language = $row[0];
 
     // insert book into table
-    $sql = 'INSERT INTO konyvadatok.konyvek (isbn, oldalszam, kiadoid, suly, konyvcim, sorozatid, kotestipusid, kiadasdatuma, ar, akciosar, nyelvid, keszlet, leiras) VALUES (
+    $sql = 'INSERT INTO books (isbn, pages, publisher_id, weight, title, series_id, cover_id, date_published, price, discounted_price, language_id, stock, description) VALUES (
         ' . $isbn . ',
         ' . $numberOfPages . ',
         ' . $publisher . ',
@@ -144,34 +144,34 @@ function InsertBook($bookdata)
 
     // genres: for each genre, if it isn't already in the db, add it, then connect it to the book in the separate connecting table
     foreach ($bookdata["genres"] as $key => $value) {
-        $sql = "SELECT mufajid FROM konyvadatok.mufajok WHERE mufajnev = '" . mysqli_real_escape_string($con, $value) . "';";
+        $sql = "SELECT genre_id FROM genres WHERE genre = '" . mysqli_real_escape_string($con, $value) . "';";
         $rs = mysqli_query($con, $sql);
         if (mysqli_num_rows($rs) == 0) {
-            $sql = "INSERT INTO konyvadatok.mufajok (mufajnev) VALUES ('" . mysqli_real_escape_string($con, $value) . "');";
+            $sql = "INSERT INTO genres (genre) VALUES ('" . mysqli_real_escape_string($con, $value) . "');";
             mysqli_query($con, $sql);
         }
-        $sql = "SELECT mufajid FROM konyvadatok.mufajok WHERE mufajnev = '" . mysqli_real_escape_string($con, $value) . "';";
+        $sql = "SELECT genre_id FROM genres WHERE genre = '" . mysqli_real_escape_string($con, $value) . "';";
         $rs = mysqli_query($con, $sql);
         $row = mysqli_fetch_row($rs);
         $genre = $row[0];
 
-        $sql = 'INSERT INTO konyvadatok.konyvek_mufajok (isbn, mufajid) VALUES (' . mysqli_real_escape_string($con, $isbn) . ', ' . mysqli_real_escape_string($con, $genre) . ');';
+        $sql = 'INSERT INTO books_genres (isbn, genre_id) VALUES (' . mysqli_real_escape_string($con, $isbn) . ', ' . mysqli_real_escape_string($con, $genre) . ');';
     }
 
     // writers: same method as genres
     foreach ($bookdata["writers"] as $key => $value) {
-        $sql = "SELECT iroid FROM konyvadatok.irok WHERE ironev = '" . mysqli_real_escape_string($con, $value) . "';";
+        $sql = "SELECT writer_id FROM writers WHERE writer = '" . mysqli_real_escape_string($con, $value) . "';";
         $rs = mysqli_query($con, $sql);
         if (mysqli_num_rows($rs) == 0) {
-            $sql = "INSERT INTO konyvadatok.irok (ironev) VALUES ('" . mysqli_real_escape_string($con, $value) . "');";
+            $sql = "INSERT INTO writers (writer) VALUES ('" . mysqli_real_escape_string($con, $value) . "');";
             mysqli_query($con, $sql);
         }
-        $sql = "SELECT iroid FROM konyvadatok.irok WHERE ironev = '" . mysqli_real_escape_string($con, $value) . "';";
+        $sql = "SELECT writer_id FROM writers WHERE writer = '" . mysqli_real_escape_string($con, $value) . "';";
         $rs = mysqli_query($con, $sql);
         $row = mysqli_fetch_row($rs);
         $writer = $row[0];
 
-        $sql = 'INSERT INTO konyvadatok.konyvek_irok (isbn, iroid) VALUES (' . mysqli_real_escape_string($con, $isbn) . ', ' . mysqli_real_escape_string($con, $writer) . ');';
+        $sql = 'INSERT INTO books_writers (isbn, writer_id) VALUES (' . mysqli_real_escape_string($con, $isbn) . ', ' . mysqli_real_escape_string($con, $writer) . ');';
     }
 
     mysqli_close($con);
@@ -179,7 +179,7 @@ function InsertBook($bookdata)
 
 function GetBookByISBN($isbn) {
     $con = GetConnection();
-    $sql = 'CALL konyvadatok.GetBookByISBN("' . $isbn . '")';
+    $sql = 'CALL GetBookByISBN("' . $isbn . '")';
     $rs = mysqli_query($con, $sql);
     $assoc = mysqli_fetch_assoc($rs);
     return $assoc;

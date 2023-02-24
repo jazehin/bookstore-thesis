@@ -13,9 +13,9 @@ $bookdata = array(
     "isbn" => "",
     "title" => "",
     "series" => "",
-    "date-of-publishing" => "",
+    "date_published" => "",
     "stock" => "",
-    "number-of-pages" => "",
+    "pages" => "",
     "weight" => "",
     "publisher" => "",
     "covertype" => "",
@@ -24,7 +24,7 @@ $bookdata = array(
     "genres" => array(""),
     "writers" => array(""),
     "price" => "",
-    "discounted-price" => ""
+    "discounted_price" => ""
 );
 
 // declare an array for error messages to be displayed
@@ -32,9 +32,9 @@ $errors = array(
     "isbn" => "",
     "title" => "",
     "series" => "",
-    "date-of-publishing" => "",
+    "date_published" => "",
     "stock" => "",
-    "number-of-pages" => "",
+    "pages" => "",
     "weight" => "",
     "publisher" => "",
     "covertype" => "",
@@ -43,7 +43,7 @@ $errors = array(
     "genres" => "",
     "writers" => "",
     "price" => "",
-    "discounted-price" => "",
+    "discounted_price" => "",
     "cover" => ""
 );
 
@@ -76,12 +76,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $bookdata["series"] = $_POST["series"];
 
     // checking the date of publishing
-    $bookdata["date-of-publishing"] = $_POST["date-of-publishing"];
+    $bookdata["date_published"] = $_POST["date_published"];
 
-    $isPublishingDateValid = !empty($bookdata["date-of-publishing"]);
+    $isPublishingDateValid = !empty($bookdata["date_published"]);
 
     if (!$isPublishingDateValid) {
-        $errors["date-of-publishing"] = "Kérem adjon meg egy dátumot!";
+        $errors["date_published"] = "Kérem adjon meg egy dátumot!";
     }
 
     // checking the stock
@@ -94,12 +94,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // checking the number of pages
-    $bookdata["number-of-pages"] = (intval($_POST["number-of-pages"]) == 0 ? NULL : intval($_POST["number-of-pages"]));
+    $bookdata["pages"] = (intval($_POST["pages"]) == 0 ? NULL : intval($_POST["pages"]));
 
-    $isNumberOfPagesValid = $bookdata["number-of-pages"] > 0 && strval($bookdata["number-of-pages"]) == $_POST["number-of-pages"];
+    $isNumberOfPagesValid = $bookdata["pages"] > 0 && strval($bookdata["pages"]) == $_POST["pages"];
 
     if (!$isNumberOfPagesValid) {
-        $errors["number-of-pages"] = "Kérem pozitív számot adjon meg az oldalak számának!";
+        $errors["pages"] = "Kérem pozitív számot adjon meg az oldalak számának!";
     }
 
     // checking weight
@@ -197,23 +197,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // checking discounted price
-    $bookdata["discounted-price"] = "";
-    if (!isset($_POST["discounted-price"]) || $_POST["discounted-price"] === "") {
-        $bookdata["discounted-price"] = null;
-    } else if ($_POST["discounted-price"] == "0" || $_POST["discounted-price"] == "-0") {
-        $bookdata["discounted-price"] = 0;
+    $bookdata["discounted_price"] = "";
+    if (!isset($_POST["discounted_price"]) || $_POST["discounted_price"] === "") {
+        $bookdata["discounted_price"] = null;
+    } else if ($_POST["discounted_price"] == "0" || $_POST["discounted_price"] == "-0") {
+        $bookdata["discounted_price"] = 0;
     } else {
-        if (is_numeric($_POST["discounted-price"])) {
-            $bookdata["discounted-price"] = intval($_POST["discounted-price"]);
+        if (is_numeric($_POST["discounted_price"])) {
+            $bookdata["discounted_price"] = intval($_POST["discounted_price"]);
         } else {
-            $bookdata["discounted-price"] = $_POST["discounted-price"];
+            $bookdata["discounted_price"] = $_POST["discounted_price"];
         }
     }
 
-    $isDiscountedPriceValid = is_null($bookdata["discounted-price"]) || (is_numeric($bookdata["discounted-price"]) && $bookdata["discounted-price"] > 0);
+    $isDiscountedPriceValid = is_null($bookdata["discounted_price"]) || (is_numeric($bookdata["discounted_price"]) && $bookdata["discounted_price"] > 0);
 
     if (!$isDiscountedPriceValid) {
-        $errors["discounted-price"] = "Kérem pozitív számot adjon meg a könyv akciós árának, vagy hagyja üresen!";
+        $errors["discounted_price"] = "Kérem pozitív számot adjon meg a könyv akciós árának, vagy hagyja üresen!";
     }
 
     // checking cover
@@ -340,12 +340,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="row">
         <div class="col-sm-3 mb-3">
-            <label for="date-of-publishing" class="form-label">Kiadás dátuma: <span class="text-danger">*</span></label>
-            <input type="date" name="date-of-publishing" id="date-of-publishing" class="form-control" value="<?php if ($display)
-                echo $bookdata["date-of-publishing"]; ?>">
-            <?php if (!empty($errors["date-of-publishing"])) { ?>
+            <label for="date_published" class="form-label">Kiadás dátuma: <span class="text-danger">*</span></label>
+            <input type="date" name="date_published" id="date_published" class="form-control" value="<?php if ($display)
+                echo $bookdata["date_published"]; ?>">
+            <?php if (!empty($errors["date_published"])) { ?>
                 <p class="text-danger">
-                    <?php echo $errors["date-of-publishing"]; ?>
+                    <?php echo $errors["date_published"]; ?>
                 </p>
             <?php } ?>
         </div>
@@ -363,12 +363,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php } ?>
         </div>
         <div class="col-sm-3 mb-3">
-            <label for="number-of-pages" class="form-label">Oldalszám: <span class="text-danger">*</span></label>
-            <input type="text" name="number-of-pages" id="number-of-pages" class="form-control" value="<?php if ($display)
-                echo $bookdata["number-of-pages"]; ?>">
-            <?php if (!empty($errors["number-of-pages"])) { ?>
+            <label for="pages" class="form-label">Oldalszám: <span class="text-danger">*</span></label>
+            <input type="text" name="pages" id="pages" class="form-control" value="<?php if ($display)
+                echo $bookdata["pages"]; ?>">
+            <?php if (!empty($errors["pages"])) { ?>
                 <p class="text-danger">
-                    <?php echo $errors["number-of-pages"]; ?>
+                    <?php echo $errors["pages"]; ?>
                 </p>
             <?php } ?>
         </div>
@@ -539,15 +539,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php } ?>
         </div>
         <div class="col-sm-4 mb-3">
-            <label for="discounted-price" class="form-label">Akciós ár:</label>
+            <label for="discounted_price" class="form-label">Akciós ár:</label>
             <div class="input-group">
-                <input type="text" name="discounted-price" id="discounted-price" class="form-control" value="<?php if ($display)
-                    echo $bookdata["discounted-price"]; ?>">
+                <input type="text" name="discounted_price" id="discounted_price" class="form-control" value="<?php if ($display)
+                    echo $bookdata["discounted_price"]; ?>">
                 <span class="input-group-text">Ft</span>
             </div>
-            <?php if (!empty($errors["discounted-price"])) { ?>
+            <?php if (!empty($errors["discounted_price"])) { ?>
                 <p class="text-danger">
-                    <?php echo $errors["discounted-price"]; ?>
+                    <?php echo $errors["discounted_price"]; ?>
                 </p>
             <?php } ?>
         </div>

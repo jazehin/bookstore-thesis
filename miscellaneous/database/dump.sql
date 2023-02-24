@@ -1,229 +1,268 @@
 -- int types size reference: https://dev.mysql.com/doc/refman/5.6/en/integer-types.html
 
-DROP DATABASE IF EXISTS rendelesadatok;
-DROP DATABASE IF EXISTS felhasznaloadatok;
-DROP DATABASE IF EXISTS konyvadatok;
+DROP DATABASE IF EXISTS konyvaruhaz;
+CREATE DATABASE IF NOT EXISTS konyvaruhaz;
+USE konyvaruhaz;
 
-CREATE DATABASE IF NOT EXISTS rendelesadatok;
-CREATE DATABASE IF NOT EXISTS felhasznaloadatok;
-CREATE DATABASE IF NOT EXISTS konyvadatok;
-
-USE konyvadatok;
-
--- tábla a könyvsorozatok tárolására
-CREATE TABLE konyvsorozatok (
-    sorozatid INT AUTO_INCREMENT NOT NULL,
-    sorozatnev VARCHAR(255) CHARACTER SET UTF8MB4,
-    PRIMARY KEY (sorozatid)
+CREATE TABLE serieses (
+    series_id INT AUTO_INCREMENT NOT NULL,
+    series VARCHAR(255) CHARACTER SET UTF8MB4,
+    PRIMARY KEY (series_id)
 );
 
--- tábla a kiadók tárolására
-CREATE TABLE kiadok (
-    kiadoid INT AUTO_INCREMENT NOT NULL,
-    kiadonev VARCHAR(255) CHARACTER SET UTF8MB4,
-    PRIMARY KEY (kiadoid)
+CREATE TABLE publishers (
+    publisher_id INT AUTO_INCREMENT NOT NULL,
+    publisher VARCHAR(255) CHARACTER SET UTF8MB4,
+    PRIMARY KEY (publisher_id)
 );
 
--- tábla a nyelvek tárolására
-CREATE TABLE nyelvek (
-    nyelvid INT AUTO_INCREMENT NOT NULL,
-    nyelvnev VARCHAR(30) CHARACTER SET UTF8MB4,
-    PRIMARY KEY (nyelvid)
+CREATE TABLE languages (
+    language_id INT AUTO_INCREMENT NOT NULL,
+    language VARCHAR(30) CHARACTER SET UTF8MB4,
+    PRIMARY KEY (language_id)
 );
 
--- tábla a műfajok tárolására
-CREATE TABLE mufajok (
-    mufajid INT AUTO_INCREMENT NOT NULL,
-    mufajnev VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL,
-    PRIMARY KEY (mufajid)
+-- table for storing cover types
+CREATE TABLE covers (
+    cover_id INT AUTO_INCREMENT NOT NULL,
+    cover VARCHAR(30) CHARACTER SET UTF8MB4,
+    PRIMARY KEY (cover_id)
 );
 
--- tábla a kötéstípusok tárolására
-CREATE TABLE kotestipusok (
-    kotestipusid INT AUTO_INCREMENT NOT NULL,
-    kotestipusnev VARCHAR(30) CHARACTER SET UTF8MB4,
-    PRIMARY KEY (kotestipusid)
+CREATE TABLE genres (
+    genre_id INT AUTO_INCREMENT NOT NULL,
+    genre VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL,
+    PRIMARY KEY (genre_id)
 );
 
--- tábla könyvek tárolására
-CREATE TABLE konyvek (
+CREATE TABLE writers (
+    writer_id INT AUTO_INCREMENT NOT NULL,
+    writer VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL,
+    PRIMARY KEY (writer_id)
+);
+
+CREATE TABLE books (
     isbn VARCHAR(13) CHARACTER SET UTF8MB4 NOT NULL,
-    oldalszam SMALLINT UNSIGNED NOT NULL,
-    kiadoid INT NOT NULL,
-    suly INT UNSIGNED NULL, -- grammban adjuk meg
-    konyvcim VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL,
-    -- boritokep VARCHAR(255) CHARACTER SET UTF8MB4 NULL, -- új megoldás: ./covers/{isbn}.png
-    sorozatid INT NULL,
-    kotestipusid INT NOT NULL,
-    kiadasdatuma DATE NOT NULL,
-    ar SMALLINT UNSIGNED NOT NULL, -- forintban adjuk meg
-    akciosar SMALLINT UNSIGNED NULL, -- forintban adjuk meg
-    nyelvid INT NOT NULL,
-    keszlet SMALLINT UNSIGNED NOT NULL,
-    leiras TEXT NOT NULL,
+    pages SMALLINT UNSIGNED NOT NULL,
+    publisher_id INT NOT NULL,
+    weight INT UNSIGNED NULL, -- in gramms
+    title VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL,
+    series_id INT NULL,
+    cover_id INT NOT NULL,
+    date_published DATE NOT NULL,
+    price SMALLINT UNSIGNED NOT NULL, -- in HUF
+    discounted_price SMALLINT UNSIGNED NULL, -- in HUF
+    language_id INT NOT NULL,
+    stock SMALLINT UNSIGNED NOT NULL,
+    description TEXT NOT NULL,
     PRIMARY KEY (isbn),
-    FOREIGN key (kiadoid) REFERENCES kiadok(kiadoid),
-    FOREIGN KEY (sorozatid) REFERENCES konyvsorozatok(sorozatid),
-    FOREIGN KEY (nyelvid) REFERENCES nyelvek(nyelvid),
-    FOREIGN KEY (kotestipusid) REFERENCES kotestipusok(kotestipusid)
+    FOREIGN key (publisher_id) REFERENCES publishers(publisher_id),
+    FOREIGN KEY (series_id) REFERENCES serieses(series_id),
+    FOREIGN KEY (language_id) REFERENCES languages(language_id),
+    FOREIGN KEY (cover_id) REFERENCES covers(cover_id)
 );
 
--- tábla a könyvek és műfajok összekötésére
-CREATE TABLE konyvek_mufajok (
+CREATE TABLE books_genres (
     id INT AUTO_INCREMENT NOT NULL,
     isbn VARCHAR(13) CHARACTER SET UTF8MB4 NOT NULL,
-    mufajid INT NOT NULL,
+    genre_id INT NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (isbn) REFERENCES konyvek(isbn),
-    FOREIGN KEY (mufajid) REFERENCES mufajok(mufajid)
+    FOREIGN KEY (isbn) REFERENCES books(isbn),
+    FOREIGN KEY (genre_id) REFERENCES genres(genre_id)
 );
 
--- tábla a műfajok tárolására
-CREATE TABLE irok (
-    iroid INT AUTO_INCREMENT NOT NULL,
-    ironev VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL,
-    PRIMARY KEY (iroid)
-);
-
--- tábla a könyvek és műfajok összekötésére
-CREATE TABLE konyvek_irok (
+CREATE TABLE books_writers (
     id INT AUTO_INCREMENT NOT NULL,
     isbn VARCHAR(13) CHARACTER SET UTF8MB4 NOT NULL,
-    iroid INT NOT NULL,
+    writer_id INT NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (isbn) REFERENCES konyvek(isbn),
-    FOREIGN KEY (iroid) REFERENCES irok(iroid)
+    FOREIGN KEY (isbn) REFERENCES books(isbn),
+    FOREIGN KEY (writer_id) REFERENCES writers(writer_id)
 );
 
--- nézet a legújabb könyvek lekérdezésére
-CREATE VIEW legujabb_konyvek AS
-SELECT * FROM konyvek
-ORDER BY kiadasdatuma DESC
-LIMIT 15;USE felhasznaloadatok;
+DELIMITER //
+CREATE PROCEDURE `GetBookByISBN`(IN _isbn VARCHAR(13))
+BEGIN
+    SELECT 
+		isbn,
+		pages,
+		publisher,
+        weight, 
+        title, 
+        series, 
+        cover, 
+        date_published,
+        price,
+        discounted_price,
+        language,
+        stock,
+        description
+	FROM
+		books 
+        INNER JOIN publishers ON books.publisher_id = publishers.publisher_id
+        LEFT JOIN serieses ON books.series_id = serieses.series_id -- lehet hogy nem sorozat része!
+        INNER JOIN covers ON books.cover_id = covers.cover_id
+        INNER JOIN languages ON books.language_id = languages.language_id
+	WHERE
+		isbn = _isbn;
+END //
+DELIMITER ;
 
--- tábla a felhasználótípusok tárolására
-CREATE TABLE felhasznalotipusok (
-    tipusid INT AUTO_INCREMENT NOT NULL,
-    tipusnev VARCHAR(30) CHARACTER SET UTF8MB4 NOT NULL,
-    PRIMARY KEY (tipusid)
+DELIMITER //
+CREATE PROCEDURE `GetWritersByISBN`(IN _isbn VARCHAR(13))
+BEGIN
+    SELECT 
+		writer_id,
+        writer
+	FROM
+		writers 
+        INNER JOIN books_writers ON writers.writer_id = books_writers.writer_id
+	WHERE
+		isbn = _isbn;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE `GetGenresByISBN`(IN _isbn VARCHAR(13))
+BEGIN
+    SELECT 
+		genre_id,
+        genre
+	FROM
+		genres 
+        INNER JOIN books_genres ON genres.genre_id = books_genres.genre_id
+	WHERE
+		isbn = _isbn;
+END //
+DELIMITER ;
+
+CREATE TABLE user_types (
+    type_id INT AUTO_INCREMENT NOT NULL,
+    type VARCHAR(30) CHARACTER SET UTF8MB4 NOT NULL,
+    PRIMARY KEY (type_id)
 );
 
--- beillesztem az előző táblába a felhasználó típusokat
-INSERT INTO felhasznalotipusok (tipusnev) VALUES
+INSERT INTO user_types (type) VALUES
 ("adminisztrátor"),
 ("moderátor"),
 ("felhasználó");
 
--- tábla a felhaszálói adatok tárolására
-CREATE TABLE felhasznalok (
-    felhasznaloid INT AUTO_INCREMENT NOT NULL,
-    felhasznalonev VARCHAR(20) CHARACTER SET UTF8MB4 NOT NULL,
-    tipusid INT NOT NULL,
-    vezeteknev VARCHAR(50) CHARACTER SET UTF8MB4 NULL,
-    keresztnev VARCHAR(50) CHARACTER SET UTF8MB4 NULL,
-    nem ENUM('nő', 'férfi', 'na') NOT NULL DEFAULT 'na',
-    szuldatum DATE NULL,
-    telszam VARCHAR(12) NULL,
-    PRIMARY KEY (felhasznaloid),
-    FOREIGN KEY (tipusid) REFERENCES felhasznalotipusok(tipusid)
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT NOT NULL,
+    username VARCHAR(20) CHARACTER SET UTF8MB4 NOT NULL,
+    type_id INT NOT NULL,
+    family_name VARCHAR(50) CHARACTER SET UTF8MB4 NULL,
+    given_name VARCHAR(50) CHARACTER SET UTF8MB4 NULL,
+    gender ENUM('female', 'male') NULL DEFAULT NULL,
+    birthdate DATE NULL,
+    phone_number VARCHAR(12) NULL,
+    PRIMARY KEY (user_id),
+    FOREIGN KEY (type_id) REFERENCES user_types(type_id)
 );
 
--- tábla az értékelések tárolására
-CREATE TABLE ertekelesek (
-    felhasznaloid INT NOT NULL,
+CREATE TABLE user_book_reviews (
+    user_id INT NOT NULL,
     isbn VARCHAR(13) CHARACTER SET UTF8MB4 NOT NULL,
-    ertekeles TINYINT NOT NULL,
-    PRIMARY KEY (felhasznaloid, isbn),
-    FOREIGN KEY (felhasznaloid) REFERENCES felhasznalok(felhasznaloid),
-    FOREIGN KEY (isbn) REFERENCES konyvadatok.konyvek(isbn)
+    has_bought_or_read BIT NOT NULL,
+    rating TINYINT NULL,
+    review TEXT NULL,
+    PRIMARY KEY (user_id, isbn),
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (isbn) REFERENCES books(isbn)
 );
 
--- tábla a szállítási címek tárolására
-CREATE TABLE szallitasicimek (
-    szallitasicimid INT AUTO_INCREMENT NOT NULL,
-    cegnev VARCHAR(100) NULL,
-    megye ENUM('Bács-Kiskun','Baranya','Békés','Borsod-Abaúj-Zemplén','Csongrád-Csanád','Fejér','Győr-Moson-Sopron','Hajdú-Bihar','Heves','Jász-Nagykun-Szolnok','Komárom-Esztergom','Nógrád','Pest','Somogy','Szabolcs-Szatmár-Bereg','Tolna','Vas','Veszprém','Zala') NOT NULL,
-    varos VARCHAR(50) NOT NULL,
-    kozterulet VARCHAR(50) NOT NULL,
-    megjegyzes VARCHAR(50) NULL,
-    PRIMARY KEY (szallitasicimid)
+CREATE TABLE counties (
+    county_id TINYINT AUTO_INCREMENT NOT NULL,
+    county VARCHAR(22),
+    PRIMARY KEY (county_id)
 );
 
--- tábla a belépési adatok tárolására (európai szabvány: GDPR)
-CREATE TABLE belepesiadatok (
-    belepesid INT AUTO_INCREMENT NOT NULL,
-    felhasznaloid INT NOT NULL,
+INSERT INTO counties (county) VALUES
+('Bács-Kiskun'),
+('Baranya'),
+('Békés'),
+('Borsod-Abaúj-Zemplén'),
+('Csongrád-Csanád'),
+('Fejér'),
+('Győr-Moson-Sopron'),
+('Hajdú-Bihar'),
+('Heves'),
+('Jász-Nagykun-Szolnok'),
+('Komárom-Esztergom'),
+('Nógrád'),
+('Pest'),
+('Somogy'),
+('Szabolcs-Szatmár-Bereg'),
+('Tolna'),
+('Vas'),
+('Veszprém'),
+('Zala');
+
+CREATE TABLE addresses (
+    address_id INT AUTO_INCREMENT NOT NULL,
+    company VARCHAR(100) NULL,
+    county_id TINYINT NOT NULL,
+    city VARCHAR(50) NOT NULL,
+    public_space VARCHAR(50) NOT NULL,
+    zip_code TINYINT NOT NULL,
+    note VARCHAR(50) NULL,
+    PRIMARY KEY (address_id)
+);
+
+-- TODO: make connections
+
+CREATE TABLE login (
+    login_id INT AUTO_INCREMENT NOT NULL,
+    user_id INT NOT NULL,
     email VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL,
-    jelszo CHAR(64) CHARACTER SET UTF8MB4 NOT NULL,
-    PRIMARY KEY (belepesid),
-    FOREIGN KEY (felhasznaloid) REFERENCES felhasznalok(felhasznaloid)
+    password CHAR(64) CHARACTER SET UTF8MB4 NOT NULL,
+    PRIMARY KEY (login_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
--- tábla a kommentek tárolására
-CREATE TABLE kommentek (
-    kommentid INT AUTO_INCREMENT NOT NULL,
-    felhasznaloid INT NOT NULL, -- ki írta?
-    isbn VARCHAR(13) CHARACTER SET UTF8MB4 NOT NULL, -- melyik könyv oldala alá írta?
-    szoveg TEXT CHARACTER SET UTF8MB4 NOT NULL, -- mit írt?
-    datum TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(), -- mikor írta? (ez alapján lesz rendezve)
-    PRIMARY KEY (kommentid),
-    FOREIGN KEY (felhasznaloid) REFERENCES felhasznalok(felhasznaloid),
-    FOREIGN KEY (isbn) REFERENCES konyvadatok.konyvek(isbn)
-)
-
--- nézet a kommentek lekérdezésére
-DELIMITER //
-CREATE PROCEDURE GetKommentek(isbn VARCHAR(13))
-BEGIN
-    SELECT felhasznalok.felhasznaloid AS fid, felhasznalok.felhasznalonev AS fnev, kommentek.szoveg AS szoveg, kommentek.datum AS datum 
-    FROM kommentek INNER JOIN felhasznalok ON kommentek.felhasznaloid = felhasznalok.felhasznaloid
-    WHERE kommentek.isbn = isbn
-    ORDER BY datum DESC;
-END
-// DELIMITER ;
-
-USE rendelesadatok;
-
--- tábla a kosarak tárolására
--- CREATE TABLE kosarak (
---     kosarid INT AUTO_INCREMENT NOT NULL,
---     felhasznaloid INT NOT NULL,
---     PRIMARY KEY (kosarid, felhasznaloid),
---     FOREIGN KEY (felhasznaloid) REFERENCES felhasznaloadatok.felhasznalok(felhasznaloid)
--- );
-
--- tábla a rendelés összesítésére
-CREATE TABLE rendelesek (
-    rendelesid INT AUTO_INCREMENT NOT NULL,
-    felhasznaloid INT NOT NULL,
-    ido TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-    osszesar INT NOT NULL,
-    PRIMARY KEY (rendelesid),
-    FOREIGN KEY (felhasznaloid) REFERENCES felhasznaloadatok.felhasznalok(felhasznaloid)
-);
-
--- tábla a kosarak tartalmának tárolására
-CREATE TABLE rendelesreszletek (
-    rendelesid INT NOT NULL,
+CREATE TABLE comments (
+    comment_id INT AUTO_INCREMENT NOT NULL,
+    user_id INT NOT NULL,
     isbn VARCHAR(13) CHARACTER SET UTF8MB4 NOT NULL,
-    mennyiseg INT UNSIGNED NOT NULL,
-    eredetiar INT NOT NULL,
-    akciosar INT NULL,
-    PRIMARY KEY (rendelesid, isbn),
-    FOREIGN KEY (isbn) REFERENCES konyvadatok.konyvek(isbn)
+    comment_text TEXT CHARACTER SET UTF8MB4 NOT NULL, 
+    comment_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    PRIMARY KEY (comment_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (isbn) REFERENCES books(isbn)
 );
 
--- nézet egy adott felhasználó kosarának tartalmának lekérdezésére
 DELIMITER //
-CREATE PROCEDURE GetReszletesKosar(felhasznaloid INT)
+CREATE PROCEDURE GetKommentek(IN _isbn VARCHAR(13))
 BEGIN
     SELECT 
-        rendelesreszletek.isbn AS isbn,
-        konyvek.konyvcim AS cim,
-        rendelesreszletek.mennyiseg AS mennyiseg, 
-        (rendelesreszletek.mennyiseg * konyvek.nettoar) AS ar
-    FROM rendelesadatok.rendelesreszletek INNER JOIN konyvadatok.konyvek ON rendelesreszletek.isbn = konyvek.isbn
-    WHERE felhasznaloid = kosartartalmak.felhasznaloid; 
+        user_id,
+        username,
+        comment_text,
+        comment_date
+    FROM 
+        comments 
+        INNER JOIN users ON comments.user_id = users.user_id
+    WHERE isbn = _isbn
+    ORDER BY comment_date DESC;
 END
 // DELIMITER ;
 
+CREATE TABLE orders (
+    order_id INT AUTO_INCREMENT NOT NULL,
+    user_id INT NOT NULL,
+    order_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    price_sum INT NOT NULL,
+    PRIMARY KEY (order_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+CREATE TABLE order_details (
+    order_id INT NOT NULL,
+    isbn VARCHAR(13) CHARACTER SET UTF8MB4 NOT NULL,
+    quantity INT UNSIGNED NOT NULL,
+    price SMALLINT UNSIGNED NOT NULL,
+    discounted_price SMALLINT UNSIGNED NULL,
+    PRIMARY KEY (order_id, isbn),
+    FOREIGN KEY (isbn) REFERENCES books(isbn),
+    FOREIGN KEY (order_id) REFERENCES orders(order_id)
+);

@@ -50,10 +50,12 @@ include("includes/sql.php");
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="/addbook">Könyv hozzáadása</a></li>
                                 <li><a class="dropdown-item" href="#">Könyv módosítása</a></li>
+                                <!--
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
                                 <li><a class="dropdown-item" href="#"></a></li>
+                                -->
                             </ul>
                         </li>
                         <!--

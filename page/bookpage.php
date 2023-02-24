@@ -5,7 +5,7 @@ $bookdata = GetBookByISBN($_GET["isbn"]);
 <div class="card my-3 p-3">
     <div class="row">
         <span class="fw-bold fs-5 lh-1 mb-0">
-            <?php echo $bookdata["konyvcim"]; ?>
+            <?php echo $bookdata["title"]; ?>
         </span><br>
         <span class="fst-italic pb-2">Adam Silvera</span>
         <hr class="">
@@ -17,7 +17,7 @@ $bookdata = GetBookByISBN($_GET["isbn"]);
                 <div class="row pt-1">
                     <span class="col-5 my-auto fw-bold">Kiadó:</span>
                     <span class="col-7 my-auto">
-                        <?php echo $bookdata["kiado"]; ?>
+                        <?php echo $bookdata["publisher"]; ?>
                     </span>
                 </div>
 
@@ -28,11 +28,11 @@ $bookdata = GetBookByISBN($_GET["isbn"]);
                     </span>
                 </div>
 
-                <?php if (!empty($bookdata["suly"])) { ?>
+                <?php if (!empty($bookdata["weight"])) { ?>
                     <div class="row pt-1">
                         <span class="col-5 my-auto fw-bold">Súly:</span>
                         <span class="col-7 my-auto">
-                            <?php echo $bookdata["suly"]; ?> g
+                            <?php echo $bookdata["weight"]; ?> g
                         </span>
                     </div>
                 <?php } ?>
@@ -40,7 +40,7 @@ $bookdata = GetBookByISBN($_GET["isbn"]);
                 <div class="row pt-1">
                     <span class="col-5 my-auto fw-bold">Kötéstípus:</span>
                     <span class="col-7 my-auto">
-                        <?php echo $bookdata["kotestipus"]; ?>
+                        <?php echo $bookdata["cover"]; ?>
                     </span>
                 </div>
 
@@ -48,7 +48,7 @@ $bookdata = GetBookByISBN($_GET["isbn"]);
                     <span class="col-5 my-auto fw-bold">Kiadás dátuma:</span>
                     <span class="col-7 my-auto">
                         <?php
-                        $date = date_create($bookdata["kiadasdatuma"]);
+                        $date = date_create($bookdata["date_published"]);
                         echo date_format($date, "Y. m. d.");
                         ?>
                     </span>
@@ -57,14 +57,14 @@ $bookdata = GetBookByISBN($_GET["isbn"]);
                 <div class="row pt-1">
                     <span class="col-5 my-auto fw-bold">Nyelv:</span>
                     <span class="col-7 my-auto">
-                        <?php echo $bookdata["nyelv"]; ?>
+                        <?php echo $bookdata["language"]; ?>
                     </span>
                 </div>
 
                 <div class="row py-1">
                     <span class="col-5 my-auto fw-bold">Oldalak száma:</span>
                     <span class="col-7 my-auto">
-                        <?php echo $bookdata["oldalszam"]; ?>
+                        <?php echo $bookdata["pages"]; ?>
                     </span>
                 </div>
 
@@ -76,7 +76,7 @@ $bookdata = GetBookByISBN($_GET["isbn"]);
             <div class="book-content">
                 <span class="fw-bold">Leírás:</span><br>
                 <span>
-                    <?php echo str_replace("\n", "<br>", $bookdata["leiras"]); ?>
+                    <?php echo str_replace("\n", "<br>", $bookdata["description"]); ?>
                 </span>
             </div>
         </div>

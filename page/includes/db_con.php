@@ -1,12 +1,13 @@
 <?php
 function GetConnection()
 {
-	$servername = "localhost";
+	$hostname = "localhost";
 	$username = "jazehin";
 	$password = "VízPronto6395";
+	$database = "konyvaruhaz";
 
 	// Create connection
-	$con = mysqli_connect($servername, $username, $password);
+	$con = mysqli_connect($hostname, $username, $password, $database);
 
 	// Check connection
 	if (!$con) {
