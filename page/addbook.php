@@ -2,7 +2,6 @@
 
 // get lists for datalists
 $writers = GetWriters();
-$genres = GetGenres();
 $publishers = GetPublishers();
 $serieses = GetSerieses();
 $languages = GetLanguages();
