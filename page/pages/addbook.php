@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // checking the stock
     $bookdata["stock"] = (strlen($_POST["stock"]) == 0 ? NULL : intval($_POST["stock"]));
 
-    $isStockValid = $bookdata["stock"] >= 0 && strval($bookdata["stock"]) == $_POST["stock"];
+    $isStockValid = strlen($_POST["stock"]) > 0 && $bookdata["stock"] >= 0 && strval($bookdata["stock"]) == $_POST["stock"];
 
     if (!$isStockValid) {
         $errors["stock"] = "Kérem 0-t, vagy nagyobb számot adjon meg készletnek!";
@@ -290,8 +290,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 
-<form class="card my-3 p-3" action="./addbook" method="post" autocomplete="off" enctype="multipart/form-data"
-    style="background-color: rgba(225, 211, 180, 0.2);">
+<form class="card p-3" action="./addbook" method="post" autocomplete="off" enctype="multipart/form-data">
     <h1 class="fs-2">Könyv hozzáadása</h1>
     <p><span class="text-danger">*</span> kötelező mező</p>
 
@@ -472,10 +471,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="row">
                 <div class="col-6 mb-3">
-                    <input type="button" class="form-control" value="+" onclick="AddField('genre')">
+                    <input type="button" class="btn-brown form-control" value="+" onclick="AddField('genre')">
                 </div>
                 <div class="col-6 mb-3">
-                    <input type="button" class="form-control" value="-" onclick="RemoveField('genre')">
+                    <input type="button" class="btn-brown form-control" value="-" onclick="RemoveField('genre')">
                 </div>
             </div>
             <?php if (!empty($errors["genres"])) { ?>
@@ -509,10 +508,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="row">
                 <div class="col-6 mb-3">
-                    <input type="button" class="form-control" value="+" onclick="AddField('writer')">
+                    <input type="button" class="btn-brown form-control" value="+" onclick="AddField('writer')">
                 </div>
                 <div class="col-6 mb-3">
-                    <input type="button" class="form-control" value="-" onclick="RemoveField('writer')">
+                    <input type="button" class="btn-brown form-control" value="-" onclick="RemoveField('writer')">
                 </div>
             </div>
             <?php if (!empty($errors["writers"])) { ?>
@@ -561,6 +560,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
-    <input type="submit" class="form-control" value="Felvétel"
-        style="background-color: rgba(139, 94, 60, 1); color: white;">
+    <input type="submit" class="btn-brown form-control" value="Felvétel">
 </form>

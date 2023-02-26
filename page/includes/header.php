@@ -21,7 +21,7 @@ $genres = GetGenres();
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://kit.fontawesome.com/fea0ed64d7.js" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" type="text/css" href="css/mystyle.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
     <script src="js/myscript.js"></script>
 </head>
 
@@ -42,15 +42,13 @@ $genres = GetGenres();
                     <form class="d-flex" role="search" method="get">
                         <input class="flex-fill form-control me-2" type="search" placeholder="Keresés"
                             aria-label="Search">
-                        <input class="btn" type="submit" value="Keresés"
-                            style="background-color: rgba(139, 94, 60, 1); color: white;">
-                        <a class="btn text-nowrap ms-2 d-none d-lg-block"
-                            style="background-color: rgba(139, 94, 60, 1); color: white;">Részletes
+                        <input class="btn btn-brown" type="submit" value="Keresés">
+                        <a class="btn btn-brown text-nowrap ms-2 d-none d-lg-block">Részletes
                             keresés</a>
                     </form>
                 </div>
                 <div class="col-lg-auto col px-0 text-end">
-                        <a class="btn border-0" data-bs-toggle="modal" data-bs-target="#login">
+                        <a class="btn border-0" href="/login">
                             <i class="fa-solid fa-circle-user fs-2"></i>
                         </a>
                         <a class="btn border-0" href="/basket">
@@ -63,8 +61,7 @@ $genres = GetGenres();
         <div class="container d-block d-lg-none pt-2">
             <form class="d-flex" role="search" method="get">
                 <input class="flex-fill form-control me-2" type="search" placeholder="Keresés" aria-label="Search">
-                <input class="btn" type="submit" value="Keresés"
-                    style="background-color: rgba(139, 94, 60, 1); color: white;">
+                <input class="btn btn-brown" type="submit" value="Keresés">
             </form>
         </div>
     </header>
@@ -94,23 +91,5 @@ $genres = GetGenres();
             </div>
         </div>
     </nav>
-
-    <div class="modal fade" id="login" tabindex="-1" aria-labelledby="loginLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <main class="container">

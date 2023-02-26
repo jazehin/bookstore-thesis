@@ -7,19 +7,25 @@ if (isset($_GET['p'])) {
 
 switch ($p) {
     case 'main':
-        $content = 'mainpage.php';
+        $content = 'pages/mainpage.php';
+        break;
+    case 'login':
+        $content = 'pages/login.php';
+        break;
+    case 'forgotten-password':
+        $content = 'pages/forgottenpassword.php';
         break;
     case 'book':
-        $content = 'bookpage.php';
+        $content = 'pages/bookpage.php';
         break;
     case 'books':
-        $content = 'books.php';
+        $content = 'pages/books.php';
         break;
     case 'addbook':
-        $content = 'addbook.php';
+        $content = 'pages/addbook.php';
         break;
     default:
-        header("Location: ./");
+        header("Location: /");
         break;
 }
 

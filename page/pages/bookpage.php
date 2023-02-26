@@ -2,7 +2,7 @@
 $bookdata = GetBookByISBN($_GET["isbn"]);
 ?>
 
-<div class="card my-3 p-3">
+<div class="card p-3">
     <div class="row">
         <span class="fw-bold fs-5 lh-1 mb-0">
             <?php echo $bookdata["title"]; ?>

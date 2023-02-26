@@ -33,3 +33,12 @@ i {
     color: black;
     text-decoration: none;
 }
+
+.btn-brown {
+    background-color: rgba(139, 94, 60, 1)!important; 
+    color: white!important;
+}
+
+form.card {
+    background-color: rgba(225, 211, 180, 0.2);
+}

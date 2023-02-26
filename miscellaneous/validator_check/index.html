@@ -13,305 +13,115 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/fea0ed64d7.js" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" type="text/css" href="css/mystyle.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
     <script src="js/myscript.js"></script>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-md navbar-light" style="background-color: rgba(225, 211, 180, 1);">
+    <header class="navbar" style="background-color: rgba(225, 211, 180, 1);">
         <div class="container">
-            <a class="navbar-brand" href="./">Könyváruház</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas"
-                aria-controls="offcanvas">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel"
-                style="background-color: rgba(225, 211, 180, 1);">
-                <div class="offcanvas-header">
-                    <a class="navbar-brand" id="offcanvasLabel" href="./">Könyváruház</a>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <div class="row align-items-center w-100 mx-auto">
+                <div class="col-auto d-inline d-lg-none ps-0">
+                    <button type="button" class="navbar-toggler" data-bs-toggle="offcanvas" data-bs-target="#offcanvas"
+                        aria-controls="offcanvas">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
                 </div>
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Könyvek</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="./addbook">Könyv hozzáadása</a>
-                        </li>
-                        <!--
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                Dropdown
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled">Disabled</a>
-                        </li>
-                        -->
-                    </ul>
+                <div class="col-lg-auto col-auto">
+                    <a class="navbar-brand" href="/main">Könyváruház</a>
+                </div>
+                <div class="col px-3 d-none d-lg-block">
                     <form class="d-flex" role="search" method="get">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn" style="background-color: rgba(139, 94, 60, 1); color: white;" type="submit">Search</button>
+                        <input class="flex-fill form-control me-2" type="search" placeholder="Keresés"
+                            aria-label="Search">
+                        <input class="btn btn-brown" type="submit" value="Keresés">
+                        <a class="btn btn-brown text-nowrap ms-2 d-none d-lg-block">Részletes
+                            keresés</a>
                     </form>
-
                 </div>
+                <div class="col-lg-auto col px-0 text-end">
+                        <a class="btn border-0" href="/login">
+                            <i class="fa-solid fa-circle-user fs-2"></i>
+                        </a>
+                        <a class="btn border-0" href="/basket">
+                            <i class="fa-solid fa-basket-shopping fs-2"></i>
+                        </a>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="container d-block d-lg-none pt-2">
+            <form class="d-flex" role="search" method="get">
+                <input class="flex-fill form-control me-2" type="search" placeholder="Keresés" aria-label="Search">
+                <input class="btn btn-brown" type="submit" value="Keresés">
+            </form>
+        </div>
+    </header>
+    <nav class="navbar">
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel"
+            style="background-color: rgba(225, 211, 180, 1);">
+            <div class="offcanvas-header">
+                <a class="navbar-brand" id="offcanvasLabel" href="/">Könyváruház</a>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/books/9789635841523">Könyv</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Admin
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/addbook">Könyv hozzáadása</a></li>
+                            <li><a class="dropdown-item" href="#">Könyv módosítása</a></li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
 
-    <main class="container">
-
-    
-
-    <!--
-    <div class="container-fluid">
-            <a class="navbar-brand" href="#">Navbar</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasContent"
-                aria-controls="offcanvasContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="offcanvas-md offcanvas-start" tabindex="-1" id="offcanvasContent"
-                aria-labelledby="offcanvasContentLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasContentLabel">Navbar</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-                        data-bs-target="#offcanvasContent" aria-label="Close"></button>
+    <main class="container"><div class="row">
+    <div class="col-lg-6">
+        <form class="card p-3" action="/login" method="post" autocomplete="on">
+            <h1 class="fs-2">Belépés</h1>
+            <label for="username" class="form-label">Felhasználónév:</label>
+            <input type="text" name="username" class="form-control">
+            <label for="password" class="form-label mt-2">Jelszó:</label>
+            <input type="password" name="password" class="form-control">
+            <div class="row mt-3">
+                <div class="col-4">
+                    <input type="submit" value="Belépés" class="form-control">
                 </div>
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-start flex-grow-1 pe-3">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                Dropdown
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled">Disabled</a>
-                        </li>
-                    </ul>
-                </div>
+                <div class="col-8"></div>
             </div>
-        </div>
--->
-
-
-<form class="card my-3 p-3" action="./addbook" method="post" enctype="multipart/form-data"
-    style="background-color: rgba(225, 211, 180, 0.2);">
-    <h1 class="fs-2">Könyv hozzáadása</h1>
-    <p><span class="text-danger">*</span> kötelező mező</p>
-
-    
-    <div class="row">
-        <div class="col-sm-4 mb-3">
-            <label for="isbn" class="form-label">ISBN: <span class="text-danger">*</span></label>
-            <input type="text" name="isbn" id="isbn" class="form-control" value="">
-                            <p class="text-danger">
-                    Kérem adjon meg egy helyes ISBN-t! Az ISBN 10 vagy 13 karakter hosszú és csak számokat tartalmaz!                </p>
-                    </div>
-        <div class="col-sm-4 mb-3">
-            <label for="title" class="form-label">Könyvcím: <span class="text-danger">*</span></label>
-            <input type="text" name="title" id="title" class="form-control">
-                            <p class="text-danger">
-                    Kérem adja meg a könyv címét!                </p>
-                    </div>
-        <div class="col-sm-4 mb-3">
-            <label for="series" class="form-label">Könyvsorozat:</label>
-            <input type="text" name="series" id="series" list="serieses" class="form-control">
-            <datalist id="serieses">
-                                    <option value="Harry Potter">
-                                        <option value="Egy ropi naplója">
-                                </datalist>
-                    </div>
+        </form>
     </div>
-
-    <div class="row">
-        <div class="col-sm-3 mb-3">
-            <label for="date-of-publishing" class="form-label">Kiadás dátuma: <span class="text-danger">*</span></label>
-            <input type="date" name="date-of-publishing" id="date-of-publishing" class="form-control">
-                            <p class="text-danger">
-                    Kérem adjon meg egy dátumot!                </p>
-                    </div>
-        <div class="col-sm-3 mb-3">
-            <label for="stock" class="form-label">Készlet: <span class="text-danger">*</span></label>
-            <div class="input-group">
-                <input type="text" name="stock" id="stock" class="form-control">
-                <span class="input-group-text">db</span>
+    <div class="col-lg-6">
+        <form class="card p-3" action="/signup" method="post" autocomplete="off">
+            <h1 class="fs-2 mb-0">Még nincs fiókja?</h1>
+            <span class="mb-2">Regisztráljon egyet most!</span>
+            <label for="username" class="form-label">Felhasználónév:</label>
+            <input type="text" name="username" class="form-control">
+            <label for="password" class="form-label mt-2">Jelszó:</label>
+            <input type="password" name="password" class="form-control">
+            <div class="row mt-3">
+                <div class="col-4">
+                    <input type="submit" value="Regisztráció" class="form-control">
+                </div>
             </div>
-                            <p class="text-danger">
-                    Kérem 0-t, vagy nagyobb számot adjon meg készletnek!                </p>
-                    </div>
-        <div class="col-sm-3 mb-3">
-            <label for="number-of-pages" class="form-label">Oldalszám: <span class="text-danger">*</span></label>
-            <input type="text" name="number-of-pages" id="number-of-pages" class="form-control">
-                            <p class="text-danger">
-                    Kérem pozitív számot adjon meg az oldalak számának!                </p>
-                    </div>
-        <div class="col-sm-3 mb-3">
-            <label for="weight" class="form-label">Súly:</label>
-            <div class="input-group">
-                <input type="text" name="weight" id="weight" class="form-control">
-                <span class="input-group-text">gramm</span>
-            </div>
-                    </div>
+        </form>
     </div>
+</div></main>
 
-    <div class="row">
-        <div class="col-sm-4 mb-3">
-            <label for="publisher" class="form-label">Kiadó: <span class="text-danger">*</span></label>
-            <input type="text" name="publisher" id="publisher" list="publishers" class="form-control">
-            <datalist id="publishers">
-                                    <option value="Park Könyvkiadó">
-                                        <option value="Álomgyár Kiadó">
-                                        <option value="Athenaeum Kiadó Kft.">
-                                        <option value="Kocsis Kiadó">
-                                        <option value="69420 kiadó">
-                                        <option value="dsfdg">
-                                        <option value="fgfd">
-                                </datalist>
-                            <p class="text-danger">
-                    Kérem adjon meg egy kiadót!                </p>
-                    </div>
-        <div class="col-sm-4 mb-3">
-            <label for="covertype" class="form-label">Kötéstípus: <span class="text-danger">*</span></label>
-            <input type="text" name="covertype" id="covertype" list="covertypes" class="form-control">
-            <datalist id="covertypes">
-                                    <option value="keménykötésű">
-                                        <option value="papírkötésű">
-                                        <option value="kartonált">
-                                        <option value="dgggbdg">
-                                        <option value="gfgfh">
-                                </datalist>
-                            <p class="text-danger">
-                    Kérem adjon meg egy kötéstípust!                </p>
-                    </div>
-        <div class="col-sm-4 mb-3">
-            <label for="language" class="form-label">Nyelv: <span class="text-danger">*</span></label>
-            <input type="text" name="language" id="language" list="languages" class="form-control">
-            <datalist id="languages">
-                                    <option value="magyar">
-                                        <option value="angol">
-                                        <option value="görög">
-                                        <option value="nem">
-                                        <option value="gdgfg">
-                                        <option value="gf">
-                                </datalist>
-                            <p class="text-danger">
-                    Kérem adjon meg egy nyelvet!                </p>
-                    </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm-12 mb-3">
-            <label for="description" class="form-label">Leírás: <span class="text-danger">*</span></label>
-            <textarea name="description" id="description" class="form-control" rows="7"></textarea>
-        </div>
-                    <p class="text-danger">
-                Kérem írjon leírást a könyvhöz!            </p>
-            </div>
-
-    <div class="row">
-        <div class="col-sm-6">
-            <label for="genre-1" class="form-label">Műfaj(ok): <span class="text-danger">*</span><br><span
-                    class="small">Nyomja meg a + gombot további mezők felvételéhez és a - gombot az
-                    eltávolításukhoz.</span></label>
-            <div class="row" id="genre-fields">
-                <datalist id="genres">
-                                    </datalist>
-                <div class="col-12 mb-3">
-                    <input type="text" class="form-control genre-field" name="genre-1" id="genre-1" list="genres">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6 mb-3">
-                    <input type="button" class="form-control" value="+" onclick="AddField('genre')">
-                </div>
-                <div class="col-6 mb-3">
-                    <input type="button" class="form-control" value="-" onclick="RemoveField('genre')">
-                </div>
-            </div>
-                            <p class="text-danger">
-                    Kérem adjon meg annyi műfajt ahány mező van!                </p>
-                    </div>
-        <div class="col-sm-6">
-            <label for="writer-1" class="form-label">Író(k): <span class="text-danger">*</span><br><span
-                    class="small">Nyomja meg a + gombot további mezők felvételéhez és a - gombot az
-                    eltávolításukhoz.</span></label>
-            <div class="row" id="writer-fields">
-                <datalist id="writers">
-                                    </datalist>
-                <div class="col-12 mb-3">
-                    <input type="text" class="form-control writer-field" name="writer-1" id="writer-1" list="writers">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6 mb-3">
-                    <input type="button" class="form-control" value="+" onclick="AddField('writer')">
-                </div>
-                <div class="col-6 mb-3">
-                    <input type="button" class="form-control" value="-" onclick="RemoveField('writer')">
-                </div>
-            </div>
-                            <p class="text-danger">
-                    Kérem adjon meg annyi írót ahány mező van!                </p>
-                    </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm-4 mb-3">
-            <label for="price" class="form-label">Ár: <span class="text-danger">*</span></label>
-            <div class="input-group">
-                <input type="text" name="price" id="price" class="form-control">
-                <span class="input-group-text">Ft</span>
-            </div>
-                            <p class="text-danger">
-                    Kérem pozitív számot adjon meg a könyv árának!                </p>
-                    </div>
-        <div class="col-sm-4 mb-3">
-            <label for="discounted-price" class="form-label">Akciós ár:</label>
-            <div class="input-group">
-                <input type="text" name="discounted-price" id="discounted-price" class="form-control">
-                <span class="input-group-text">Ft</span>
-            </div>
-                    </div>
-        <div class="col-sm-4 mb-3">
-            <label for="cover" class="form-label">Borítókép:</label>
-            <input type="file" name="cover" id="cover" class="form-control">
-                            <p class="text-danger">
-                    A borító feltöltéséhez szükség van a könyv ISBN-ére!                </p>
-                    </div>
-    </div>
-
-    <input type="submit" class="form-control" value="Felvétel" style="background-color: rgba(139, 94, 60, 1); color: white;">
-</form></main>
-
-<footer>
-    <div class="container-fluid" style="background-color: #E1D3B4;">
+<footer class="mt-3">
+    <div class="container-fluid" style="background-color: rgba(225, 211, 180, 1);">
         <div class="container py-3">
             Example footer<br>
             Impresszum<br>
