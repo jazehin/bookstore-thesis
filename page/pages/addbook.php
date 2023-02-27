@@ -283,12 +283,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $success = false;
     }
 }
-
-
-// TODO: on failed form submission load the erroneus data back into the form
 ?>
 
-
+<script src="js/addbook_field_control.js"></script>
 
 <form class="card p-3" action="./addbook" method="post" autocomplete="off" enctype="multipart/form-data">
     <h1 class="fs-2">Könyv hozzáadása</h1>

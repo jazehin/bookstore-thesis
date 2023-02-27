@@ -185,6 +185,45 @@ function GetBookByISBN($isbn) {
     return $assoc;
 }
 
+function Login($username, $password) {
+    $con = GetConnection();
+    $sql = "SELECT user_id FROM login WHERE username = ? AND password = ?;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "ss", $username, $password);
+    mysqli_execute($stmt);
+    mysqli_stmt_bind_result($stmt, $user_id);
+    mysqli_stmt_fetch($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+    return $user_id;
+}
+
+function GetUserById($id) {
+    $con = GetConnection();
+    $sql = "CALL GetUserById(?);";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $id);
+    mysqli_execute($stmt);
+    mysqli_stmt_bind_result($stmt, $username, $email, $type, $family_name, $given_name, $gender, $birthdate, $phone_number);
+    mysqli_stmt_fetch($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    $array = array(
+        "id" => $id,
+        "username" => $username,
+        "email" => $email,
+        "type" => $type,
+        "family_name" => $family_name,
+        "given_name" => $given_name,
+        "gender" => $gender,
+        "birthdate" => $birthdate,
+        "phone_number" => $phone_number
+    );
+
+    return $array;
+}
+
 function ArrayToString($array)
 {
     $string = "";

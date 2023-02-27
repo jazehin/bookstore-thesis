@@ -12,6 +12,12 @@ switch ($p) {
     case 'login':
         $content = 'pages/login.php';
         break;
+    case 'profile':
+        $content = 'pages/profile.php';
+        break;
+    case 'signout':
+        $content = 'pages/signout.php';
+        break;
     case 'forgotten-password':
         $content = 'pages/forgottenpassword.php';
         break;

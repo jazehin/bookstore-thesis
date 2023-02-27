@@ -149,7 +149,6 @@ INSERT INTO user_types (type) VALUES
 
 CREATE TABLE users (
     user_id INT AUTO_INCREMENT NOT NULL,
-    username VARCHAR(20) CHARACTER SET UTF8MB4 NOT NULL,
     type_id INT NOT NULL,
     family_name VARCHAR(50) CHARACTER SET UTF8MB4 NULL,
     given_name VARCHAR(50) CHARACTER SET UTF8MB4 NULL,
@@ -159,6 +158,36 @@ CREATE TABLE users (
     PRIMARY KEY (user_id),
     FOREIGN KEY (type_id) REFERENCES user_types(type_id)
 );
+
+CREATE TABLE login (
+    login_id INT AUTO_INCREMENT NOT NULL,
+    user_id INT UNIQUE NOT NULL,
+    username VARCHAR(20) CHARACTER SET UTF8MB4 NOT NULL,
+    email VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL,
+    password CHAR(64) CHARACTER SET UTF8MB4 NOT NULL,
+    PRIMARY KEY (login_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+DELIMITER //
+CREATE PROCEDURE GetUserById(_user_id INT)
+BEGIN
+    SELECT
+        username,
+        email,
+        type,
+        family_name,
+        given_name,
+        gender,
+        birthdate,
+        phone_number
+    FROM
+        users
+        NATURAL JOIN login
+        NATURAL JOIN user_types
+    WHERE user_id = _user_id;
+END //
+DELIMITER ;
 
 CREATE TABLE user_book_reviews (
     user_id INT NOT NULL,
@@ -210,15 +239,6 @@ CREATE TABLE addresses (
 );
 
 -- TODO: make connections
-
-CREATE TABLE login (
-    login_id INT AUTO_INCREMENT NOT NULL,
-    user_id INT NOT NULL,
-    email VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL,
-    password CHAR(64) CHARACTER SET UTF8MB4 NOT NULL,
-    PRIMARY KEY (login_id),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
-);
 
 CREATE TABLE comments (
     comment_id INT AUTO_INCREMENT NOT NULL,

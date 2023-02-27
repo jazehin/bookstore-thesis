@@ -2,6 +2,8 @@
 include("includes/db_con.php");
 include("includes/sql.php");
 
+session_start();
+
 $genres = GetGenres();
 ?>
 
@@ -22,7 +24,6 @@ $genres = GetGenres();
     <script src="https://kit.fontawesome.com/fea0ed64d7.js" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    <script src="js/myscript.js"></script>
 </head>
 
 <body>
@@ -48,13 +49,15 @@ $genres = GetGenres();
                     </form>
                 </div>
                 <div class="col-lg-auto col px-0 text-end">
-                        <a class="btn border-0" href="/login">
-                            <i class="fa-solid fa-circle-user fs-2"></i>
-                        </a>
-                        <a class="btn border-0" href="/basket">
-                            <i class="fa-solid fa-basket-shopping fs-2"></i>
-                        </a>
-                    
+                    <a class="btn border-0" <?php if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"]) { ?>
+                            href="/profile/<?php echo $_SESSION["user"]["id"] ?>" <?php } else { ?> data-bs-toggle="modal"
+                            data-bs-target="#loginModal" <?php } ?>>
+                        <i class="fa-solid fa-circle-user fs-2"></i>
+                    </a>
+                    <a class="btn border-0" href="/basket">
+                        <i class="fa-solid fa-basket-shopping fs-2"></i>
+                    </a>
+
                 </div>
             </div>
         </div>
@@ -91,5 +94,89 @@ $genres = GetGenres();
             </div>
         </div>
     </nav>
+
+    <script src="js/login.js"></script>
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="loginModalLabel">Belépés</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <span id="login-error" class="text-danger d-none"></span>
+                    <label for="login-username" class="form-label">Felhasználónév:</label>
+                    <input type="text" name="username" id="login-username" class="form-control">
+                    <label for="login-password" class="form-label mt-2">Jelszó:</label>
+                    <input type="password" name="password" id="login-password" class="form-control">
+                    <div class="mt-2">
+                        <a href="/login/forgotten-password">Elfelejtette jelszavát?</a>
+                    </div>
+                    <div class="mt-2">
+                        <span>Még nincs fiókja? </span>
+                        <a href="" data-bs-toggle="modal" data-bs-target="#signupModal">Regisztráljon most!</a>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Mégse">
+                    <input type="button" value="Belépés" class="btn-brown btn" onclick="login();">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="signupModalLabel">Regisztráció</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/signup" method="post" autocomplete="on">
+                    <div class="modal-body">
+                        <label for="signup_redirect_uri" class="d-none">URI:</label>
+                        <input type="text" name="signup_redirect_uri" id="signup_redirect_uri" class="d-none"
+                            value="<?php echo $uri; ?>">
+                        <label for="signup-email" class="form-label">E-mail cím:</label>
+                        <input type="text" name="email" id="signup-email" class="form-control">
+                        <label for="signup-username" class="form-label mt-2">Felhasználónév:</label>
+                        <input type="text" name="username" id="signup-username" class="form-control">
+                        <label for="signup-password" class="form-label mt-2">Jelszó:</label>
+                        <input type="password" name="password" id="signup-password" class="form-control">
+                        <div class="mt-2">
+                            <span>Már van fiókja? </span>
+                            <a href="" data-bs-toggle="modal" data-bs-target="#loginModal">Jelentkezzen be!</a>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Mégse">
+                        <input type="submit" value="Regisztráció" class="btn-brown btn">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="loggedInModal" tabindex="-1" aria-labelledby="loggedInModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="loggedInModalLabel">Regisztráció</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                    <div class="modal-body">
+                        
+                        <div class="mt-2">
+                            <span>Már van fiókja? </span>
+                            <a href="" data-bs-toggle="modal" data-bs-target="#loginModal">Jelentkezzen be!</a>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Mégse">
+                        <input type="submit" value="Regisztráció" class="btn-brown btn">
+                    </div>
+            </div>
+        </div>
+    </div>
 
     <main class="container">
