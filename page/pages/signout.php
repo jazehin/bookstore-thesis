@@ -1,5 +1,6 @@
 <?php
-    session_destroy();
+    unset($_SESSION["user"]);
+    $_SESSION["logged_in"] = false;
 ?>
 
 <script>

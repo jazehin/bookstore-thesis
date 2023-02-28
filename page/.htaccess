@@ -3,13 +3,13 @@ RewriteRule ^/$ /?p=main [L]
 RewriteRule ^main$ /?p=main [L]
 
 RewriteRule ^login$ /?p=login [L]
-RewriteRule ^login/forgotten-password$ /?p=forgotten-password [L]
+RewriteRule ^login/forgotten$ /?p=forgotten-password [L]
 
 RewriteRule ^signup$ /?p=signup [L]
 
 RewriteRule ^signout$ /?p=signout [L]
 
-RewriteRule ^profile/([0-9]+)/?$ /?p=profile&user_id=$1 [NC,L]
+RewriteRule ^profile$ /?p=profile [L]
 
 RewriteRule ^books$ /?p=books [L]
 RewriteRule ^books/([0-9]+)/?$ /?p=book&isbn=$1 [NC,L]

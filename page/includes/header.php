@@ -3,6 +3,7 @@ include("includes/db_con.php");
 include("includes/sql.php");
 
 session_start();
+$is_logged_in = isset($_SESSION["logged_in"]) && $_SESSION["logged_in"];
 
 $genres = GetGenres();
 ?>
@@ -31,8 +32,8 @@ $genres = GetGenres();
         <div class="container">
             <div class="row align-items-center w-100 mx-auto">
                 <div class="col-auto d-inline d-lg-none ps-0">
-                    <button type="button" class="navbar-toggler" data-bs-toggle="offcanvas" data-bs-target="#offcanvas"
-                        aria-controls="offcanvas">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
+                        aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                 </div>
@@ -49,8 +50,8 @@ $genres = GetGenres();
                     </form>
                 </div>
                 <div class="col-lg-auto col px-0 text-end">
-                    <a class="btn border-0" <?php if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"]) { ?>
-                            href="/profile/<?php echo $_SESSION["user"]["id"] ?>" <?php } else { ?> data-bs-toggle="modal"
+                    <a class="btn border-0" <?php if ($is_logged_in) { ?> data-bs-toggle="modal"
+                            data-bs-target="#loggedInModal" <?php } else { ?> data-bs-toggle="modal"
                             data-bs-target="#loginModal" <?php } ?>>
                         <i class="fa-solid fa-circle-user fs-2"></i>
                     </a>
@@ -68,6 +69,7 @@ $genres = GetGenres();
             </form>
         </div>
     </header>
+    <!--
     <nav class="navbar">
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel"
             style="background-color: rgba(225, 211, 180, 1);">
@@ -94,6 +96,30 @@ $genres = GetGenres();
             </div>
         </div>
     </nav>
+    -->
+    <nav class="navbar navbar-expand-lg py-0 mb-3" style="background-color: rgba(225, 211, 180, 0.5);">
+        <div class="container ps-3">
+            <div class="collapse navbar-collapse py-1" id="navbar">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/books/9789635841523">Könyv</a>
+                    </li>
+                    <?php if ($is_logged_in && $_SESSION["user"]["type"] === "administrator") { ?>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Admin
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/addbook">Könyv hozzáadása</a></li>
+                            <li><a class="dropdown-item" href="#">Könyv módosítása</a></li>
+                        </ul>
+                    </li>
+                    <?php } ?>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
     <script src="js/login.js"></script>
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
@@ -110,7 +136,7 @@ $genres = GetGenres();
                     <label for="login-password" class="form-label mt-2">Jelszó:</label>
                     <input type="password" name="password" id="login-password" class="form-control">
                     <div class="mt-2">
-                        <a href="/login/forgotten-password">Elfelejtette jelszavát?</a>
+                        <a href="/login/forgotten">Elfelejtette jelszavát?</a>
                     </div>
                     <div class="mt-2">
                         <span>Még nincs fiókja? </span>
@@ -161,20 +187,22 @@ $genres = GetGenres();
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="loggedInModalLabel">Regisztráció</h1>
+                    <h1 class="modal-title fs-5" id="loggedInModalLabel">Üdvözlöm,
+                        <?php if ($is_logged_in)
+                            echo $_SESSION["user"]["username"]; ?>
+                    </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                    <div class="modal-body">
-                        
-                        <div class="mt-2">
-                            <span>Már van fiókja? </span>
-                            <a href="" data-bs-toggle="modal" data-bs-target="#loginModal">Jelentkezzen be!</a>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Mégse">
-                        <input type="submit" value="Regisztráció" class="btn-brown btn">
-                    </div>
+
+                <div class="modal-body">
+                    <span>Köszönjük, hogy minket választ!</span>
+                </div>
+
+                <div class="modal-footer">
+                    <a href="/profile" class="btn btn-brown">Profil megtekintése</a>
+                    <a href="/signout" class="btn btn-danger">Kijelentkezés</a>
+                    <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Bezárás">
+                </div>
             </div>
         </div>
     </div>

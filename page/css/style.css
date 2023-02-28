@@ -39,6 +39,10 @@ i {
     color: white!important;
 }
 
-form.card {
+.card {
     background-color: rgba(225, 211, 180, 0.2);
+}
+
+navbar {
+    background-color: rgba(225, 211, 180, 1);
 }

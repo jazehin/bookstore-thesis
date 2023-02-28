@@ -155,8 +155,16 @@ CREATE TABLE users (
     gender ENUM('female', 'male') NULL DEFAULT NULL,
     birthdate DATE NULL,
     phone_number VARCHAR(12) NULL,
+    points INT UNSIGNED NOT NULL DEFAULT 0,
     PRIMARY KEY (user_id),
     FOREIGN KEY (type_id) REFERENCES user_types(type_id)
+);
+
+CREATE TABLE user_preferences (
+    user_id INT NOT NULL,
+    genre_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (genre_id) REFERENCES genres(genre_id)
 );
 
 CREATE TABLE login (
@@ -235,7 +243,15 @@ CREATE TABLE addresses (
     public_space VARCHAR(50) NOT NULL,
     zip_code TINYINT NOT NULL,
     note VARCHAR(50) NULL,
-    PRIMARY KEY (address_id)
+    PRIMARY KEY (address_id),
+    FOREIGN KEY (county_id) REFERENCES counties(county_id)
+);
+
+CREATE TABLE users_addresses (
+    user_id INT NOT NULL,
+    address_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (address_id) REFERENCES addresses(address_id)
 );
 
 -- TODO: make connections
