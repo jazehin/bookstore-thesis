@@ -179,13 +179,20 @@ function InsertBook($bookdata)
 
 function GetBookByISBN($isbn) {
     $con = GetConnection();
-    $sql = 'CALL GetBookByISBN("' . $isbn . '")';
+    $sql = 'CALL GetBookByISBN("' . $isbn . '");';
     $rs = mysqli_query($con, $sql);
     $assoc = mysqli_fetch_assoc($rs);
     return $assoc;
 }
 
-function Login($username, $password) {
+function DoesBookExist($isbn): bool {
+    $con = GetConnection();
+    $sql = 'SELECT DoesBookExist("' . $isbn . '");';
+    $rs = mysqli_query($con, $sql);
+    return mysqli_fetch_row($rs)[0];
+}
+
+function Login($username, $password): int {
     $con = GetConnection();
     $sql = "SELECT user_id FROM login WHERE username = ? AND password = ?;";
     $stmt = mysqli_prepare($con, $sql);
@@ -228,8 +235,8 @@ function ArrayToString($array)
 {
     $string = "";
     foreach ($array as $key => $value) {
-        $string += $value . ", ";
+        $string += $value . ";";
     }
-    return substr($string, 0, strlen($string) - 2);
+    return substr($string, 0, strlen($string) - 1);
 }
 ?>

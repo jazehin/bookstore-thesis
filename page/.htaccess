@@ -3,7 +3,8 @@ RewriteRule ^/$ /?p=main [L]
 RewriteRule ^main$ /?p=main [L]
 
 RewriteRule ^login$ /?p=login [L]
-RewriteRule ^login/forgotten$ /?p=forgotten-password [L]
+
+RewriteRule ^forgotten$ /?p=forgotten-password [L]
 
 RewriteRule ^signup$ /?p=signup [L]
 
@@ -15,3 +16,5 @@ RewriteRule ^books$ /?p=books [L]
 RewriteRule ^books/([0-9]+)/?$ /?p=book&isbn=$1 [NC,L]
 
 RewriteRule ^addbook$ /?p=addbook [L]
+RewriteRule ^modifybook/([0-9]+)/?$ /?p=modifybook&isbn=$1 [NC,L]
+RewriteRule ^modifybook$ /?p=modifybook [L]

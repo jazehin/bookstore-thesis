@@ -1,308 +1,311 @@
 <?php if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] && $_SESSION["user"]["type"] === "administrator") { ?>
 
-<?php
+    <?php
 
-// get lists for datalists
-$writers = GetWriters();
-$publishers = GetPublishers();
-$serieses = GetSerieses();
-$languages = GetLanguages();
-$covertypes = GetCoverTypes();
+    // get lists for datalists
+    $writers = GetWriters();
+    $publishers = GetPublishers();
+    $serieses = GetSerieses();
+    $languages = GetLanguages();
+    $covertypes = GetCoverTypes();
 
-// declare an array for $_POST
-$bookdata = array(
-    "isbn" => "",
-    "title" => "",
-    "series" => "",
-    "date_published" => "",
-    "stock" => "",
-    "pages" => "",
-    "weight" => "",
-    "publisher" => "",
-    "covertype" => "",
-    "language" => "",
-    "description" => "",
-    "genres" => array(""),
-    "writers" => array(""),
-    "price" => "",
-    "discounted_price" => ""
-);
+    // declare an array for $_POST
+    $bookdata = array(
+        "isbn" => "",
+        "title" => "",
+        "series" => "",
+        "date_published" => "",
+        "stock" => "",
+        "pages" => "",
+        "weight" => "",
+        "publisher" => "",
+        "covertype" => "",
+        "language" => "",
+        "description" => "",
+        "genres" => array(""),
+        "writers" => array(""),
+        "price" => "",
+        "discounted_price" => ""
+    );
 
-// declare an array for error messages to be displayed
-$errors = array(
-    "isbn" => "",
-    "title" => "",
-    "series" => "",
-    "date_published" => "",
-    "stock" => "",
-    "pages" => "",
-    "weight" => "",
-    "publisher" => "",
-    "covertype" => "",
-    "language" => "",
-    "description" => "",
-    "genres" => "",
-    "writers" => "",
-    "price" => "",
-    "discounted_price" => "",
-    "cover" => ""
-);
+    // declare an array for error messages to be displayed
+    $errors = array(
+        "isbn" => "",
+        "title" => "",
+        "series" => "",
+        "date_published" => "",
+        "stock" => "",
+        "pages" => "",
+        "weight" => "",
+        "publisher" => "",
+        "covertype" => "",
+        "language" => "",
+        "description" => "",
+        "genres" => "",
+        "writers" => "",
+        "price" => "",
+        "discounted_price" => "",
+        "cover" => ""
+    );
 
-// boolean to control whether to display the $_POST variables in the input fields or not
-$display = false;
+    // boolean to control whether to display the $_POST variables in the input fields or not
+    $display = false;
 
-// boolean to display a "successfully added" message
-$success = false;
+    // boolean to display a "successfully added" message
+    $success = false;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // checking ISBN
-    $bookdata["isbn"] = $_POST["isbn"];
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // checking ISBN
+        $bookdata["isbn"] = $_POST["isbn"];
 
-    $isIsbnValid = (strlen($bookdata["isbn"]) == 10 || strlen($bookdata["isbn"]) == 13) && preg_match("/^\d+$/", $bookdata["isbn"]);
+        $isIsbnValid = (strlen($bookdata["isbn"]) == 10 || strlen($bookdata["isbn"]) == 13) && preg_match("/^\d+$/", $bookdata["isbn"]);
 
-    if (!$isIsbnValid) {
-        $errors["isbn"] = "Kérem adjon meg egy helyes ISBN-t! Az ISBN 10 vagy 13 karakter hosszú és csak számokat tartalmaz!";
-    } else if (DoesBookExist($bookdata["isbn"])) {
-        $errors["isbn"] = 'Ilyen ISBN azonosítóval már létezik könyv az adatbázisban! Ha módosítani szeretné, kérem menjen a <a href="/modifybook/'.$bookdata["isbn"].'">könyvmódosítási</a> oldalra!';
-    }
+        if (!$isIsbnValid) {
+            $errors["isbn"] = "Kérem adjon meg egy helyes ISBN-t! Az ISBN 10 vagy 13 karakter hosszú és csak számokat tartalmaz!";
+        } else if (DoesBookExist($bookdata["isbn"])) {
+            $errors["isbn"] = 'Ilyen ISBN azonosítóval már létezik könyv az adatbázisban! Ha módosítani szeretné, kérem menjen a <a href="/modifybook/' . $bookdata["isbn"] . '">könyvmódosítási</a> oldalra!';
+        }
 
-    // checking book title 
-    $bookdata["title"] = $_POST["title"];
+        // checking book title 
+        $bookdata["title"] = $_POST["title"];
 
-    $isTitleValid = !empty($bookdata["title"]);
+        $isTitleValid = !empty($bookdata["title"]);
 
-    if (!$isTitleValid) {
-        $errors["title"] = "Kérem adja meg a könyv címét!";
-    }
+        if (!$isTitleValid) {
+            $errors["title"] = "Kérem adja meg a könyv címét!";
+        }
 
-    // store series
-    $bookdata["series"] = $_POST["series"];
+        // store series
+        $bookdata["series"] = $_POST["series"];
 
-    // checking the date of publishing
-    $bookdata["date_published"] = $_POST["date_published"];
+        // checking the date of publishing
+        $bookdata["date_published"] = $_POST["date_published"];
 
-    $isPublishingDateValid = !empty($bookdata["date_published"]);
+        $isPublishingDateValid = !empty($bookdata["date_published"]);
 
-    if (!$isPublishingDateValid) {
-        $errors["date_published"] = "Kérem adjon meg egy dátumot!";
-    }
+        if (!$isPublishingDateValid) {
+            $errors["date_published"] = "Kérem adjon meg egy dátumot!";
+        }
 
-    // checking the stock
-    $bookdata["stock"] = (strlen($_POST["stock"]) == 0 ? NULL : intval($_POST["stock"]));
+        // checking the stock
+        $bookdata["stock"] = (strlen($_POST["stock"]) == 0 ? NULL : intval($_POST["stock"]));
 
-    $isStockValid = strlen($_POST["stock"]) > 0 && $bookdata["stock"] >= 0 && strval($bookdata["stock"]) == $_POST["stock"];
+        $isStockValid = strlen($_POST["stock"]) > 0 && $bookdata["stock"] >= 0 && strval($bookdata["stock"]) == $_POST["stock"];
 
-    if (!$isStockValid) {
-        $errors["stock"] = "Kérem 0-t, vagy nagyobb számot adjon meg készletnek!";
-    }
+        if (!$isStockValid) {
+            $errors["stock"] = "Kérem 0-t, vagy nagyobb számot adjon meg készletnek!";
+        }
 
-    // checking the number of pages
-    $bookdata["pages"] = (intval($_POST["pages"]) == 0 ? NULL : intval($_POST["pages"]));
+        // checking the number of pages
+        $bookdata["pages"] = (intval($_POST["pages"]) == 0 ? NULL : intval($_POST["pages"]));
 
-    $isNumberOfPagesValid = $bookdata["pages"] > 0 && strval($bookdata["pages"]) == $_POST["pages"];
+        $isNumberOfPagesValid = $bookdata["pages"] > 0 && strval($bookdata["pages"]) == $_POST["pages"];
 
-    if (!$isNumberOfPagesValid) {
-        $errors["pages"] = "Kérem pozitív számot adjon meg az oldalak számának!";
-    }
+        if (!$isNumberOfPagesValid) {
+            $errors["pages"] = "Kérem pozitív számot adjon meg az oldalak számának!";
+        }
 
-    // checking weight
-    $bookdata["weight"] = (intval($_POST["weight"]) == 0 ? NULL : intval($_POST["weight"]));
+        // checking weight
+        $bookdata["weight"] = (intval($_POST["weight"]) == 0 ? NULL : intval($_POST["weight"]));
 
-    $isWeightValid = empty($_POST['weight']) || (strval($bookdata["weight"]) == $_POST["weight"] && $bookdata["weight"] >= 0);
+        $isWeightValid = empty($_POST['weight']) || (strval($bookdata["weight"]) == $_POST["weight"] && $bookdata["weight"] >= 0);
 
-    if (!$isWeightValid) {
-        $errors["weight"] = "Kérem érvényes súlyt adjon meg!";
-    }
+        if (!$isWeightValid) {
+            $errors["weight"] = "Kérem érvényes súlyt adjon meg!";
+        }
 
-    // checking publisher
-    $bookdata["publisher"] = $_POST["publisher"];
+        // checking publisher
+        $bookdata["publisher"] = $_POST["publisher"];
 
-    $isPublisherValid = !empty($bookdata["publisher"]);
+        $isPublisherValid = !empty($bookdata["publisher"]);
 
-    if (!$isPublisherValid) {
-        $errors["publisher"] = "Kérem adjon meg egy kiadót!";
-    }
+        if (!$isPublisherValid) {
+            $errors["publisher"] = "Kérem adjon meg egy kiadót!";
+        }
 
-    // checking covertype
-    $bookdata["covertype"] = $_POST["covertype"];
+        // checking covertype
+        $bookdata["covertype"] = $_POST["covertype"];
 
-    $isCovertypeValid = !empty($bookdata["covertype"]);
+        $isCovertypeValid = !empty($bookdata["covertype"]);
 
-    if (!$isCovertypeValid) {
-        $errors["covertype"] = "Kérem adjon meg egy kötéstípust!";
-    }
+        if (!$isCovertypeValid) {
+            $errors["covertype"] = "Kérem adjon meg egy kötéstípust!";
+        }
 
-    // checking language
-    $bookdata["language"] = $_POST["language"];
+        // checking language
+        $bookdata["language"] = $_POST["language"];
 
-    $isLanguageValid = !empty($bookdata["language"]);
+        $isLanguageValid = !empty($bookdata["language"]);
 
-    if (!$isLanguageValid) {
-        $errors["language"] = "Kérem adjon meg egy nyelvet!";
-    }
+        if (!$isLanguageValid) {
+            $errors["language"] = "Kérem adjon meg egy nyelvet!";
+        }
 
-    // checking description
-    $bookdata["description"] = $_POST["description"];
+        // checking description
+        $bookdata["description"] = $_POST["description"];
 
-    $isDescriptionValid = !empty($bookdata["description"]);
+        $isDescriptionValid = !empty($bookdata["description"]);
 
-    if (!$isDescriptionValid) {
-        $errors["description"] = "Kérem írjon leírást a könyvhöz!";
-    }
+        if (!$isDescriptionValid) {
+            $errors["description"] = "Kérem írjon leírást a könyvhöz!";
+        }
 
-    // checking genres
-    $bookdata["genres"] = array();
-    $genreCount = 1;
-    while (isset($_POST["genre-" . $genreCount + 1])) {
-        $genreCount++;
-    }
+        // checking genres
+        $bookdata["genres"] = array();
+        $genreCount = 1;
+        while (isset($_POST["genre-" . $genreCount + 1])) {
+            $genreCount++;
+        }
 
-    for ($i = 1; $i <= $genreCount; $i++) {
-        $genre = $_POST["genre-" . $i];
-        array_push($bookdata["genres"], $genre);
+        for ($i = 1; $i <= $genreCount; $i++) {
+            $genre = $_POST["genre-" . $i];
+            array_push($bookdata["genres"], $genre);
 
-        if (empty($errors["genres"])) {
-            $isGenreValid = !empty($genre);
+            if (empty($errors["genres"])) {
+                $isGenreValid = !empty($genre);
 
-            if (!$isGenreValid) {
-                $errors["genres"] = "Kérem adjon meg annyi műfajt ahány mező van!";
+                if (!$isGenreValid) {
+                    $errors["genres"] = "Kérem adjon meg annyi műfajt ahány mező van!";
+                }
             }
         }
-    }
 
-    // checking writers
-    $bookdata["writers"] = array();
-    $writerCount = 1;
-    while (isset($_POST["writer-" . $writerCount + 1])) {
-        $writerCount++;
-    }
+        // checking writers
+        $bookdata["writers"] = array();
+        $writerCount = 1;
+        while (isset($_POST["writer-" . $writerCount + 1])) {
+            $writerCount++;
+        }
 
-    for ($i = 1; $i <= $writerCount; $i++) {
-        $writer = $_POST["writer-" . $i];
-        array_push($bookdata["writers"], $writer);
+        for ($i = 1; $i <= $writerCount; $i++) {
+            $writer = $_POST["writer-" . $i];
+            array_push($bookdata["writers"], $writer);
 
-        if (empty($errors["writers"])) {
-            $isWriterValid = !empty($writer);
+            if (empty($errors["writers"])) {
+                $isWriterValid = !empty($writer);
 
-            if (!$isWriterValid) {
-                $errors["writers"] = "Kérem adjon meg annyi írót ahány mező van!";
+                if (!$isWriterValid) {
+                    $errors["writers"] = "Kérem adjon meg annyi írót ahány mező van!";
+                }
             }
         }
-    }
 
-    // checking price
-    $bookdata["price"] = (intval($_POST["price"]) == 0 ? NULL : intval($_POST["price"]));
+        // checking price
+        $bookdata["price"] = (intval($_POST["price"]) == 0 ? NULL : intval($_POST["price"]));
 
-    $isPriceValid = $bookdata["price"] > 0 && strval($bookdata["price"]) == $_POST["price"];
+        $isPriceValid = $bookdata["price"] > 0 && strval($bookdata["price"]) == $_POST["price"];
 
-    if (!$isPriceValid) {
-        $errors["price"] = "Kérem pozitív számot adjon meg a könyv árának!";
-    }
+        if (!$isPriceValid) {
+            $errors["price"] = "Kérem pozitív számot adjon meg a könyv árának!";
+        }
 
-    // checking discounted price
-    $bookdata["discounted_price"] = "";
-    if (!isset($_POST["discounted_price"]) || $_POST["discounted_price"] === "") {
-        $bookdata["discounted_price"] = null;
-    } else if ($_POST["discounted_price"] == "0" || $_POST["discounted_price"] == "-0") {
-        $bookdata["discounted_price"] = 0;
-    } else {
-        if (is_numeric($_POST["discounted_price"])) {
-            $bookdata["discounted_price"] = intval($_POST["discounted_price"]);
+        // checking discounted price
+        $bookdata["discounted_price"] = "";
+        if (!isset($_POST["discounted_price"]) || $_POST["discounted_price"] === "") {
+            $bookdata["discounted_price"] = null;
+        } else if ($_POST["discounted_price"] == "0" || $_POST["discounted_price"] == "-0") {
+            $bookdata["discounted_price"] = 0;
         } else {
-            $bookdata["discounted_price"] = $_POST["discounted_price"];
-        }
-    }
-
-    $isDiscountedPriceValid = is_null($bookdata["discounted_price"]) || (is_numeric($bookdata["discounted_price"]) && $bookdata["discounted_price"] > 0);
-
-    if (!$isDiscountedPriceValid) {
-        $errors["discounted_price"] = "Kérem pozitív számot adjon meg a könyv akciós árának, vagy hagyja üresen!";
-    }
-
-    // checking cover
-    $targetFile = "";
-    if ($isIsbnValid && !empty($_FILES["cover"]["name"])) {
-        $targetDirectory = "covers/";
-        $imageFileType = strtolower(pathinfo(basename($_FILES["cover"]["name"]), PATHINFO_EXTENSION));
-        $targetFile = $targetDirectory . $bookdata['isbn'] . '.' . $imageFileType;
-
-        // delete if file exists already
-        if (file_exists($targetFile)) {
-            unlink($targetFile);
-        }
-
-        // check if the provided file is an image
-        $check = getimagesize($_FILES["cover"]["tmp_name"]);
-        if ($check === false) {
-            $errors["cover"] = "A fájlnak képnek kell lennie!";
-        }
-
-        // check file size (ok: <10MB)
-        if ($_FILES["cover"]["size"] > 1e+7) {
-            $errorMessage = "A kép nem lehet nagyobb 10MB-nál!";
-            if (empty($errors["cover"])) {
-                $errors["cover"] = $errorMessage;
+            if (is_numeric($_POST["discounted_price"])) {
+                $bookdata["discounted_price"] = intval($_POST["discounted_price"]);
             } else {
-                $errors["cover"] = $errors["cover"] . '<br>' . $errorMessage;
+                $bookdata["discounted_price"] = $_POST["discounted_price"];
             }
         }
 
-        // only allow png, jpg, jpeg files
-        $isAllowedFileType = $imageFileType == "jpg" || $imageFileType == "png" || $imageFileType == "jpeg";
-        if (!$isAllowedFileType) {
-            $errorMessage = "A kép csak PNG, JPG és JPEG fájlformátumú lehet!";
+        $isDiscountedPriceValid = is_null($bookdata["discounted_price"]) || (is_numeric($bookdata["discounted_price"]) && $bookdata["discounted_price"] > 0);
+
+        if (!$isDiscountedPriceValid) {
+            $errors["discounted_price"] = "Kérem pozitív számot adjon meg a könyv akciós árának, vagy hagyja üresen!";
+        }
+
+        // checking cover
+        $targetFile = "";
+        if ($isIsbnValid && !empty($_FILES["cover"]["name"])) {
+            $targetDirectory = "covers/";
+            $imageFileType = strtolower(pathinfo(basename($_FILES["cover"]["name"]), PATHINFO_EXTENSION));
+            $targetFile = $targetDirectory . $bookdata['isbn'] . '.' . $imageFileType;
+
+            // delete if file exists already
+            if (file_exists($targetFile)) {
+                unlink($targetFile);
+            }
+
+            // check if the provided file is an image
+            $check = getimagesize($_FILES["cover"]["tmp_name"]);
+            if ($check === false) {
+                $errors["cover"] = "A fájlnak képnek kell lennie!";
+            }
+
+            // check file size (ok: <10MB)
+            if ($_FILES["cover"]["size"] > 1e+7) {
+                $errorMessage = "A kép nem lehet nagyobb 10MB-nál!";
+                if (empty($errors["cover"])) {
+                    $errors["cover"] = $errorMessage;
+                } else {
+                    $errors["cover"] = $errors["cover"] . '<br>' . $errorMessage;
+                }
+            }
+
+            // only allow png, jpg, jpeg files
+            $isAllowedFileType = $imageFileType == "jpg" || $imageFileType == "png" || $imageFileType == "jpeg";
+            if (!$isAllowedFileType) {
+                $errorMessage = "A kép csak PNG, JPG és JPEG fájlformátumú lehet!";
+                if (empty($errors["cover"])) {
+                    $errors["cover"] = $errorMessage;
+                } else {
+                    $errors["cover"] = $errors["cover"] . '<br>' . $errorMessage;
+                }
+            }
+
+            // Check if $uploadOk is set to 0 by an error
             if (empty($errors["cover"])) {
-                $errors["cover"] = $errorMessage;
-            } else {
-                $errors["cover"] = $errors["cover"] . '<br>' . $errorMessage;
+                if (!move_uploaded_file($_FILES["cover"]["tmp_name"], $targetFile)) {
+                    $errors["cover"] = "Nem sikerült feltölteni a fájlt.";
+                }
+            }
+        } else {
+            if (!$isIsbnValid && !empty($_FILES["cover"]["name"])) {
+                $errors["cover"] = "A borító feltöltéséhez szükség van a könyv ISBN-ére!";
             }
         }
 
-        // Check if $uploadOk is set to 0 by an error
-        if (empty($errors["cover"])) {
-            if (!move_uploaded_file($_FILES["cover"]["tmp_name"], $targetFile)) {
-                $errors["cover"] = "Nem sikerült feltölteni a fájlt.";
+        if (!array_filter($errors)) {
+            // there are no errors
+            InsertBook($bookdata);
+
+            $display = false;
+            $success = true;
+        } else {
+            // delete uploaded cover
+            if (file_exists($targetFile)) {
+                unlink($targetFile);
             }
-        }
-    } else {
-        if (!$isIsbnValid && !empty($_FILES["cover"]["name"])) {
-            $errors["cover"] = "A borító feltöltéséhez szükség van a könyv ISBN-ére!";
+
+            // if there are errors, show the values, otherwise hide them 
+            $display = true;
+            $success = false;
         }
     }
-
-    if (!array_filter($errors)) {
-        // there are no errors
-        InsertBook($bookdata);
-
-        $display = false;
-        $success = true;
-    } else {
-        // delete uploaded cover
-        if (file_exists($targetFile)) {
-            unlink($targetFile);
-        }
-
-        // if there are errors, show the values, otherwise hide them 
-        $display = true;
-        $success = false;
-    }
-}
 ?>
 
-<script src="js/addbook_field_control.js"></script>
 
-<form class="card p-3" action="./addbook" method="post" autocomplete="off" enctype="multipart/form-data">
-    <h1 class="fs-2">Könyv hozzáadása</h1>
+
+<form class="card p-3" action="./modifybook" method="post" autocomplete="off" enctype="multipart/form-data">
+    <h1 class="fs-2">Könyv módosítása</h1>
     <p><span class="text-danger">*</span> kötelező mező</p>
 
     <?php if ($success) { ?>
-        <p class="text-success">Könyv hozzáadása sikerült!</p>
+        <p class="text-success">Könyv módosítása sikerült!</p>
     <?php } ?>
 
+    <script src="js/modifybook_onkeyup.js"></script>
+
+    <div id="form">
     <div class="row">
         <div class="col-sm-4 mb-3">
             <label for="isbn" class="form-label">ISBN: <span class="text-danger">*</span></label>
-            <input type="text" name="isbn" id="isbn" class="form-control" value="<?php if ($display)
+            <input type="text" name="isbn" id="isbn" class="form-control" onkeyup="loadBookData(this.value);" value="<?php if ($display)
                 echo $bookdata["isbn"]; ?>">
             <?php if (!empty($errors["isbn"])) { ?>
                 <p class="text-danger">
@@ -561,7 +564,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
-    <input type="submit" class="btn-brown form-control" value="Felvétel">
+    <input type="submit" class="btn-brown form-control" value="Mentés">
+    </div>
 </form>
 
 <?php } else { ?>

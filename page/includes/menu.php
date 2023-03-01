@@ -30,6 +30,9 @@ switch ($p) {
     case 'addbook':
         $content = 'pages/addbook.php';
         break;
+    case 'modifybook':
+        $content = 'pages/modifybook.php';
+        break;
     default:
         header("Location: /");
         break;

@@ -112,7 +112,7 @@ $genres = GetGenres();
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="/addbook">Könyv hozzáadása</a></li>
-                            <li><a class="dropdown-item" href="#">Könyv módosítása</a></li>
+                            <li><a class="dropdown-item" href="/modifybook">Könyv módosítása</a></li>
                         </ul>
                     </li>
                     <?php } ?>
@@ -136,7 +136,7 @@ $genres = GetGenres();
                     <label for="login-password" class="form-label mt-2">Jelszó:</label>
                     <input type="password" name="password" id="login-password" class="form-control">
                     <div class="mt-2">
-                        <a href="/login/forgotten">Elfelejtette jelszavát?</a>
+                        <a href="/forgotten">Elfelejtette jelszavát?</a>
                     </div>
                     <div class="mt-2">
                         <span>Még nincs fiókja? </span>
