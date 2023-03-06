@@ -60,120 +60,40 @@ function InsertBook($bookdata)
     $con = GetConnection();
 
     // simple data
-    $isbn = "'" . mysqli_real_escape_string($con, $bookdata["isbn"]) . "'";
-    $title = "'" . mysqli_real_escape_string($con, $bookdata["title"]) . "'";
-    $dateOfPublishing = "'" . mysqli_real_escape_string($con, $bookdata["date_published"]) . "'";
-    $stock = mysqli_real_escape_string($con, $bookdata["stock"]);
-    $numberOfPages = mysqli_real_escape_string($con, $bookdata["pages"]);
-    $weight = (empty($bookdata["weight"]) ? "NULL" : mysqli_real_escape_string($con, $bookdata["weight"]));
-    $description = "'" . mysqli_real_escape_string($con, $bookdata["description"]) . "'";
+    $isbn = mysqli_real_escape_string($con, $bookdata["isbn"]);
+    $pages = mysqli_real_escape_string($con, $bookdata["pages"]);
+    $publisher = (empty($bookdata["publisher"]) ? null : mysqli_real_escape_string($con, $bookdata["publisher"]));
+    $weight = (empty($bookdata["weight"]) ? null : mysqli_real_escape_string($con, $bookdata["weight"]));
+    $title = mysqli_real_escape_string($con, $bookdata["title"]);
+    $series = (empty($bookdata["series"]) ? null : mysqli_real_escape_string($con, $bookdata["series"]));
+    $cover = mysqli_real_escape_string($con, $bookdata["covertype"]);
+    $datePublished = mysqli_real_escape_string($con, $bookdata["date_published"]);
     $price = mysqli_real_escape_string($con, $bookdata["price"]);
-    $discountedPrice = (empty($bookdata["discounted_price"]) ? "NULL" : mysqli_real_escape_string($con, $bookdata["discounted_price"]));
+    $discountedPrice = (empty($bookdata["discounted_price"]) ? null : mysqli_real_escape_string($con, $bookdata["discounted_price"]));
+    $language = mysqli_real_escape_string($con, $bookdata["language"]);
+    $stock = mysqli_real_escape_string($con, $bookdata["stock"]);
+    $description = mysqli_real_escape_string($con, $bookdata["description"]);
 
-    // foreign keys that go into the book table
-    // methodology: if the value is not already stored in the current table, insert it -> then get its index
-
-    // series (can also be empty)
-    $series = 'NULL';
-    if (!empty($bookdata["series"])) {
-        $sql = "SELECT series_id FROM serieses WHERE series = '" . mysqli_real_escape_string($con, $bookdata["series"]) . "';";
-        $rs = mysqli_query($con, $sql);
-        if (mysqli_num_rows($rs) == 0) {
-            $sql = "INSERT INTO serieses (series) VALUES ('" . mysqli_real_escape_string($con, $bookdata["series"]) . "');";
-            mysqli_query($con, $sql);
-        }
-        $sql = "SELECT series_id FROM serieses WHERE series = '" . mysqli_real_escape_string($con, $bookdata["series"]) . "';";
-        $rs = mysqli_query($con, $sql);
-        $row = mysqli_fetch_row($rs);
-        $series = $row[0];
+    $genres = "";
+    for ($i=0; $i < count($bookdata["genres"]); $i++) { 
+        $genres = $genres . $bookdata["genres"][$i];
+        if ($i < count($bookdata["genres"]) - 1)
+            $genres = $genres . '@';
     }
 
-    // publisher
-    $sql = "SELECT publisher_id FROM publishers WHERE publisher = '" . mysqli_real_escape_string($con, $bookdata["publisher"]) . "';";
-    $rs = mysqli_query($con, $sql);
-    if (mysqli_num_rows($rs) == 0) {
-        $sql = "INSERT INTO publishers (publisher) VALUES ('" . mysqli_real_escape_string($con, $bookdata["publisher"]) . "');";
-        mysqli_query($con, $sql);
+    $writers = "";
+    for ($i=0; $i < count($bookdata["writers"]); $i++) { 
+        $writers = $writers . $bookdata["writers"][$i];
+        if ($i < count($bookdata["writers"]) - 1)
+            $writers = $writers . '@';
     }
-    $sql = "SELECT publisher_id FROM publishers WHERE publisher = '" . mysqli_real_escape_string($con, $bookdata["publisher"]) . "';";
-    $rs = mysqli_query($con, $sql);
-    $row = mysqli_fetch_row($rs);
-    $publisher = $row[0];
-
-    // covertype
-    $sql = "SELECT cover_id FROM covers WHERE cover = '" . mysqli_real_escape_string($con, $bookdata["covertype"]) . "';";
-    $rs = mysqli_query($con, $sql);
-    if (mysqli_num_rows($rs) == 0) {
-        $sql = "INSERT INTO covers (cover) VALUES ('" . mysqli_real_escape_string($con, $bookdata["covertype"]) . "');";
-        mysqli_query($con, $sql);
-    }
-    $sql = "SELECT cover_id FROM covers WHERE cover = '" . mysqli_real_escape_string($con, $bookdata["covertype"]) . "';";
-    $rs = mysqli_query($con, $sql);
-    $row = mysqli_fetch_row($rs);
-    $covertype = $row[0];
-
-    // language
-    $sql = "SELECT language_id FROM languages WHERE language = '" . mysqli_real_escape_string($con, $bookdata["language"]) . "';";
-    $rs = mysqli_query($con, $sql);
-    if (mysqli_num_rows($rs) == 0) {
-        $sql = "INSERT INTO languages (language) VALUES ('" . mysqli_real_escape_string($con, $bookdata["language"]) . "');";
-        mysqli_query($con, $sql);
-    }
-    $sql = "SELECT language_id FROM languages WHERE language = '" . mysqli_real_escape_string($con, $bookdata["language"]) . "';";
-    $rs = mysqli_query($con, $sql);
-    $row = mysqli_fetch_row($rs);
-    $language = $row[0];
-
-    // insert book into table
-    $sql = 'INSERT INTO books (isbn, pages, publisher_id, weight, title, series_id, cover_id, date_published, price, discounted_price, language_id, stock, description) VALUES (
-        ' . $isbn . ',
-        ' . $numberOfPages . ',
-        ' . $publisher . ',
-        ' . $weight . ',
-        ' . $title . ',
-        ' . $series . ',
-        ' . $covertype . ',
-        ' . $dateOfPublishing . ',
-        ' . $price . ',
-        ' . $discountedPrice . ',
-        ' . $language . ',
-        ' . $stock . ',
-        ' . $description . '
-    );';
-    mysqli_query($con, $sql);
-
-    // genres: for each genre, if it isn't already in the db, add it, then connect it to the book in the separate connecting table
-    foreach ($bookdata["genres"] as $key => $value) {
-        $sql = "SELECT genre_id FROM genres WHERE genre = '" . mysqli_real_escape_string($con, $value) . "';";
-        $rs = mysqli_query($con, $sql);
-        if (mysqli_num_rows($rs) == 0) {
-            $sql = "INSERT INTO genres (genre) VALUES ('" . mysqli_real_escape_string($con, $value) . "');";
-            mysqli_query($con, $sql);
-        }
-        $sql = "SELECT genre_id FROM genres WHERE genre = '" . mysqli_real_escape_string($con, $value) . "';";
-        $rs = mysqli_query($con, $sql);
-        $row = mysqli_fetch_row($rs);
-        $genre = $row[0];
-
-        $sql = 'INSERT INTO books_genres (isbn, genre_id) VALUES (' . mysqli_real_escape_string($con, $isbn) . ', ' . mysqli_real_escape_string($con, $genre) . ');';
-    }
-
-    // writers: same method as genres
-    foreach ($bookdata["writers"] as $key => $value) {
-        $sql = "SELECT writer_id FROM writers WHERE writer = '" . mysqli_real_escape_string($con, $value) . "';";
-        $rs = mysqli_query($con, $sql);
-        if (mysqli_num_rows($rs) == 0) {
-            $sql = "INSERT INTO writers (writer) VALUES ('" . mysqli_real_escape_string($con, $value) . "');";
-            mysqli_query($con, $sql);
-        }
-        $sql = "SELECT writer_id FROM writers WHERE writer = '" . mysqli_real_escape_string($con, $value) . "';";
-        $rs = mysqli_query($con, $sql);
-        $row = mysqli_fetch_row($rs);
-        $writer = $row[0];
-
-        $sql = 'INSERT INTO books_writers (isbn, writer_id) VALUES (' . mysqli_real_escape_string($con, $isbn) . ', ' . mysqli_real_escape_string($con, $writer) . ');';
-    }
-
+    
+    // prepare sta
+    $sql = "CALL InsertBook(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "sisissssiisisss", $isbn, $pages, $publisher, $weight, $title, $series, $cover, $datePublished, $price, $discountedPrice, $language, $stock, $description, $genres, $writers);
+    mysqli_execute($stmt);
+    mysqli_stmt_close($stmt);
     mysqli_close($con);
 }
 
@@ -182,7 +102,28 @@ function GetBookByISBN($isbn) {
     $sql = 'CALL GetBookByISBN("' . $isbn . '");';
     $rs = mysqli_query($con, $sql);
     $assoc = mysqli_fetch_assoc($rs);
+    $assoc["genres"] = GetGenresByISBN($isbn);
+    $assoc["writers"] = GetWritersByISBN($isbn);
+    mysqli_close($con);
     return $assoc;
+}
+
+function GetGenresByISBN($isbn) {
+    $con = GetConnection();
+    $sql = 'CALL GetGenresByISBN("' . $isbn . '");';
+    $rs = mysqli_query($con, $sql);
+    $array = mysqli_fetch_all($rs, MYSQLI_NUM);
+    mysqli_close($con);
+    return $array;
+}
+
+function GetWritersByISBN($isbn) {
+    $con = GetConnection();
+    $sql = 'CALL GetWritersByISBN("' . $isbn . '");';
+    $rs = mysqli_query($con, $sql);
+    $array = mysqli_fetch_all($rs, MYSQLI_NUM);
+    mysqli_close($con);
+    return $array;
 }
 
 function DoesBookExist($isbn): bool {

@@ -25,6 +25,7 @@ $genres = GetGenres();
     <script src="https://kit.fontawesome.com/fea0ed64d7.js" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="js/index.js"></script>
 </head>
 
 <body>
@@ -121,7 +122,6 @@ $genres = GetGenres();
         </div>
     </nav>
 
-    <script src="js/login.js"></script>
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

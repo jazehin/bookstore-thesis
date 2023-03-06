@@ -1,5 +1,14 @@
 <?php
 $bookdata = GetBookByISBN($_GET["isbn"]);
+$folder = "/covers/";
+$img = "no_cover.jpg";
+if (file_exists($folder . $bookdata["isbn"] . ".jpg")) {
+    $img = $bookdata["isbn"] . ".jpg";
+} else if (file_exists($folder . $bookdata["isbn"] . ".jpeg")) {
+    $img = $bookdata["isbn"] . ".jpeg";
+} else if (file_exists($folder . $bookdata["isbn"] . ".png")) {
+    $img = $bookdata["isbn"] . ".png";
+}
 ?>
 
 <div class="card p-3">
@@ -12,7 +21,7 @@ $bookdata = GetBookByISBN($_GET["isbn"]);
     </div>
     <div class="row">
         <div class="col-md-4 col-lg-3">
-            <img class="img-fluid" src="/covers/<?php echo $bookdata["isbn"] ?>.jpg" alt="">
+            <img class="img-fluid" src="<?php echo $folder . $img ?>" alt="">
             <div class="book-info">
                 <div class="row pt-1">
                     <span class="col-5 my-auto fw-bold">Kiadó:</span>
