@@ -17,10 +17,11 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
+DROP DATABASE IF EXISTS bookstore;
 CREATE DATABASE bookstore CHARACTER SET utf8mb4 COLLATE utf8mb4_hungarian_ci;
 USE bookstore;
 --
--- Database: `konyvaruhaz`
+-- Database: `bookstore`
 --
 
 DELIMITER $$
@@ -314,7 +315,7 @@ CREATE TABLE `addresses` (
   `public_space` varchar(50) NOT NULL,
   `zip_code` int NOT NULL,
   `note` varchar(50) DEFAULT NULL
-)
+);
 
 -- --------------------------------------------------------
 
