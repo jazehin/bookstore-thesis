@@ -4,7 +4,7 @@ function GetConnection()
 	$hostname = "localhost";
 	$username = "jazehin";
 	$password = "VízPronto6395";
-	$database = "konyvaruhaz";
+	$database = "bookstore";
 
 	// Create connection
 	$con = mysqli_connect($hostname, $username, $password, $database);

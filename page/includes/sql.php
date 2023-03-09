@@ -97,6 +97,59 @@ function InsertBook($bookdata)
     mysqli_close($con);
 }
 
+function DeleteBook($isbn) {
+    $con = GetConnection();
+    $sql = "CALL DeleteBook(?);";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $isbn);
+    mysqli_execute($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+}
+
+function UpdateBook($bookdata) {
+    $con = GetConnection();
+
+    // simple data
+    $isbn = mysqli_real_escape_string($con, $bookdata["isbn"]);
+    $pages = mysqli_real_escape_string($con, $bookdata["pages"]);
+    $publisher = (empty($bookdata["publisher"]) ? null : mysqli_real_escape_string($con, $bookdata["publisher"]));
+    $weight = (empty($bookdata["weight"]) ? null : mysqli_real_escape_string($con, $bookdata["weight"]));
+    $title = mysqli_real_escape_string($con, $bookdata["title"]);
+    $series = (empty($bookdata["series"]) ? null : mysqli_real_escape_string($con, $bookdata["series"]));
+    $cover = mysqli_real_escape_string($con, $bookdata["covertype"]);
+    $datePublished = mysqli_real_escape_string($con, $bookdata["date_published"]);
+    $price = mysqli_real_escape_string($con, $bookdata["price"]);
+    $discountedPrice = (empty($bookdata["discounted_price"]) ? null : mysqli_real_escape_string($con, $bookdata["discounted_price"]));
+    $language = mysqli_real_escape_string($con, $bookdata["language"]);
+    $stock = mysqli_real_escape_string($con, $bookdata["stock"]);
+    $description = mysqli_real_escape_string($con, $bookdata["description"]);
+
+    $genres = "";
+    for ($i=0; $i < count($bookdata["genres"]); $i++) { 
+        $genres = $genres . $bookdata["genres"][$i];
+        if ($i < count($bookdata["genres"]) - 1)
+            $genres = $genres . '@';
+    }
+
+    $writers = "";
+    for ($i=0; $i < count($bookdata["writers"]); $i++) { 
+        $writers = $writers . $bookdata["writers"][$i];
+        if ($i < count($bookdata["writers"]) - 1)
+            $writers = $writers . '@';
+    }
+    echo $genres;
+    echo $writers;
+    // prepare sta
+    $sql = "CALL UpdateBook(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "sisissssiisisss", $isbn, $pages, $publisher, $weight, $title, $series, $cover, $datePublished, $price, $discountedPrice, $language, $stock, $description, $genres, $writers);
+    mysqli_execute($stmt);
+    echo mysqli_stmt_error($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+}
+
 function GetBookByISBN($isbn) {
     $con = GetConnection();
     $sql = 'CALL GetBookByISBN("' . $isbn . '");';
@@ -176,8 +229,8 @@ function ArrayToString($array)
 {
     $string = "";
     foreach ($array as $key => $value) {
-        $string += $value . ";";
+        $string += $value . ", ";
     }
-    return substr($string, 0, strlen($string) - 1);
+    return substr($string, 0, strlen($string) - 2);
 }
 ?>

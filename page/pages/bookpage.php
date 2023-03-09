@@ -9,18 +9,44 @@ if (file_exists($folder . $bookdata["isbn"] . ".jpg")) {
 } else if (file_exists($folder . $bookdata["isbn"] . ".png")) {
     $img = $bookdata["isbn"] . ".png";
 }
+
+$genres = "";
+for ($i=0; $i < count($bookdata["genres"]); $i++) { 
+    $genres = $genres . $bookdata["genres"][$i][1];
+    if ($i < count($bookdata["genres"]) - 1)
+        $genres = $genres . ', ';
+}
+$genres = substr($genres, 0, strlen($genres) - 2);
+
+$writers = "";
+for ($i=0; $i < count($bookdata["writers"]); $i++) { 
+    $writers = $writers . $bookdata["writers"][$i][1];
+    if ($i < count($bookdata["writers"]) - 1)
+        $writers = $writers . ', ';
+}
+$writers = substr($writers, 0, strlen($writers) - 2);
 ?>
 
 <div class="card p-3">
+    <!--
     <div class="row">
-        <span class="fw-bold fs-5 lh-1 mb-0">
+        <span class="fw-bold fs-5 lh-1">
             <?php echo $bookdata["title"]; ?>
-        </span><br>
-        <span class="fst-italic pb-2">Adam Silvera</span>
-        <hr class="">
+        </span>
+        <span> · </span>
+        <span class="fst-italic"><?php echo $writers ?></span>
     </div>
+    -->
     <div class="row">
         <div class="col-md-4 col-lg-3">
+            <div>
+                <p>
+                    <span class="fw-bold fs-5 lh-1"><?php echo $bookdata["title"]; ?></span>
+                    <span> · </span>
+                    <span class="fst-italic"><?php echo $writers ?></span><br>
+                    <span><?php echo $genres; ?></span>
+                </p>
+            </div>
             <img class="img-fluid" src="<?php echo $folder . $img ?>" alt="">
             <div class="book-info">
                 <div class="row pt-1">

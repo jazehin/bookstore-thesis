@@ -54,7 +54,7 @@ $genres = GetGenres();
                     <a class="btn border-0" <?php if ($is_logged_in) { ?> data-bs-toggle="modal"
                             data-bs-target="#loggedInModal" <?php } else { ?> data-bs-toggle="modal"
                             data-bs-target="#loginModal" <?php } ?>>
-                        <i class="fa-solid fa-circle-user fs-2"></i>
+                        <i class="fa-solid fa-circle-user fs-2 <?php if ($is_logged_in) echo 'text-success'; ?>"></i>
                     </a>
                     <a class="btn border-0" href="/basket">
                         <i class="fa-solid fa-basket-shopping fs-2"></i>
@@ -113,7 +113,7 @@ $genres = GetGenres();
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="/addbook">Könyv hozzáadása</a></li>
-                            <li><a class="dropdown-item" href="/modifybook">Könyv módosítása</a></li>
+                            <li><a class="dropdown-item" href="/modifybook">Könyv módosítása/törlése</a></li>
                         </ul>
                     </li>
                     <?php } ?>
@@ -134,7 +134,7 @@ $genres = GetGenres();
                     <label for="login-username" class="form-label">Felhasználónév:</label>
                     <input type="text" name="username" id="login-username" class="form-control">
                     <label for="login-password" class="form-label mt-2">Jelszó:</label>
-                    <input type="password" name="password" id="login-password" class="form-control">
+                    <input type="password" name="password" id="login-password" class="form-control" onkeydown="if(event.key == 'Enter') login();">
                     <div class="mt-2">
                         <a href="/forgotten">Elfelejtette jelszavát?</a>
                     </div>

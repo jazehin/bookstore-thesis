@@ -115,14 +115,13 @@ function loadBookDataByIsbn(isbn) {
             document.getElementById("discounted_price").value = "";
             document.getElementById("discounted_price").setAttribute("disabled", "");
 
-            const buttons = document.querySelectorAll('form input[type="button"], form input[type="submit"], form input[type="file"]');
+            const buttons = document.getElementsByClassName("form-button");
 
             for (let i = 0; i < buttons.length; i++) {
                 buttons[i].setAttribute("disabled", "");
             }
         } else {
             array = result.split('#');
-            alert(array);
 
             document.getElementById("title").value = array[1];
             document.getElementById("title").removeAttribute("disabled");
@@ -180,7 +179,7 @@ function loadBookDataByIsbn(isbn) {
             document.getElementById("discounted_price").value = array[14];
             document.getElementById("discounted_price").removeAttribute("disabled");
 
-            const buttons = document.querySelectorAll('form input[type="button"], form input[type="submit"], form input[type="file"]');
+            const buttons = document.getElementsByClassName("form-button");
 
             for (let i = 0; i < buttons.length; i++) {
                 buttons[i].removeAttribute("disabled");
