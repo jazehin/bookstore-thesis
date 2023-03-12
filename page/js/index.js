@@ -115,6 +115,9 @@ function loadBookDataByIsbn(isbn) {
             document.getElementById("discounted_price").value = "";
             document.getElementById("discounted_price").setAttribute("disabled", "");
 
+            document.getElementById("cover").value = "";
+            document.getElementById("cover").setAttribute("disabled", "");
+
             const buttons = document.getElementsByClassName("form-button");
 
             for (let i = 0; i < buttons.length; i++) {
@@ -154,10 +157,11 @@ function loadBookDataByIsbn(isbn) {
             document.getElementById("description").removeAttribute("disabled");
 
             const genres = array[11].split('@');
+            alert(genres);
             let genreFields = document.getElementsByClassName("genre-field");
             genreFields[0].value = genres[0];
             genreFields[0].removeAttribute("disabled");
-            for (let i = 1; i < genres.length; i++) {
+            for (let i = genreFields.length; i < genres.length; i++) {
                 AddField('genre');
                 genreFields = document.getElementsByClassName("genre-field");
                 genreFields[i].value = genres[i];
@@ -167,7 +171,7 @@ function loadBookDataByIsbn(isbn) {
             let writerFields = document.getElementsByClassName("writer-field");
             writerFields[0].value = writers[0];
             writerFields[0].removeAttribute("disabled");
-            for (let i = 1; i < writers.length; i++) {
+            for (let i = writerFields.length; i < writers.length; i++) {
                 AddField('writer');
                 writerFields = document.getElementsByClassName("writer-field");
                 writerFields[i].value = writers[i];
@@ -185,6 +189,7 @@ function loadBookDataByIsbn(isbn) {
                 buttons[i].removeAttribute("disabled");
             }
 
+            document.getElementById("cover").removeAttribute("disabled");
         }
         
         
