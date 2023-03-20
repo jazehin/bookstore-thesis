@@ -15,7 +15,7 @@ function AddField(fieldName) {
     field.id = fieldName + "-" + nextFieldId;
     field.name = fieldName + "-" + nextFieldId;
     field.setAttribute("list", fieldName + "s");
-    
+
     col.appendChild(field);
     row.appendChild(col);
 }
@@ -36,14 +36,10 @@ function RemoveField(fieldName) {
 function login() {
     const xmlhttp = new XMLHttpRequest();
     xmlhttp.onload = function () {
-        const result =  this.responseText;
+        const result = this.responseText;
 
-        if (result === "error") {
-            const errorMessage = "Nincs ilyen felhasználónév-jelszó párosítás!";
-            const errorSpan = document.getElementById("login-error");
-            errorSpan.innerText = errorMessage;
-            errorSpan.classList.remove("d-none");
-            errorSpan.classList.add("d-block");
+        if (result == "error") {
+            displayLoginError("Nincs ilyen felhasználónév-jelszó párosítás!");
         } else {
             window.location.href = window.location.href;
         }
@@ -52,14 +48,165 @@ function login() {
     const username = document.getElementById("login-username").value;
     const password = document.getElementById("login-password").value;
 
+    if (username.length === 0 || password.length === 0) {
+        displayLoginError("Ne hagyjon üres mező(ke)t!");
+        return;
+    }
     xmlhttp.open("GET", `pages/login.php?username=${username}&password=${password}`);
     xmlhttp.send();
+}
+
+function displayLoginError(errorMessage) {
+    const errorSpan = document.getElementById("login-error");
+    errorSpan.innerText = errorMessage;
+    errorSpan.classList.remove("d-none");
+    errorSpan.classList.add("d-block");
+}
+
+function signUp() {
+    clearSignUpErrors();
+
+    const email = document.getElementById("signup-email").value;
+    const username = document.getElementById("signup-username").value;
+    const password = document.getElementById("signup-password").value;
+
+    
+
+    //checking if email is already registered
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.onload = function () {
+        const result = this.responseText;
+        
+        if (username.length === 0 || password.length === 0 || email.length === 0) {
+            displaySignUpError("Ne hagyjon üres mező(ke)t!");
+            return;
+        }
+    
+        //if there is an error, don't make the ajax request
+        let error = false;
+    
+        //checking if email is ok
+        const emailRegex = /^\S+@\S+\.\S+$/;
+    
+        if (!emailRegex.test(email)) {
+            displaySignUpError("Érvénytelen email cím!");
+            error = true;
+        }
+
+        //checking if email already exists in the database
+        if (result.includes("email-exists")) {
+            displaySignUpError("Ezzel az e-mail fiókkal már van regisztrálva fiók!");
+            error = true;
+        }
+
+        //checking if username length is ok
+        if (username.length < 4 || username.length > 20) {
+            displaySignUpError("A felhasználónév minimum 4 és maximum 20 karakter hosszú lehet!");
+            error = true;
+        }
+
+        //checking if username already exists in the database
+        if (result.includes("username-exists")) {
+            displaySignUpError("Ezzel az felhasználónévvel már létezik fiók!");
+            error = true;
+        }
+
+        //checking if password is valid
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@&#_%]).{8,20}$/;
+
+        if (!passwordRegex.test(password)) {
+            displaySignUpError("A jelszó nem felel meg az elvárásoknak!");
+            error = true;
+        }
+
+        if (error) return;
+
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onload = function () {
+            const result = this.responseText;
+
+            if (result.length != 0) {
+                alert("Regisztráció sikertelen.");
+                alert(result);
+            } else {
+                window.location.href = window.location.href;
+            }
+        }
+        xmlhttp.open("GET", `pages/ajax/signup.php?username=${username}&email=${email}&password=${password}`);
+        xmlhttp.send();
+    }
+
+    xmlhttp.open("GET", `pages/ajax/exists.php?email=${email}&username=${username}`);
+    xmlhttp.send();
+}
+
+function clearSignUpErrors() {
+    const errorDiv = document.getElementById("signup-errors");
+    errorDiv.innerHTML = "";
+}
+
+function displaySignUpError(errorMessage) {
+    const errorDiv = document.getElementById("signup-errors");
+    const errorP = document.createElement("span");
+    //ErrorP.classList.add();
+    errorP.innerText = errorMessage;
+    if (errorDiv.hasChildNodes()) {
+        errorDiv.append(document.createElement("br"));
+    }
+    errorDiv.append(errorP);
+
+    errorDiv.classList.remove("d-none");
+    errorDiv.classList.add("mb-2");
+}
+
+function showPasswordChecks(show) {
+    const ul = document.getElementById("password-checks");
+    if (show) {
+        ul.classList.remove("d-none");
+    } else {
+        ul.classList.add("d-none");
+    }
+}
+
+function checkPassword(password) {
+    const ul = document.getElementById("password-checks");
+    ul.classList.remove("d-none");
+
+    const spans = [
+        document.getElementById("password-length"),
+        document.getElementById("password-lowercase"),
+        document.getElementById("password-capital"),
+        document.getElementById("password-numeric"),
+        document.getElementById("password-special")
+    ];
+
+    const patterns = [/^.{8,20}$/, /[a-z]/, /[A-Z]/, /[0-9]/, /[@&#_%]/];
+    /*
+    const length  = document.getElementById("password-length");
+    const capital = document.getElementById("password-capital");
+    const numeric = document.getElementById("password-numeric");
+    const special = document.getElementById("password-special");
+
+    const length_pattern  = /.{8,20}/;
+    const capital_pattern = /[A-Z]/;
+    const numeric_pattern = /[0-9]/;
+    const special_pattern = /[@&#_%]/;
+*/
+    for (let i = 0; i < spans.length; i++) {
+        if (patterns[i].test(password)) {
+            spans[i].classList.remove("text-danger");
+            spans[i].classList.add("text-success");
+        } else {
+            spans[i].classList.add("text-danger");
+            spans[i].classList.remove("text-success");
+        }
+    }
 }
 
 function loadBookDataByIsbn(isbn) {
     const xmlhttp = new XMLHttpRequest();
     xmlhttp.onload = function () {
-        const result =  this.responseText;
+        const result = this.responseText;
 
         if (result === "") {
             document.getElementById("title").value = "";
@@ -131,7 +278,7 @@ function loadBookDataByIsbn(isbn) {
 
             document.getElementById("series").value = array[2];
             document.getElementById("series").removeAttribute("disabled");
-            
+
             document.getElementById("date_published").value = array[3];
             document.getElementById("date_published").removeAttribute("disabled");
 
@@ -191,9 +338,9 @@ function loadBookDataByIsbn(isbn) {
 
             document.getElementById("cover").removeAttribute("disabled");
         }
-        
-        
-        
+
+
+
     }
 
     xmlhttp.open("GET", `pages/bookdata.php?isbn=${isbn}`);

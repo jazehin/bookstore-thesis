@@ -75,19 +75,19 @@ function InsertBook($bookdata)
     $description = mysqli_real_escape_string($con, $bookdata["description"]);
 
     $genres = "";
-    for ($i=0; $i < count($bookdata["genres"]); $i++) { 
+    for ($i = 0; $i < count($bookdata["genres"]); $i++) {
         $genres = $genres . $bookdata["genres"][$i];
         if ($i < count($bookdata["genres"]) - 1)
             $genres = $genres . '@';
     }
 
     $writers = "";
-    for ($i=0; $i < count($bookdata["writers"]); $i++) { 
+    for ($i = 0; $i < count($bookdata["writers"]); $i++) {
         $writers = $writers . $bookdata["writers"][$i];
         if ($i < count($bookdata["writers"]) - 1)
             $writers = $writers . '@';
     }
-    
+
     // prepare sta
     $sql = "CALL InsertBook(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     $stmt = mysqli_prepare($con, $sql);
@@ -97,7 +97,8 @@ function InsertBook($bookdata)
     mysqli_close($con);
 }
 
-function DeleteBook($isbn) {
+function DeleteBook($isbn)
+{
     $con = GetConnection();
     $sql = "CALL DeleteBook(?);";
     $stmt = mysqli_prepare($con, $sql);
@@ -107,7 +108,8 @@ function DeleteBook($isbn) {
     mysqli_close($con);
 }
 
-function UpdateBook($bookdata) {
+function UpdateBook($bookdata)
+{
     $con = GetConnection();
 
     // simple data
@@ -126,14 +128,14 @@ function UpdateBook($bookdata) {
     $description = mysqli_real_escape_string($con, $bookdata["description"]);
 
     $genres = "";
-    for ($i=0; $i < count($bookdata["genres"]); $i++) { 
+    for ($i = 0; $i < count($bookdata["genres"]); $i++) {
         $genres = $genres . $bookdata["genres"][$i];
         if ($i < count($bookdata["genres"]) - 1)
             $genres = $genres . '@';
     }
 
     $writers = "";
-    for ($i=0; $i < count($bookdata["writers"]); $i++) { 
+    for ($i = 0; $i < count($bookdata["writers"]); $i++) {
         $writers = $writers . $bookdata["writers"][$i];
         if ($i < count($bookdata["writers"]) - 1)
             $writers = $writers . '@';
@@ -150,7 +152,8 @@ function UpdateBook($bookdata) {
     mysqli_close($con);
 }
 
-function GetBookByISBN($isbn) {
+function GetBookByISBN($isbn)
+{
     $con = GetConnection();
     $sql = 'CALL GetBookByISBN("' . $isbn . '");';
     $rs = mysqli_query($con, $sql);
@@ -161,7 +164,8 @@ function GetBookByISBN($isbn) {
     return $assoc;
 }
 
-function GetGenresByISBN($isbn) {
+function GetGenresByISBN($isbn)
+{
     $con = GetConnection();
     $sql = 'CALL GetGenresByISBN("' . $isbn . '");';
     $rs = mysqli_query($con, $sql);
@@ -170,7 +174,8 @@ function GetGenresByISBN($isbn) {
     return $array;
 }
 
-function GetWritersByISBN($isbn) {
+function GetWritersByISBN($isbn)
+{
     $con = GetConnection();
     $sql = 'CALL GetWritersByISBN("' . $isbn . '");';
     $rs = mysqli_query($con, $sql);
@@ -179,15 +184,19 @@ function GetWritersByISBN($isbn) {
     return $array;
 }
 
-function DoesBookExist($isbn): bool {
+function DoesBookExist($isbn): bool
+{
     $con = GetConnection();
     $sql = 'SELECT DoesBookExist("' . $isbn . '");';
     $rs = mysqli_query($con, $sql);
     return mysqli_fetch_row($rs)[0];
 }
 
-function Login($username, $password): int {
+function Login($username, $password): int|null
+{
     $con = GetConnection();
+    $username = mysqli_real_escape_string($con, $username);
+    $password = mysqli_real_escape_string($con, $password);
     $sql = "SELECT user_id FROM login WHERE username = ? AND password = ?;";
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, "ss", $username, $password);
@@ -199,7 +208,64 @@ function Login($username, $password): int {
     return $user_id;
 }
 
-function GetUserById($id) {
+function SignUp($username, $password, $email, $salt)
+{
+    $con = GetConnection();
+    $username = mysqli_real_escape_string($con, $username);
+    $password = mysqli_real_escape_string($con, $password);
+    $email = mysqli_real_escape_string($con, $email);
+    $salt = mysqli_real_escape_string($con, $salt);
+
+    $sql = "CALL SignUp(?, ?, ?, ?);";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "ssss", $username, $password, $email, $salt);
+    mysqli_execute($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+}
+
+
+function EmailAlreadyExists($email) {
+    $con = GetConnection();
+    $sql = "SELECT user_id FROM login WHERE email = ?;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $email);
+    mysqli_execute($stmt);
+    mysqli_stmt_bind_result($stmt, $user_id);
+    mysqli_stmt_fetch($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+    return !is_null($user_id);
+}
+
+function UsernameAlreadyExists($username) {
+    $con = GetConnection();
+    $sql = "SELECT user_id FROM login WHERE username = ?;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $username);
+    mysqli_execute($stmt);
+    mysqli_stmt_bind_result($stmt, $user_id);
+    mysqli_stmt_fetch($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+    return !is_null($user_id);
+}
+
+function GetSalt($username) {
+    $con = GetConnection();
+    $sql = "SELECT salt FROM login WHERE username = ?;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $username);
+    mysqli_execute($stmt);
+    mysqli_stmt_bind_result($stmt, $salt);
+    mysqli_stmt_fetch($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+    return $salt;
+}
+
+function GetUserById($id)
+{
     $con = GetConnection();
     $sql = "CALL GetUserById(?);";
     $stmt = mysqli_prepare($con, $sql);

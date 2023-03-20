@@ -54,7 +54,8 @@ $genres = GetGenres();
                     <a class="btn border-0" <?php if ($is_logged_in) { ?> data-bs-toggle="modal"
                             data-bs-target="#loggedInModal" <?php } else { ?> data-bs-toggle="modal"
                             data-bs-target="#loginModal" <?php } ?>>
-                        <i class="fa-solid fa-circle-user fs-2 <?php if ($is_logged_in) echo 'text-success'; ?>"></i>
+                        <i class="fa-solid fa-circle-user fs-2 <?php if ($is_logged_in)
+                            echo 'text-success'; ?>"></i>
                     </a>
                     <a class="btn border-0" href="/basket">
                         <i class="fa-solid fa-basket-shopping fs-2"></i>
@@ -106,16 +107,16 @@ $genres = GetGenres();
                         <a class="nav-link" href="/books/9789635841523">Könyv</a>
                     </li>
                     <?php if ($is_logged_in && $_SESSION["user"]["type"] === "administrator") { ?>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Admin
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/addbook">Könyv hozzáadása</a></li>
-                            <li><a class="dropdown-item" href="/modifybook">Könyv módosítása/törlése</a></li>
-                        </ul>
-                    </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Admin
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/addbook">Könyv hozzáadása</a></li>
+                                <li><a class="dropdown-item" href="/modifybook">Könyv módosítása/törlése</a></li>
+                            </ul>
+                        </li>
                     <?php } ?>
                 </ul>
             </div>
@@ -130,11 +131,12 @@ $genres = GetGenres();
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <span id="login-error" class="text-danger d-none"></span>
+                    <p id="login-error" class="text-danger d-none"></p>
                     <label for="login-username" class="form-label">Felhasználónév:</label>
                     <input type="text" name="username" id="login-username" class="form-control">
                     <label for="login-password" class="form-label mt-2">Jelszó:</label>
-                    <input type="password" name="password" id="login-password" class="form-control" onkeydown="if(event.key == 'Enter') login();">
+                    <input type="password" name="password" id="login-password" class="form-control"
+                        onkeydown="if(event.key == 'Enter') login();">
                     <div class="mt-2">
                         <a href="/forgotten">Elfelejtette jelszavát?</a>
                     </div>
@@ -160,15 +162,30 @@ $genres = GetGenres();
                 </div>
                 <form action="/signup" method="post" autocomplete="on">
                     <div class="modal-body">
-                        <label for="signup_redirect_uri" class="d-none">URI:</label>
-                        <input type="text" name="signup_redirect_uri" id="signup_redirect_uri" class="d-none"
-                            value="<?php echo $uri; ?>">
+                        <div id="signup-errors" class="text-danger d-none"></div>
                         <label for="signup-email" class="form-label">E-mail cím:</label>
                         <input type="text" name="email" id="signup-email" class="form-control">
                         <label for="signup-username" class="form-label mt-2">Felhasználónév:</label>
                         <input type="text" name="username" id="signup-username" class="form-control">
                         <label for="signup-password" class="form-label mt-2">Jelszó:</label>
-                        <input type="password" name="password" id="signup-password" class="form-control">
+                        <input type="password" name="password" id="signup-password" class="form-control" onkeyup="checkPassword(this.value);" onfocus="showPasswordChecks(true);">
+                        <ul id="password-checks" class="d-none">
+                            <li>
+                                <span id="password-length">8-20 karakter hosszú</span>
+                            </li>
+                            <li>
+                                <span id="password-lowercase">Tartalmaz kisbetűt</span>
+                            </li>
+                            <li>
+                                <span id="password-capital">Tartalmaz nagybetűt</span>
+                            </li>
+                            <li>
+                                <span id="password-numeric">Tartalmaz számot</span>
+                            </li>
+                            <li>
+                                <span id="password-special">Tartalmaz speciális karaktert (@, &, #, _, %)</span>
+                            </li>
+                        </ul>
                         <div class="mt-2">
                             <span>Már van fiókja? </span>
                             <a href="" data-bs-toggle="modal" data-bs-target="#loginModal">Jelentkezzen be!</a>
@@ -176,7 +193,7 @@ $genres = GetGenres();
                     </div>
                     <div class="modal-footer">
                         <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Mégse">
-                        <input type="submit" value="Regisztráció" class="btn-brown btn">
+                        <input type="button" value="Regisztráció" class="btn-brown btn" onclick="signUp();">
                     </div>
                 </form>
             </div>
