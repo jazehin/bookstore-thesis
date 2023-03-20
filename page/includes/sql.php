@@ -55,6 +55,11 @@ function GetWriters()
     return GetArrayFromResultSet($resultset);
 }
 
+function GetISBNs() {
+    $resultset = GetResultSetOfSingleColumn("isbn", "books");
+    return GetArrayFromResultSet($resultset);
+}
+
 function InsertBook($bookdata)
 {
     $con = GetConnection();
@@ -87,6 +92,9 @@ function InsertBook($bookdata)
         if ($i < count($bookdata["writers"]) - 1)
             $writers = $writers . '@';
     }
+
+    $genres = mysqli_real_escape_string($con, $genres);
+    $writers = mysqli_real_escape_string($con, $writers);
 
     // prepare sta
     $sql = "CALL InsertBook(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
@@ -140,8 +148,10 @@ function UpdateBook($bookdata)
         if ($i < count($bookdata["writers"]) - 1)
             $writers = $writers . '@';
     }
-    echo $genres;
-    echo $writers;
+    
+    $genres = mysqli_real_escape_string($con, $genres);
+    $writers = mysqli_real_escape_string($con, $writers);
+
     // prepare sta
     $sql = "CALL UpdateBook(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     $stmt = mysqli_prepare($con, $sql);

@@ -17,7 +17,6 @@ if (DoesBookExist($_GET["isbn"])) {
         if ($i < count($bookdata["genres"]) - 1)
             $genres = $genres . ', ';
     }
-    $genres = substr($genres, 0, strlen($genres) - 2);
 
     $writers = "";
     for ($i = 0; $i < count($bookdata["writers"]); $i++) {
@@ -25,7 +24,6 @@ if (DoesBookExist($_GET["isbn"])) {
         if ($i < count($bookdata["writers"]) - 1)
             $writers = $writers . ', ';
     }
-    $writers = substr($writers, 0, strlen($writers) - 2);
 
 
 
@@ -122,7 +120,7 @@ if (DoesBookExist($_GET["isbn"])) {
                 <div class="book-content">
                     <span class="fw-bold">Leírás:</span><br>
                     <span>
-                        <?php echo str_replace("\n", "<br>", $bookdata["description"]); ?>
+                        <?php echo nl2br($bookdata["description"]); ?>
                     </span>
                 </div>
             </div>

@@ -1,8 +1,17 @@
-TODO: db egyesítés, login
-
-- könyv hozzáadása oldal
 - könyv oldal/adatlap
     -> komment szekció: minden kommentet betölt, de rejtettek, megvalósítható a pagination js-tel
         -> adminnak/modoknak: új kommentek oldal?
+    -> értékelések
+    -> rendelés (kosár), rendelés összesítés, rendelés véglegesítés
 - user adatlap
+    -> könyvajánlások
 - szerző adatlap
+- kiadó adatlap
+
+nem működik:
+bookpage.php: \r\n -> <br>
+mainpage.php: a könyv wrapperek újradolgozása
+
+TODO:
+restructure ajax files
+redesign user profile icon to be more obvious who is logged in
