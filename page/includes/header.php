@@ -24,8 +24,8 @@ $genres = GetGenres();
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://kit.fontawesome.com/fea0ed64d7.js" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <script src="js/index.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script src="/js/index.js"></script>
 </head>
 
 <body>
@@ -42,21 +42,22 @@ $genres = GetGenres();
                     <a class="navbar-brand" href="/main">Könyváruház</a>
                 </div>
                 <div class="col px-3 d-none d-lg-block">
-                    <form class="d-flex" role="search" method="get">
-                        <input class="flex-fill form-control me-2" type="search" placeholder="Keresés"
-                            aria-label="Search">
+                    <form class="d-flex" role="search" method="post" action="/search">
+                        <input class="flex-fill form-control me-2" type="search" placeholder="Mire szeretne keresni...?"
+                            aria-label="Search" name="q">
                         <input class="btn btn-brown" type="submit" value="Keresés">
-                        <a class="btn btn-brown text-nowrap ms-2 d-none d-lg-block">Részletes
-                            keresés</a>
                     </form>
                 </div>
                 <div class="col-lg-auto col px-0 text-end">
-                    <a class="btn border-0" <?php if ($is_logged_in) { ?> data-bs-toggle="modal"
+                    <div class="d-inline-block">
+                        <a class="btn border-0 d-inline-block" <?php if ($is_logged_in) { ?> data-bs-toggle="modal"
                             data-bs-target="#loggedInModal" <?php } else { ?> data-bs-toggle="modal"
-                            data-bs-target="#loginModal" <?php } ?>>
-                        <i class="fa-solid fa-circle-user fs-2 <?php if ($is_logged_in)
-                            echo 'text-success'; ?>"></i>
-                    </a>
+                                data-bs-target="#loginModal" <?php } ?>>
+                            <i class="fa-solid fa-circle-user fs-2">
+                            </i>
+                            
+                        </a>
+                    </div>
                     <a class="btn border-0" href="/basket">
                         <i class="fa-solid fa-basket-shopping fs-2"></i>
                     </a>
@@ -168,7 +169,8 @@ $genres = GetGenres();
                         <label for="signup-username" class="form-label mt-2">Felhasználónév:</label>
                         <input type="text" name="username" id="signup-username" class="form-control">
                         <label for="signup-password" class="form-label mt-2">Jelszó:</label>
-                        <input type="password" name="password" id="signup-password" class="form-control" onkeyup="checkPassword(this.value);" onfocus="showPasswordChecks(true);">
+                        <input type="password" name="password" id="signup-password" class="form-control"
+                            onkeyup="checkPassword(this.value);" onfocus="showPasswordChecks(true);">
                         <ul id="password-checks" class="d-none">
                             <li>
                                 <span id="password-length">8-20 karakter hosszú</span>

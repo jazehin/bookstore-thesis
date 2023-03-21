@@ -12,6 +12,8 @@ RewriteRule ^signout$ /?p=signout [L]
 
 RewriteRule ^profile$ /?p=profile [L]
 
+RewriteRule ^search$ /?p=search [L]
+
 RewriteRule ^books$ /?p=books [L]
 RewriteRule ^books/([0-9]+)/?$ /?p=book&isbn=$1 [NC,L]
 

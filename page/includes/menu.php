@@ -21,6 +21,9 @@ switch ($p) {
     case 'forgotten-password':
         $content = 'pages/forgottenpassword.php';
         break;
+    case 'search':
+        $content = 'pages/search.php';
+        break;
     case 'book':
         $content = 'pages/bookpage.php';
         break;

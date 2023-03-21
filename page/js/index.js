@@ -52,7 +52,7 @@ function login() {
         displayLoginError("Ne hagyjon üres mező(ke)t!");
         return;
     }
-    xmlhttp.open("GET", `pages/login.php?username=${username}&password=${password}`);
+    xmlhttp.open("GET", `/pages/ajax/login.php?username=${username}&password=${password}`);
     xmlhttp.send();
 }
 
@@ -132,11 +132,11 @@ function signUp() {
                 window.location.href = window.location.href;
             }
         }
-        xmlhttp.open("GET", `pages/ajax/signup.php?username=${username}&email=${email}&password=${password}`);
+        xmlhttp.open("GET", `/pages/ajax/signup.php?username=${username}&email=${email}&password=${password}`);
         xmlhttp.send();
     }
 
-    xmlhttp.open("GET", `pages/ajax/exists.php?email=${email}&username=${username}`);
+    xmlhttp.open("GET", `/pages/ajax/exists.php?email=${email}&username=${username}`);
     xmlhttp.send();
 }
 

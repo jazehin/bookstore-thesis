@@ -44,9 +44,12 @@ if (DoesBookExist($_GET["isbn"])) {
             <div class="col-md-4 col-lg-3">
                 <div>
                     <p>
-                        <span class="fw-bold fs-5 lh-1">
+                        <span id="title" class="fw-bold fs-5 lh-1">
                             <?php echo $bookdata["title"]; ?>
                         </span>
+                        <script>
+                            document.title = document.getElementById("title").innerText;
+                        </script>
                         <span> · </span>
                         <span class="fst-italic">
                             <?php echo $writers ?>
