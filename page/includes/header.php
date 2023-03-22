@@ -3,7 +3,19 @@ include("includes/db_con.php");
 include("includes/sql.php");
 
 session_start();
-$is_logged_in = isset($_SESSION["logged_in"]) && $_SESSION["logged_in"];
+//$is_logged_in = isset($_SESSION["logged_in"]) && $_SESSION["logged_in"];
+
+if (!isset($_SESSION["logged_in"])) {
+    $_SESSION["logged_in"] = false;
+}
+
+if (!isset($_SESSION["user"])) {
+    $_SESSION["user"] = [];
+}
+
+if (!isset($_SESSION["basket"])) {
+    $_SESSION["basket"] = [];
+}
 
 $genres = GetGenres();
 ?>
@@ -50,10 +62,10 @@ $genres = GetGenres();
                 </div>
                 <div class="col-lg-auto col px-0 text-end">
                     <div class="d-inline-block">
-                        <a class="btn border-0 d-inline-block" <?php if ($is_logged_in) { ?> data-bs-toggle="modal"
+                        <a class="btn border-0 d-inline-block" <?php if ($_SESSION["logged_in"]) { ?> data-bs-toggle="modal"
                             data-bs-target="#loggedInModal" <?php } else { ?> data-bs-toggle="modal"
                                 data-bs-target="#loginModal" <?php } ?>>
-                            <i class="fa-solid fa-circle-user fs-2">
+                            <i class="fa-solid fa-circle-user fs-2 <?php if($_SESSION["logged_in"]) echo "text-success" ?>">
                             </i>
                             
                         </a>
@@ -107,7 +119,7 @@ $genres = GetGenres();
                     <li class="nav-item">
                         <a class="nav-link" href="/books/9789635841523">Könyv</a>
                     </li>
-                    <?php if ($is_logged_in && $_SESSION["user"]["type"] === "administrator") { ?>
+                    <?php if ($_SESSION["logged_in"] && $_SESSION["user"]["type"] === "administrator") { ?>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
@@ -207,7 +219,7 @@ $genres = GetGenres();
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="loggedInModalLabel">Üdvözlöm,
-                        <?php if ($is_logged_in)
+                        <?php if ($_SESSION["logged_in"])
                             echo $_SESSION["user"]["username"]; ?>
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

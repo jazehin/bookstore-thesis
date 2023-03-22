@@ -189,8 +189,6 @@
                     }
                 }
             }
-            print_r($bookdata["writers"]);
-            print_r($bookdata["genres"]);
 
             // checking price
             $bookdata["price"] = (intval($_POST["price"]) == 0 ? NULL : intval($_POST["price"]));
@@ -476,11 +474,11 @@
                 <div class="row">
                     <div class="col-6 mb-3">
                         <input disabled type="button" class="btn-brown form-control form-button" value="+"
-                            onclick="AddField('genre')">
+                            onclick="addField('genre')">
                     </div>
                     <div class="col-6 mb-3">
                         <input disabled type="button" class="btn-brown form-control form-button" value="-"
-                            onclick="RemoveField('genre')">
+                            onclick="removeField('genre')">
                     </div>
                 </div>
                 <?php if (!empty($errors["genres"])) { ?>
@@ -515,11 +513,11 @@
                 <div class="row">
                     <div class="col-6 mb-3">
                         <input disabled type="button" class="btn-brown form-control form-button" value="+"
-                            onclick="AddField('writer')">
+                            onclick="addField('writer')">
                     </div>
                     <div class="col-6 mb-3">
                         <input disabled type="button" class="btn-brown form-control form-button" value="-"
-                            onclick="RemoveField('writer')">
+                            onclick="removeField('writer')">
                     </div>
                 </div>
                 <?php if (!empty($errors["writers"])) { ?>

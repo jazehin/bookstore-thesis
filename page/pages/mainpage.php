@@ -52,9 +52,16 @@ $books = GetISBNs();
                         <span class="bookcard-description mb-2">
                             <?php echo $bookdata["description"]; ?>
                         </span>
-                        <span class="bookcard-price <?php if (!is_null($bookdata["discounted_price"])) echo "text-decoration-line-through" ?>"><?php echo $bookdata["price"]; ?> Ft</span>
+                        <span
+                            class="bookcard-price <?php if (!is_null($bookdata["discounted_price"]))
+                                echo "text-decoration-line-through" ?>"><?php echo $bookdata["price"]; ?> Ft</span>
                         <?php if (!is_null($bookdata["discounted_price"])) { ?>
-                        helyett <span class="bookcard-discounted-price text-danger fw-bold"><?php echo $bookdata["discounted_price"]; ?> Ft</span>
+                            helyett <span class="bookcard-discounted-price text-danger fw-bold">
+                                <?php echo $bookdata["discounted_price"]; ?> Ft
+                            </span>
+                            <span class="discount-percent">
+                                (-<?php echo round(((1-($bookdata["discounted_price"] / $bookdata["price"])) * 100), 0); ?>%)
+                            </span>
                         <?php } ?>
                     </div>
                 </div>

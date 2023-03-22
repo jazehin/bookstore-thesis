@@ -26,9 +26,9 @@ if (DoesBookExist($_GET["isbn"])) {
     }
 
 
+$_SESSION["basket"]
 
-
-    ?>
+?>
 
     <div class="card p-3">
         <!--
@@ -50,12 +50,9 @@ if (DoesBookExist($_GET["isbn"])) {
                         <script>
                             document.title = document.getElementById("title").innerText;
                         </script>
-                        <span> · </span>
+                        <br>
                         <span class="fst-italic">
                             <?php echo $writers ?>
-                        </span><br>
-                        <span>
-                            <?php echo $genres; ?>
                         </span>
                     </p>
                 </div>
@@ -72,6 +69,13 @@ if (DoesBookExist($_GET["isbn"])) {
                         <span class="col-5 my-auto fw-bold">ISBN:</span>
                         <span class="col-7 my-auto">
                             <?php echo $bookdata["isbn"]; ?>
+                        </span>
+                    </div>
+
+                    <div class="row pt-1">
+                        <span class="col-5 my-auto fw-bold">Műfajok:</span>
+                        <span class="col-7 my-auto">
+                            <?php echo $genres; ?>
                         </span>
                     </div>
 
@@ -120,13 +124,32 @@ if (DoesBookExist($_GET["isbn"])) {
                 </div>
             </div>
             <div class="col-md-8 col-lg-9">
-                <div class="book-content">
-                    <span class="fw-bold">Leírás:</span><br>
-                    <span>
-                        <?php echo nl2br($bookdata["description"]); ?>
-                    </span>
+                <span>
+                    <?php echo stripslashes($bookdata["description"]); ?>
+                </span>
+                <div class="purchase mt-3 pt-3 d-flex justify-content-end align-items-center">
+                    <div class="price my-auto">
+                        <span class="bookcard-price  <?php if (!is_null($bookdata["discounted_price"]))
+                            echo "text-decoration-line-through";
+                        else
+                            echo "fs-5"; ?>"><?php echo $bookdata["price"]; ?> Ft</span>
+                        <?php if (!is_null($bookdata["discounted_price"])) { ?>
+                            &nbsp;helyett&nbsp;<span class="bookcard-discounted-price text-danger fw-bold fs-5">
+                                <?php echo $bookdata["discounted_price"]; ?> Ft
+                            </span>
+                            <span class="discount-percent fs-5">
+                                (-
+                                <?php echo round(((1 - ($bookdata["discounted_price"] / $bookdata["price"])) * 100), 0); ?>%)
+                            </span>
+                        <?php } ?>
+                    </div>
+                    <form action="" method="post">
+
+                        <input type="submit" class="btn btn-brown ms-3" value="Kosárba">
+                    </form>
                 </div>
             </div>
+
         </div>
 
 
@@ -139,4 +162,3 @@ if (DoesBookExist($_GET["isbn"])) {
     <p class="text-danger">Nincs könyv ilyen ISBN-nel!</p>
 
 <?php } ?>
-

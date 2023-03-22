@@ -7,12 +7,19 @@
     -> könyvajánlások
 - szerző adatlap
 - kiadó adatlap
+- menüpontok:
+    -> új könyvek
+    -> nemsoká megjelenik
+    -> bestsellers
+    -> műfajokra bontva
+    -> véletlen könyv
 
 nem működik:
-bookpage.php: \r\n -> <br>
+bookpage.php: \r\n -> <br> ✅
 <many>.php: a főoldalon kívül nem tölti be a btn-brownt ✅
 
 TODO:
 mainpage.php: a könyv wrapperek újradolgozása ✅
 restructure ajax files ✅
 redesign user profile icon to be more obvious who is logged in - folyamatban
+kosár implementation

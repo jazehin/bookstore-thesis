@@ -1,6 +1,4 @@
-// parentElement: div.row
-// fields: div.col-12 > input field
-function AddField(fieldName) {
+function addField(fieldName) {
     let row = document.getElementById(fieldName + "-fields");
 
     let col = document.createElement("div");
@@ -20,7 +18,7 @@ function AddField(fieldName) {
     row.appendChild(col);
 }
 
-function RemoveField(fieldName) {
+function removeField(fieldName) {
     let fieldIdToRemove = document.getElementsByClassName(fieldName + "-field").length;
 
     if (fieldIdToRemove > 1) {
@@ -127,7 +125,6 @@ function signUp() {
 
             if (result.length != 0) {
                 alert("Regisztráció sikertelen.");
-                alert(result);
             } else {
                 window.location.href = window.location.href;
             }
@@ -148,7 +145,7 @@ function clearSignUpErrors() {
 function displaySignUpError(errorMessage) {
     const errorDiv = document.getElementById("signup-errors");
     const errorP = document.createElement("span");
-    //ErrorP.classList.add();
+
     errorP.innerText = errorMessage;
     if (errorDiv.hasChildNodes()) {
         errorDiv.append(document.createElement("br"));
@@ -181,17 +178,7 @@ function checkPassword(password) {
     ];
 
     const patterns = [/^.{8,20}$/, /[a-z]/, /[A-Z]/, /[0-9]/, /[@&#_%]/];
-    /*
-    const length  = document.getElementById("password-length");
-    const capital = document.getElementById("password-capital");
-    const numeric = document.getElementById("password-numeric");
-    const special = document.getElementById("password-special");
 
-    const length_pattern  = /.{8,20}/;
-    const capital_pattern = /[A-Z]/;
-    const numeric_pattern = /[0-9]/;
-    const special_pattern = /[@&#_%]/;
-*/
     for (let i = 0; i < spans.length; i++) {
         if (patterns[i].test(password)) {
             spans[i].classList.remove("text-danger");
@@ -244,14 +231,14 @@ function loadBookDataByIsbn(isbn) {
 
             const genreFields = document.getElementsByClassName("genre-field");
             for (let i = genreFields.length; i > 1; i--) {
-                RemoveField("genre");
+                removeField("genre");
             }
             genreFields[0].value = "";
             genreFields[0].setAttribute("disabled", "");
 
             const writerFields = document.getElementsByClassName("writer-field");
             for (let i = writerFields.length; i > 1; i--) {
-                RemoveField("writer");
+                removeField("writer");
             }
             writerFields[0].value = "";
             writerFields[0].setAttribute("disabled", "");
@@ -304,12 +291,12 @@ function loadBookDataByIsbn(isbn) {
             document.getElementById("description").removeAttribute("disabled");
 
             const genres = array[11].split('@');
-            alert(genres);
+            
             let genreFields = document.getElementsByClassName("genre-field");
             genreFields[0].value = genres[0];
             genreFields[0].removeAttribute("disabled");
             for (let i = genreFields.length; i < genres.length; i++) {
-                AddField('genre');
+                addField('genre');
                 genreFields = document.getElementsByClassName("genre-field");
                 genreFields[i].value = genres[i];
             }
@@ -319,7 +306,7 @@ function loadBookDataByIsbn(isbn) {
             writerFields[0].value = writers[0];
             writerFields[0].removeAttribute("disabled");
             for (let i = writerFields.length; i < writers.length; i++) {
-                AddField('writer');
+                addField('writer');
                 writerFields = document.getElementsByClassName("writer-field");
                 writerFields[i].value = writers[i];
             }
@@ -338,9 +325,6 @@ function loadBookDataByIsbn(isbn) {
 
             document.getElementById("cover").removeAttribute("disabled");
         }
-
-
-
     }
 
     xmlhttp.open("GET", `pages/bookdata.php?isbn=${isbn}`);

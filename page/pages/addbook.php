@@ -470,10 +470,10 @@
                 </div>
                 <div class="row">
                     <div class="col-6 mb-3">
-                        <input type="button" class="btn-brown form-control" value="+" onclick="AddField('genre')">
+                        <input type="button" class="btn-brown form-control" value="+" onclick="addField('genre')">
                     </div>
                     <div class="col-6 mb-3">
-                        <input type="button" class="btn-brown form-control" value="-" onclick="RemoveField('genre')">
+                        <input type="button" class="btn-brown form-control" value="-" onclick="removeField('genre')">
                     </div>
                 </div>
                 <?php if (!empty($errors["genres"])) { ?>
@@ -507,10 +507,10 @@
                 </div>
                 <div class="row">
                     <div class="col-6 mb-3">
-                        <input type="button" class="btn-brown form-control" value="+" onclick="AddField('writer')">
+                        <input type="button" class="btn-brown form-control" value="+" onclick="addField('writer')">
                     </div>
                     <div class="col-6 mb-3">
-                        <input type="button" class="btn-brown form-control" value="-" onclick="RemoveField('writer')">
+                        <input type="button" class="btn-brown form-control" value="-" onclick="removeField('writer')">
                     </div>
                 </div>
                 <?php if (!empty($errors["writers"])) { ?>
