@@ -26,9 +26,33 @@ if (DoesBookExist($_GET["isbn"])) {
     }
 
 
-$_SESSION["basket"]
+    $_SESSION["basket"]
 
-?>
+        ?>
+
+    <div class="modal fade" id="addedToBasketModal" tabindex="-1" aria-labelledby="addedToBasketModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="addedToBasketModalLabel">
+                        Információ
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <span id="info">
+
+                    </span>
+                </div>
+
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Bezárás">
+                    <a href="/basket" class="btn btn-brown">Kosárhoz</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="card p-3">
         <!--
@@ -128,8 +152,8 @@ $_SESSION["basket"]
                     <?php echo stripslashes($bookdata["description"]); ?>
                 </span>
                 <div class="purchase mt-3 pt-3 d-flex justify-content-end align-items-center">
-                    <div class="price my-auto">
-                        <span class="bookcard-price  <?php if (!is_null($bookdata["discounted_price"]))
+                    <div class="price my-auto text-end">
+                        <span class="bookcard-price d-inline-block <?php if (!is_null($bookdata["discounted_price"]))
                             echo "text-decoration-line-through";
                         else
                             echo "fs-5"; ?>"><?php echo $bookdata["price"]; ?> Ft</span>
@@ -142,11 +166,21 @@ $_SESSION["basket"]
                                 <?php echo round(((1 - ($bookdata["discounted_price"] / $bookdata["price"])) * 100), 0); ?>%)
                             </span>
                         <?php } ?>
+                        <br>
+                        <span class="points d-inline-block">
+                            A könyv megvásárlásával <span class="fw-bold">
+                                <?php
+                                if (is_null($bookdata["discounted_price"]))
+                                    echo round($bookdata["price"], -1) / 10;
+                                else
+                                    echo round($bookdata["discounted_price"], -1) / 10;
+                                ?>
+                                pont
+                            </span> szerezhető.
+                        </span>
                     </div>
-                    <form action="" method="post">
-
-                        <input type="submit" class="btn btn-brown ms-3" value="Kosárba">
-                    </form>
+                    <input type="button" class="btn btn-brown ms-3" value="Kosárba" data-bs-toggle="modal"
+                        data-bs-target="#addedToBasketModal" onclick="addToBasket(<?php echo $bookdata['isbn']; ?>, '<?php echo $bookdata['title']; ?>')">
                 </div>
             </div>
 

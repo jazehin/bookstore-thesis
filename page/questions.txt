@@ -1,0 +1,4 @@
+- user icon when logged in
+- can i use images instead of fontawesome integration
+- is file structure ok
+- footer stick to the bottom

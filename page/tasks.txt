@@ -22,4 +22,4 @@ TODO:
 mainpage.php: a könyv wrapperek újradolgozása ✅
 restructure ajax files ✅
 redesign user profile icon to be more obvious who is logged in - folyamatban
-kosár implementation
+kosár implementation - folyamatban

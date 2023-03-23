@@ -1,7 +1,7 @@
 <?php
 include("includes/db_con.php");
 include("includes/sql.php");
-
+ini_set('session.gc_maxlifetime', 60 * 60 * 24); // 24 hours
 session_start();
 //$is_logged_in = isset($_SESSION["logged_in"]) && $_SESSION["logged_in"];
 
@@ -37,7 +37,7 @@ $genres = GetGenres();
     <script src="https://kit.fontawesome.com/fea0ed64d7.js" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <script src="/js/index.js"></script>
+    <script src="/js/script.js"></script>
 </head>
 
 <body>

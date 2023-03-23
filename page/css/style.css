@@ -33,6 +33,10 @@
     display: none;
 }
 
+.text-center-phones {
+    text-align: center;
+}
+
 /*Desktop view*/
 @media screen and (min-width: 992px) {
     .bookcard {
@@ -50,11 +54,11 @@
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
-}
 
-.logged-in-badge {
+    .text-center-phones {
+        text-align: left;
+    }
 }
-
 
 /*
 .bookcard {
@@ -96,6 +100,10 @@ nav i {
     background-color: rgba(225, 211, 180, 0.2);
 }
 
-navbar {
+navbar, .table-head-brown, .table-foot-brown {
     background-color: rgba(225, 211, 180, 1);
+}
+
+.img-basket {
+    max-width: 5rem;
 }

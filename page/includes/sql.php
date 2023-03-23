@@ -78,6 +78,7 @@ function InsertBook($bookdata)
     $language = mysqli_real_escape_string($con, $bookdata["language"]);
     $stock = mysqli_real_escape_string($con, $bookdata["stock"]);
     $description = mysqli_real_escape_string($con, $bookdata["description"]);
+    $description = str_replace("\\r\\n", "<br>", $description);
 
     $genres = "";
     for ($i = 0; $i < count($bookdata["genres"]); $i++) {

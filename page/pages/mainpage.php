@@ -50,7 +50,7 @@ $books = GetISBNs();
                             <i class="fa-regular fa-star"></i>
                         </span>
                         <span class="bookcard-description mb-2">
-                            <?php echo $bookdata["description"]; ?>
+                            <?php echo stripslashes($bookdata["description"]); ?>
                         </span>
                         <span
                             class="bookcard-price <?php if (!is_null($bookdata["discounted_price"]))

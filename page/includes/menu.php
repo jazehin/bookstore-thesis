@@ -15,6 +15,9 @@ switch ($p) {
     case 'profile':
         $content = 'pages/profile.php';
         break;
+    case 'basket':
+        $content = 'pages/basket.php';
+        break;
     case 'signout':
         $content = 'pages/signout.php';
         break;

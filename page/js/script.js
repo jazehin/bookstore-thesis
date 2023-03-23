@@ -327,6 +327,30 @@ function loadBookDataByIsbn(isbn) {
         }
     }
 
-    xmlhttp.open("GET", `pages/bookdata.php?isbn=${isbn}`);
+    xmlhttp.open("GET", `/pages/ajax/bookdata.php?isbn=${isbn}`);
     xmlhttp.send();
+}
+
+function addToBasket(isbn, title) {
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.onload = function () { 
+        const result = this.responseText;
+        document.getElementById("info").innerText = result;
+    }
+    xmlhttp.open("GET", `/pages/ajax/addtobasket.php?title=${title}&isbn=${isbn}`);
+    xmlhttp.send();
+}
+
+function changeBasketValue(isbn, value) {
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.onload = function () { 
+        const result = this.responseText;
+        document.getElementById("sum-table").innerHTML = result;
+    }
+    xmlhttp.open("GET", `/pages/ajax/changebasketvalue.php?isbn=${isbn}&value=${value}`);
+    xmlhttp.send();
+}
+
+function updateModal(isbn) {
+    document.getElementById("delete-button").setAttribute("onclick", `changeBasketValue(${isbn}, -1)`);
 }
