@@ -123,8 +123,8 @@ if (DoesBookExist($_GET["isbn"])) {
                         <span class="col-5 my-auto fw-bold">Kiadás dátuma:</span>
                         <span class="col-7 my-auto">
                             <?php
-                            $date = date_create($bookdata["date_published"]);
-                            echo date_format($date, "Y. m. d.");
+                            $date_published = date_create($bookdata["date_published"]);
+                            echo date_format($date_published, "Y. m. d.");
                             ?>
                         </span>
                     </div>
@@ -179,8 +179,16 @@ if (DoesBookExist($_GET["isbn"])) {
                             </span> szerezhető.
                         </span>
                     </div>
-                    <input type="button" class="btn btn-brown ms-3" value="Kosárba" data-bs-toggle="modal"
-                        data-bs-target="#addedToBasketModal" onclick="addToBasket(<?php echo $bookdata['isbn']; ?>, '<?php echo $bookdata['title']; ?>')">
+                    <?php $today = date_create(); ?>
+                    <div class="d-flex flex-column ms-2 justify-content-center">
+                            <input type="button" class="btn btn-brown <?php if ($today < $date_published || $bookdata["stock"] == 0) echo 'disabled' ?>" value="Kosárba" data-bs-toggle="modal"
+                            data-bs-target="#addedToBasketModal" onclick="addToBasket(<?php echo $bookdata['isbn']; ?>, '<?php echo $bookdata['title']; ?>')">
+
+                        <span class="">Készlet: <?php echo $bookdata["stock"]; ?> db</span>
+                        
+                        
+                    </div>
+                    
                 </div>
             </div>
 

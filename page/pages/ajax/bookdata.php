@@ -1,6 +1,6 @@
 <?php
-include("./../includes/db_con.php");
-include("./../includes/sql.php");
+include("./../../includes/db_con.php");
+include("./../../includes/sql.php");
 
 $isbn = $_GET["isbn"];
 

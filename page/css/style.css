@@ -91,9 +91,9 @@ nav i {
     color: rgba(139, 94, 60, 1);
 }
 
-.btn-brown {
-    background-color: rgba(139, 94, 60, 1) !important;
-    color: white !important;
+.btn-brown, .pill-active {
+    background-color: rgba(139, 94, 60, 1);
+    color: white;
 }
 
 .card {
@@ -106,4 +106,16 @@ navbar, .table-head-brown, .table-foot-brown {
 
 .img-basket {
     max-width: 5rem;
+}
+
+.pill-active, .pill-inactive {
+    border-radius: 50px;
+}
+
+.pill-inactive {
+    border: 1px rgba(139, 94, 60, 1) solid;
+}
+
+.pill-active {
+    border: none;
 }

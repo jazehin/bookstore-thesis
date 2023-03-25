@@ -1,4 +1,4 @@
-<?php if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] && $_SESSION["user"]["type"] === "administrator") { ?>
+<?php if ($_SESSION["logged_in"] && $_SESSION["user"]["type"] === "administrator") { ?>
 
     <?php
 

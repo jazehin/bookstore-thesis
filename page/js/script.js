@@ -68,24 +68,24 @@ function signUp() {
     const username = document.getElementById("signup-username").value;
     const password = document.getElementById("signup-password").value;
 
-    
+
 
     //checking if email is already registered
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.onload = function () {
         const result = this.responseText;
-        
+
         if (username.length === 0 || password.length === 0 || email.length === 0) {
             displaySignUpError("Ne hagyjon üres mező(ke)t!");
             return;
         }
-    
+
         //if there is an error, don't make the ajax request
         let error = false;
-    
+
         //checking if email is ok
         const emailRegex = /^\S+@\S+\.\S+$/;
-    
+
         if (!emailRegex.test(email)) {
             displaySignUpError("Érvénytelen email cím!");
             error = true;
@@ -291,7 +291,7 @@ function loadBookDataByIsbn(isbn) {
             document.getElementById("description").removeAttribute("disabled");
 
             const genres = array[11].split('@');
-            
+
             let genreFields = document.getElementsByClassName("genre-field");
             genreFields[0].value = genres[0];
             genreFields[0].removeAttribute("disabled");
@@ -333,7 +333,7 @@ function loadBookDataByIsbn(isbn) {
 
 function addToBasket(isbn, title) {
     const xmlhttp = new XMLHttpRequest();
-    xmlhttp.onload = function () { 
+    xmlhttp.onload = function () {
         const result = this.responseText;
         document.getElementById("info").innerText = result;
     }
@@ -343,7 +343,7 @@ function addToBasket(isbn, title) {
 
 function changeBasketValue(isbn, value) {
     const xmlhttp = new XMLHttpRequest();
-    xmlhttp.onload = function () { 
+    xmlhttp.onload = function () {
         const result = this.responseText;
         document.getElementById("sum-table").innerHTML = result;
     }
@@ -353,4 +353,97 @@ function changeBasketValue(isbn, value) {
 
 function updateModal(isbn) {
     document.getElementById("delete-button").setAttribute("onclick", `changeBasketValue(${isbn}, -1)`);
+}
+
+function changePill(pill) {
+    if (pill.classList.contains("pill-inactive")) {
+        pill.classList.remove("pill-inactive");
+        pill.classList.add("pill-active");
+
+        const xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", `/pages/ajax/preference.php?genre=${pill.value}&mode=add`);
+        xmlhttp.send();
+    } else {
+        pill.classList.remove("pill-active");
+        pill.classList.add("pill-inactive");
+
+        const xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", `/pages/ajax/preference.php?genre=${pill.value}&mode=remove`);
+        xmlhttp.send();
+    }
+}
+
+function editProfile() {
+    document.getElementById("edit-button").classList.add("d-none");
+    document.getElementById("save-button").classList.remove("d-none");
+
+    const labels = document.getElementsByClassName("data-label");
+    for (let i = 0; i < labels.length; i++) {
+        labels[i].classList.add("d-none");
+    }
+
+    const inputs = document.getElementsByClassName("data-input");
+    for (let i = 0; i < inputs.length; i++) {
+        inputs[i].classList.remove("d-none");
+    }
+}
+
+function saveProfile() {
+    let error = false;
+
+    let familyName = document.getElementById("family_name").value;
+    let givenName = document.getElementById("given_name").value;
+
+    if ((familyName.length == 0 && givenName.length != 0) || (familyName.length != 0 && givenName.length == 0)) {
+        document.getElementById("name-error").innerText = "Kérem vagy mindkét mezőt töltse ki, vagy mindkettőt hagyja üresen!";
+        error = true;
+    } else {
+        document.getElementById("name-error").innerText = "";
+    }
+
+    if (familyName.length == 0 && givenName.length == 0) {
+        familyName = null;
+        givenName = null;
+    }
+
+    let gender = null;
+    if (document.getElementById("male").checked) {
+        gender = "male";
+    } else if (document.getElementById("female").checked) {
+        gender = "female";
+    }
+
+    let birthdate = document.getElementById("birthdate").value;
+    if (new Date(birthdate) > new Date()) {
+        document.getElementById("birthdate-error").innerText = "Kérem ne jövőbeli dátumot adjon meg!";
+        error = true;
+    } else {
+        document.getElementById("birthdate-error").innerText = "";
+    }
+
+    if (birthdate.length == 0) {
+        birthdate = null;
+    }
+
+    let phoneNumber = document.getElementById("phone_number").value.replaceAll(' ', '');
+    const phoneRegex = /^\+?\d{11}$/;
+    if (phoneNumber.length != 0 && !phoneRegex.test(phoneNumber)) {
+        document.getElementById("phone-number-error").innerText = "Kérem érvényes telefonszámot adjon meg +36123456789 vagy 06123456789 formátumban!";
+        error = true;
+    } else {
+        document.getElementById("phone-number-error").innerText = "";
+    }
+
+    if (phoneNumber.length == 0) {
+        phoneNumber = null;
+    }
+
+    if (error) return;
+
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.onload = function () {
+        window.location.href = window.location.href;
+    }
+    xmlhttp.open("GET", `/pages/ajax/saveuserdata.php?family_name=${familyName}&given_name=${givenName}&gender=${gender}&birthdate=${birthdate}&phone_number=${phoneNumber}`);
+    xmlhttp.send();
 }

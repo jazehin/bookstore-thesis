@@ -55,7 +55,8 @@ function GetWriters()
     return GetArrayFromResultSet($resultset);
 }
 
-function GetISBNs() {
+function GetISBNs()
+{
     $resultset = GetResultSetOfSingleColumn("isbn", "books");
     return GetArrayFromResultSet($resultset);
 }
@@ -150,7 +151,7 @@ function UpdateBook($bookdata)
         if ($i < count($bookdata["writers"]) - 1)
             $writers = $writers . '@';
     }
-    
+
     $genres = mysqli_real_escape_string($con, $genres);
     $writers = mysqli_real_escape_string($con, $writers);
 
@@ -199,9 +200,10 @@ function GetWritersByISBN($isbn)
 function DoesBookExist($isbn): bool
 {
     $con = GetConnection();
-    $sql = 'SELECT DoesBookExist("' . $isbn . '");';
+    $sql = "SELECT * FROM books WHERE isbn = '" . $isbn . "';";
     $rs = mysqli_query($con, $sql);
-    return mysqli_fetch_row($rs)[0];
+    $count = mysqli_num_rows($rs);
+    return $count > 0;
 }
 
 function Login($username, $password): int|null
@@ -237,7 +239,8 @@ function SignUp($username, $password, $email, $salt)
 }
 
 
-function EmailAlreadyExists($email) {
+function EmailAlreadyExists($email)
+{
     $con = GetConnection();
     $sql = "SELECT user_id FROM login WHERE email = ?;";
     $stmt = mysqli_prepare($con, $sql);
@@ -250,7 +253,8 @@ function EmailAlreadyExists($email) {
     return !is_null($user_id);
 }
 
-function UsernameAlreadyExists($username) {
+function UsernameAlreadyExists($username)
+{
     $con = GetConnection();
     $sql = "SELECT user_id FROM login WHERE username = ?;";
     $stmt = mysqli_prepare($con, $sql);
@@ -263,7 +267,8 @@ function UsernameAlreadyExists($username) {
     return !is_null($user_id);
 }
 
-function GetSalt($username) {
+function GetSalt($username)
+{
     $con = GetConnection();
     $sql = "SELECT salt FROM login WHERE username = ?;";
     $stmt = mysqli_prepare($con, $sql);
@@ -303,12 +308,43 @@ function GetUserById($id)
     return $array;
 }
 
-function ArrayToString($array)
+function SetPreference($username, $genre, $add)
 {
-    $string = "";
-    foreach ($array as $key => $value) {
-        $string += $value . ", ";
+    $con = GetConnection();
+    if ($add)
+        $sql = "CALL SetPreference(?, ?);";
+    else
+        $sql = "CALL RemovePreference(?, ?);";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "ss", $username, $genre);
+    mysqli_execute($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+}
+
+function GetGenrePreferencesByUsername($username)
+{
+    $con = GetConnection();
+    $sql = "SELECT genre FROM genres INNER JOIN user_preferences ON genres.genre_id = user_preferences.genre_id WHERE user_preferences.user_id = (SELECT user_id FROM login WHERE username = '" . $username . "');";
+    $rs = mysqli_query($con, $sql);
+    $array = [];
+
+    while ($row = mysqli_fetch_row($rs)) {
+        array_push($array, $row[0]);
     }
-    return substr($string, 0, strlen($string) - 2);
+
+    mysqli_close($con);
+    return $array;
+}
+
+function SaveUserData($username, $family_name, $given_name, $gender, $birthdate, $phone_number)
+{
+    $con = GetConnection();
+    $sql = "UPDATE users SET family_name = ?, given_name = ?, gender = ?, birthdate = ?, phone_number = ? WHERE user_id = (SELECT user_id FROM login WHERE username = ?);";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "ssssss", $family_name, $given_name, $gender, $birthdate, $phone_number, $username);
+    mysqli_execute($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
 }
 ?>
