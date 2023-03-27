@@ -16,8 +16,13 @@ RewriteRule ^search$ /?p=search [L]
 
 RewriteRule ^basket$ /?p=basket [L]
 
+RewriteRule ^order-address$ /?p=order-address [L]
+RewriteRule ^add-address$ /?p=add-address [L]
+
 RewriteRule ^books$ /?p=books [L]
 RewriteRule ^books/([0-9]+)/?$ /?p=book&isbn=$1 [NC,L]
+
+RewriteRule ^random$ /?p=random [L]
 
 RewriteRule ^addbook$ /?p=addbook [L]
 RewriteRule ^modifybook/([0-9]+)/?$ /?p=modifybook&isbn=$1 [NC,L]

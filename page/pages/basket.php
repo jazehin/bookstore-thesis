@@ -46,7 +46,7 @@ $price_sum = 0;
         </div>
     </div>
     
-    <p class="fs-4">Kosarának tartalma:</p>
+    <h1 class="fs-3">Kosarának tartalma:</h1>
     <div id="sum-table" class="table-responsive">
 
         <table class="table">
@@ -126,7 +126,17 @@ $price_sum = 0;
             </tfoot>
         </table>
     </div>
+
+    <div class="text-end">
+        <a 
+            <?php if ($_SESSION["logged_in"] && mysqli_num_rows(GetAddressesByUsername($_SESSION["user"]["username"])) > 0) { ?>
+                href="/order-address"
+            <?php } else { ?>
+                href="/add-address"
+            <?php } ?>
+         class="btn btn-brown">Tovább a szállítási cím megadásához</a>
+    </div>
 <?php } else { //if it's empty... ?>
-    <p class="fs-4">A kosara üres.</p>
+    <h1 class="fs-3">A kosara üres.</h1>
     <!-- Ezek a könyvek érdekelhetik szekció -->
 <?php } ?>

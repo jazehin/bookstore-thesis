@@ -18,6 +18,12 @@ switch ($p) {
     case 'basket':
         $content = 'pages/basket.php';
         break;
+    case 'order-address':
+        $content = 'pages/orderaddress.php';
+        break;
+    case 'add-address':
+        $content = 'pages/addaddress.php';
+        break;
     case 'signout':
         $content = 'pages/signout.php';
         break;
@@ -38,6 +44,10 @@ switch ($p) {
         break;
     case 'modifybook':
         $content = 'pages/modifybook.php';
+        break;
+    case 'random':
+        $isbns = GetISBNs();
+        header("Location: /books/" . $isbns[array_rand($isbns)]);
         break;
     default:
         header("Location: /");

@@ -447,3 +447,122 @@ function saveProfile() {
     xmlhttp.open("GET", `/pages/ajax/saveuserdata.php?family_name=${familyName}&given_name=${givenName}&gender=${gender}&birthdate=${birthdate}&phone_number=${phoneNumber}`);
     xmlhttp.send();
 }
+
+function makeAddressFormVisible() {
+    document.getElementById("new-address-form").classList.remove("d-none");
+}
+
+function saveAddress() {
+    let error = false;
+
+    let company = document.getElementById("company").value;
+    if (company.length == 0) {
+        company = null;
+    }
+
+    let county = document.getElementById("county").value;
+
+    let city = document.getElementById("city").value;
+    if (city.length == 0) {
+        document.getElementById("city-error").innerText = "Kérem adjon meg egy várost!";
+        error = true;
+    }
+
+    let publicSpace = document.getElementById("public-space").value;
+    if (publicSpace.length == 0) {
+        document.getElementById("public-space-error").innerText = "Kérem adjon meg egy közterületet!";
+        error = true;
+    }
+
+    let zipCode = document.getElementById("zip-code").value;
+    const zipCodeRegex = /^\d{4}$/;
+    if (!zipCodeRegex.test(zipCode)) {
+        document.getElementById("zip-code-error").innerText = "Kérem adjon meg egy érvényes irányítószámot!";
+        error = true;
+    }
+
+    let note = document.getElementById("note").value;
+    if (note.length == 0) {
+        note = null;
+    }
+
+    if (error) return;
+
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.onload = function () {
+        window.location.href = window.location.href;
+    }
+    xmlhttp.open("GET", `/pages/ajax/saveaddress.php?company=${company}&county=${county}&city=${city}&public_space=${publicSpace}&zip_code=${zipCode}&note=${note}`);
+    xmlhttp.send();
+}
+
+function deleteAddressCon(address_id) {
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", `/pages/ajax/deleteaddresscon.php?address_id=${address_id}`);
+    xmlhttp.send();
+}
+
+function onAddressChoose(index) {
+    
+    if (document.getElementById(`company-${index}`) !== null)
+        document.getElementById('company').value = document.getElementById(`company-${index}`).innerText;
+    else
+        document.getElementById('company').value = "";
+    document.getElementById('county').value = document.getElementById(`county-${index}`).innerText;
+    document.getElementById('city').value = document.getElementById(`city-${index}`).innerText;
+    document.getElementById('public-space').value = document.getElementById(`public-space-${index}`).innerText;
+    document.getElementById('zip-code').value = document.getElementById(`zip-code-${index}`).innerText;
+    if (document.getElementById(`note-${index}`) !== null)
+        document.getElementById('note').value = document.getElementById(`note-${index}`).innerText;
+    else
+        document.getElementById('note').value = "";
+
+    document.getElementById('submit').classList.remove('disabled');
+}
+
+function validateAddress() {
+    let error = false;
+
+    let company = document.getElementById("company").value;
+    if (company.length == 0) {
+        company = null;
+    }
+
+    let county = document.getElementById("county").value;
+
+    let city = document.getElementById("city").value;
+    if (city.length == 0) {
+        document.getElementById("city-error").innerText = "Kérem adjon meg egy várost!";
+        error = true;
+    } else {
+        document.getElementById("city-error").innerText = "";
+    }
+
+    let publicSpace = document.getElementById("public-space").value;
+    if (publicSpace.length == 0) {
+        document.getElementById("public-space-error").innerText = "Kérem adjon meg egy közterületet!";
+        error = true;
+    } else {
+        document.getElementById("public-space-error").innerText = "";
+    }
+
+    let zipCode = document.getElementById("zip-code").value;
+    const zipCodeRegex = /^\d{4}$/;
+    if (!zipCodeRegex.test(zipCode)) {
+        document.getElementById("zip-code-error").innerText = "Kérem adjon meg egy érvényes irányítószámot!";
+        error = true;
+    } else {
+        document.getElementById("zip-code-error").innerText = "";
+    }
+
+    let note = document.getElementById("note").value;
+    if (note.length == 0) {
+        note = null;
+    }
+
+    if (error) {
+        document.getElementById("submit-button").classList.add("disabled");
+    } else {
+        document.getElementById("submit-button").classList.remove("disabled");
+    }
+}

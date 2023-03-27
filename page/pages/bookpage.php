@@ -152,7 +152,7 @@ if (DoesBookExist($_GET["isbn"])) {
                     <?php echo stripslashes($bookdata["description"]); ?>
                 </span>
                 <div class="purchase mt-3 pt-3 d-flex justify-content-end align-items-center">
-                    <div class="price my-auto text-end">
+                    <div class="price my-auto me-3 text-end">
                         <span class="bookcard-price d-inline-block <?php if (!is_null($bookdata["discounted_price"]))
                             echo "text-decoration-line-through";
                         else
@@ -180,7 +180,7 @@ if (DoesBookExist($_GET["isbn"])) {
                         </span>
                     </div>
                     <?php $today = date_create(); ?>
-                    <div class="d-flex flex-column ms-2 justify-content-center">
+                    <div class="d-flex flex-column ms-3 justify-content-center">
                             <input type="button" class="btn btn-brown <?php if ($today < $date_published || $bookdata["stock"] == 0) echo 'disabled' ?>" value="Kosárba" data-bs-toggle="modal"
                             data-bs-target="#addedToBasketModal" onclick="addToBasket(<?php echo $bookdata['isbn']; ?>, '<?php echo $bookdata['title']; ?>')">
 

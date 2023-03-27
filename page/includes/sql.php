@@ -288,7 +288,7 @@ function GetUserById($id)
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, "i", $id);
     mysqli_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $username, $email, $type, $family_name, $given_name, $gender, $birthdate, $phone_number);
+    mysqli_stmt_bind_result($stmt, $username, $email, $type, $family_name, $given_name, $gender, $birthdate, $phone_number, $points);
     mysqli_stmt_fetch($stmt);
     mysqli_stmt_close($stmt);
     mysqli_close($con);
@@ -302,7 +302,8 @@ function GetUserById($id)
         "given_name" => $given_name,
         "gender" => $gender,
         "birthdate" => $birthdate,
-        "phone_number" => $phone_number
+        "phone_number" => $phone_number,
+        "points" => $points
     );
 
     return $array;
@@ -345,6 +346,45 @@ function SaveUserData($username, $family_name, $given_name, $gender, $birthdate,
     mysqli_stmt_bind_param($stmt, "ssssss", $family_name, $given_name, $gender, $birthdate, $phone_number, $username);
     mysqli_execute($stmt);
     mysqli_stmt_close($stmt);
+    mysqli_close($con);
+}
+
+function GetCounties()
+{
+    $con = GetConnection();
+    $sql = "SELECT county_id, county FROM counties;";
+    $rs = mysqli_query($con, $sql);
+    mysqli_close($con);
+    return $rs;
+}
+
+function SaveAddress($username, $company, $county, $city, $public_space, $zip_code, $note) {
+    $con = GetConnection();
+    $sql = "CALL SaveAddress(?, ?, ?, ?, ?, ?, ?);";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "ssissss", $username, $company, $county, $city, $public_space, $zip_code, $note);
+    mysqli_execute($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+}
+
+function GetAddressesByUsername($username) {
+    $con = GetConnection();
+    $sql = "SELECT addresses.address_id, addresses.company, counties.county, addresses.city, addresses.public_space, addresses.zip_code, addresses.note FROM addresses 
+            INNER JOIN users_addresses ON addresses.address_id = users_addresses.address_id 
+            INNER JOIN users ON users_addresses.user_id = users.user_id 
+            INNER JOIN login ON users.user_id = login.user_id 
+            INNER JOIN counties ON addresses.county_id = counties.county_id 
+            WHERE login.username = '" . $username . "';";
+    $rs = mysqli_query($con, $sql);
+    mysqli_close($con);
+    return $rs;
+}
+
+function DeleteAddressCon($address_id, $username) {
+    $con = GetConnection();
+    $sql = "DELETE FROM users_addresses WHERE user_id = (SELECT user_id FROM login WHERE username = '$username') AND address_id = $address_id;";
+    mysqli_query($con, $sql);
     mysqli_close($con);
 }
 ?>

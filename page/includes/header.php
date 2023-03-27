@@ -1,9 +1,6 @@
 <?php
-include("includes/db_con.php");
-include("includes/sql.php");
 ini_set('session.gc_maxlifetime', 60 * 60 * 24); // 24 hours
 session_start();
-//$is_logged_in = isset($_SESSION["logged_in"]) && $_SESSION["logged_in"];
 
 if (!isset($_SESSION["logged_in"])) {
     $_SESSION["logged_in"] = false;
@@ -72,6 +69,13 @@ $genres = GetGenres();
                     </div>
                     <a class="btn border-0" href="/basket">
                         <i class="fa-solid fa-basket-shopping fs-2"></i>
+                        <!-- Needs a compatible design
+                        <?php if (count($_SESSION["basket"]) != 0) { ?>
+                        <span id="basket-counter">
+                            <?php echo count($_SESSION["basket"]); ?>
+                        </span>
+                        <?php } ?>
+                        -->
                     </a>
 
                 </div>
