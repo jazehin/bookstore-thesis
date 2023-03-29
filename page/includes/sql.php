@@ -387,4 +387,30 @@ function DeleteAddressCon($address_id, $username) {
     mysqli_query($con, $sql);
     mysqli_close($con);
 }
+
+function GetAddressId($company, $county, $city, $public_space, $zip_code, $note) {
+    $con = GetConnection();
+    $sql = "SELECT GetAddressId(?, ?, ?, ?, ?, ?);";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "sissss", $company, $county, $city, $public_space, $zip_code, $note);
+    mysqli_stmt_bind_result($stmt, $id);
+    mysqli_execute($stmt);
+    mysqli_stmt_fetch($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+    return $id;
+}
+
+function GetCountyIdByCountyName($county) {
+    $con = GetConnection();
+    $sql = "SELECT county_id FROM counties WHERE county = ?;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $county);
+    mysqli_stmt_bind_result($stmt, $id);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_fetch($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+    return $id;
+}
 ?>

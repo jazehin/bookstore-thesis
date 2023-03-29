@@ -5,7 +5,7 @@
     <?php $counties = GetCounties(); ?>
 
     <div class="row">
-        <form id="new-address-form" class="col-4" action="" method="post">
+        <form id="new-address-form" class="col-4" action="/order-payment" method="post">
             <span class="text-danger">* Kötelező mező</span><br>
             <label for="company" class="form-label mt-2">Cég:</label>
             <input type="text" name="company" class="form-control" id="company" placeholder="Példa Kft.">

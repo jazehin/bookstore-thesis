@@ -17,6 +17,7 @@ RewriteRule ^search$ /?p=search [L]
 RewriteRule ^basket$ /?p=basket [L]
 
 RewriteRule ^order-address$ /?p=order-address [L]
+RewriteRule ^order-payment$ /?p=order-payment [L]
 RewriteRule ^add-address$ /?p=add-address [L]
 
 RewriteRule ^books$ /?p=books [L]

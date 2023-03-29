@@ -508,7 +508,7 @@ function onAddressChoose(index) {
         document.getElementById('company').value = document.getElementById(`company-${index}`).innerText;
     else
         document.getElementById('company').value = "";
-    document.getElementById('county').value = document.getElementById(`county-${index}`).innerText;
+    document.getElementById('county').value = document.getElementById(`county-code-${index}`).innerText;
     document.getElementById('city').value = document.getElementById(`city-${index}`).innerText;
     document.getElementById('public-space').value = document.getElementById(`public-space-${index}`).innerText;
     document.getElementById('zip-code').value = document.getElementById(`zip-code-${index}`).innerText;

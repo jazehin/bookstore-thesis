@@ -12,13 +12,13 @@
                 <?php $i = 1; ?>
                 <?php while ($row = mysqli_fetch_row($addresses)) { ?>
                     <div class="address my-2">
-                        <input type="radio" name="address" id="address-<?php echo $i; ?>" name="addresses" value="<?php echo $i; ?>"
+                        <input type="radio" name="address" id="address-<?php echo $i; ?>" value="<?php echo $i; ?>"
                             onclick="onAddressChoose(<?php echo $i; ?>);">
                         <label for="address-<?php echo $i; ?>">
                             <?php if (isset($row[1])) { ?>
                                 (<span id="company-<?php echo $i; ?>"><?php echo $row[1] ?></span>)
                             <?php } ?>
-                            <span id="county-<?php echo $i; ?>"><?php echo "$row[2]"; ?></span> megye,
+                            <span id="county-<?php echo $i; ?>"><?php echo "$row[2]"; ?></span><span class="d-none" id="county-code-<?php echo $i; ?>"><?php echo GetCountyIdByCountyName("$row[2]"); ?></span> megye,
                             <span id="zip-code-<?php echo $i; ?>"><?php echo "$row[5]"; ?></span>.
                             <span id="city-<?php echo $i; ?>"><?php echo "$row[3]"; ?></span>,
                             <span id="public-space-<?php echo $i; ?>"><?php echo "$row[4]"; ?></span>
