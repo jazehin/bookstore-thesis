@@ -4,6 +4,8 @@ session_start();
 
 if (!isset($_SESSION["logged_in"])) {
     $_SESSION["logged_in"] = false;
+} else if ($_SESSION["logged_in"]) {
+    $_SESSION["user"] = GetUserById($_SESSION["user"]["id"]);
 }
 
 if (!isset($_SESSION["user"])) {
@@ -51,25 +53,27 @@ $genres = GetGenres();
                     <a class="navbar-brand" href="/main">Könyváruház</a>
                 </div>
                 <div class="col px-3 d-none d-lg-block">
-                    <form class="d-flex" role="search" method="post" action="/search">
+                    <form class="d-flex" role="search" id="form-big" method="post" action="/search/+/1">
                         <input class="flex-fill form-control me-2" type="search" placeholder="Mire szeretne keresni...?"
-                            aria-label="Search" name="q">
+                            aria-label="Search" name="q" onchange="updateForm('big', this);">
                         <input class="btn btn-brown" type="submit" value="Keresés">
                     </form>
                 </div>
                 <div class="col-lg-auto col px-0 text-end">
                     <div class="d-inline-block">
-                        <a class="btn border-0 d-inline-block" <?php if ($_SESSION["logged_in"]) { ?> data-bs-toggle="modal"
-                            data-bs-target="#loggedInModal" <?php } else { ?> data-bs-toggle="modal"
-                                data-bs-target="#loginModal" <?php } ?>>
-                            <i class="fa-solid fa-circle-user fs-2 <?php if($_SESSION["logged_in"]) echo "text-success" ?>">
-                            </i>
-                            
-                        </a>
-                    </div>
-                    <a class="btn border-0" href="/basket">
-                        <i class="fa-solid fa-basket-shopping fs-2"></i>
-                        <!-- Needs a compatible design
+                        <a class="btn border-0 d-inline-block" <?php if ($_SESSION["logged_in"]) { ?>
+                                data-bs-toggle="modal" data-bs-target="#loggedInModal" <?php } else { ?>
+                                data-bs-toggle="modal" data-bs-target="#loginModal" <?php } ?>>
+                            <i
+                                class="fa-solid fa-circle-user fs-2 <?php if ($_SESSION["logged_in"])
+                                    echo "text-success" ?>">
+                                </i>
+
+                            </a>
+                        </div>
+                        <a class="btn border-0" href="/basket">
+                            <i class="fa-solid fa-basket-shopping fs-2"></i>
+                            <!-- Needs a compatible design
                         <?php if (count($_SESSION["basket"]) != 0) { ?>
                         <span id="basket-counter">
                             <?php echo count($_SESSION["basket"]); ?>
@@ -82,8 +86,9 @@ $genres = GetGenres();
             </div>
         </div>
         <div class="container d-block d-lg-none pt-2">
-            <form class="d-flex" role="search" method="get">
-                <input class="flex-fill form-control me-2" type="search" placeholder="Keresés" aria-label="Search">
+            <form class="d-flex" role="search" id="form-small" method="post" action="/search/+/1">
+                <input class="flex-fill form-control me-2" type="search" placeholder="Mire szeretne keresni...?"
+                    aria-label="Search" name="q" onchange="updateForm('small', this);">
                 <input class="btn btn-brown" type="submit" value="Keresés">
             </form>
         </div>

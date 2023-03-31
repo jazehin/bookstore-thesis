@@ -24,6 +24,9 @@ switch ($p) {
     case 'order-payment':
         $content = 'pages/orderpayment.php';
         break;
+    case 'order-success':
+        $content = 'pages/ordersuccess.php';
+        break;
     case 'add-address':
         $content = 'pages/addaddress.php';
         break;

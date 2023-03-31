@@ -6,8 +6,10 @@
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .bookcard-container {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
 }
 
 .bookcard {
@@ -42,7 +44,7 @@
     .bookcard {
         min-width: 20rem;
         max-width: 30rem;
-        
+
         border-radius: 5px;
         position: relative;
         text-align: left;
@@ -58,6 +60,44 @@
     .text-center-phones {
         text-align: left;
     }
+
+    .points {
+        max-width: 50%;
+    }
+}
+
+.slider {
+    height: 10px;
+    background-color: #ddd;
+    /* set the initial background color */
+}
+
+.slider::-webkit-slider-thumb {
+    width: 18px;
+    height: 18px;
+    background-color: rgba(139, 94, 60, 1);
+}
+
+.slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background-color: rgba(139, 94, 60, 1);
+}
+
+.slider::-webkit-slider-thumb:active {
+    background-color: rgba(139, 94, 60, 0.8);
+}
+
+.slider::-webkit-slider-runnable-track {
+    height: 10px;
+    background: #ddd;
+    /* set the background color of the range */
+}
+
+.slider::-moz-range-track {
+    height: 10px;
+    background: #ddd;
+    /* set the background color of the range */
 }
 
 /*
@@ -91,7 +131,8 @@ nav i {
     color: rgba(139, 94, 60, 1);
 }
 
-.btn-brown, .pill-active {
+.btn-brown,
+.pill-active {
     background-color: rgba(139, 94, 60, 1);
     color: white;
 }
@@ -100,7 +141,9 @@ nav i {
     background-color: rgba(225, 211, 180, 0.2);
 }
 
-navbar, .table-head-brown, .table-foot-brown {
+navbar,
+.table-head-brown,
+.table-foot-brown {
     background-color: rgba(225, 211, 180, 1);
 }
 
@@ -108,7 +151,8 @@ navbar, .table-head-brown, .table-foot-brown {
     max-width: 5rem;
 }
 
-.pill-active, .pill-inactive {
+.pill-active,
+.pill-inactive {
     border-radius: 50px;
 }
 

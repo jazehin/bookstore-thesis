@@ -31,7 +31,7 @@ $books = GetISBNs();
             <div class="row position-relative">
                 <div class="col-lg-auto col-12">
                     <div class="bookcard-cover m-3">
-                        <img class="img-fluid" src="<?php echo $folder . $img ?>" alt="<?php echo $folder . $img ?>">
+                        <img class="img-fluid" src="/<?php echo $folder . $img ?>" alt="<?php echo $folder . $img ?>">
                     </div>
                 </div>
                 <div class="col-lg col-12">

@@ -1,5 +1,5 @@
-<?php
-if (DoesBookExist($_GET["isbn"])) {
+<?php if (DoesBookExist($_GET["isbn"])) { ?>
+    <?php
     $bookdata = GetBookByISBN($_GET["isbn"]);
     $folder = "covers/";
     $img = "no_cover.jpg";
@@ -25,10 +25,33 @@ if (DoesBookExist($_GET["isbn"])) {
             $writers = $writers . ', ';
     }
 
+    if (isset($_POST["post-comment"])) {
+        PostComment($_SESSION["user"]["id"], $bookdata["isbn"], $_POST["comment"]);
+    }
 
-    $_SESSION["basket"]
+    ?>
 
-        ?>
+    <div class="modal fade" id="deleteCommentModal" tabindex="-1" aria-labelledby="deleteCommentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteCommentModalLabel">
+                        Komment törlése
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <span class="txt-danger">Figyelem! Ez a művelet nem vonható vissza!</span>
+                </div>
+
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Mégse">
+                    <input type="button" class="btn btn-danger" value="Törlés" onclick="">
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade" id="addedToBasketModal" tabindex="-1" aria-labelledby="addedToBasketModal" aria-hidden="true">
         <div class="modal-dialog">
@@ -181,20 +204,69 @@ if (DoesBookExist($_GET["isbn"])) {
                     </div>
                     <?php $today = date_create(); ?>
                     <div class="d-flex flex-column ms-3 justify-content-center">
-                            <input type="button" class="btn btn-brown <?php if ($today < $date_published || $bookdata["stock"] == 0) echo 'disabled' ?>" value="Kosárba" data-bs-toggle="modal"
-                            data-bs-target="#addedToBasketModal" onclick="addToBasket(<?php echo $bookdata['isbn']; ?>, '<?php echo $bookdata['title']; ?>')">
+                        <input type="button" class="btn btn-brown <?php if ($today < $date_published || $bookdata["stock"] == 0)
+                            echo 'disabled' ?>" value="Kosárba" data-bs-toggle="modal"
+                                data-bs-target="#addedToBasketModal"
+                                onclick="addToBasket(<?php echo $bookdata['isbn']; ?>, '<?php echo $bookdata['title']; ?>')">
 
-                        <span class="">Készlet: <?php echo $bookdata["stock"]; ?> db</span>
-                        
-                        
+                        <span class="">Készlet:
+                            <?php echo $bookdata["stock"]; ?> db
+                        </span>
+
+
                     </div>
-                    
+
                 </div>
             </div>
 
         </div>
 
-
+        <div class="row mt-3 pt-3">
+            <span class="fs-5 fw-bold">Kommentek</span>
+            <?php $comments = GetCommentsByISBN($bookdata["isbn"]); ?>
+            <?php $comments_count = 0; ?>
+            <div id="comments">
+                <?php while ($row = mysqli_fetch_row($comments)) { ?>
+                    <div class="row comment mb-3">
+                        <div class="comment-info w-100">
+                            <span class="comment-id text-secondary small">#
+                                <?php echo $row[0]; ?>
+                            </span>
+                            <span class="fw-bold">
+                                <?php echo $row[1]; ?>
+                            </span> <span class="small">
+                                <?php echo $row[3]; ?>
+                            </span>
+                            <?php if ($_SESSION["logged_in"] && ($_SESSION["user"]["username"] == $row[1] || $_SESSION["user"]["type"] == "administrator" || $_SESSION["user"]["type"] == "moderator")) { ?>
+                                <span class="float-end text-end">
+                                    <a href="" class="text-danger fw-normal">Törlés</a>
+                                </span>
+                            <?php } ?>
+                        </div>
+                        <span class="comment-text">
+                            <?php echo $row[2]; ?>
+                        </span>
+                    </div>
+                <?php } ?>
+            </div>
+            <?php if ($_SESSION["logged_in"]) { ?>
+                <form id="comment-on-book" method="post">
+                    <label for="comment">
+                        <?php if ($comments_count > 0) { ?>
+                            Csatlakozzon Ön is a beszélgetéshez!
+                        <?php } else { ?>
+                            Ossza meg véleményét a könyvvel kapcsolatban!
+                        <?php } ?>
+                    </label>
+                    <textarea name="comment" id="comment" class="form-control" rows="5"></textarea>
+                    <div class="w-100 text-end">
+                        <input type="submit" value="Posztolás" class="btn btn-brown mt-3" name="post-comment">
+                    </div>
+                </form>
+            <?php } else { ?>
+                <span>Jelentkezzen be, hogy hozzászólhasson a beszélgetéshez!</span>
+            <?php } ?>
+        </div>
         <!--<i class="fa-solid fa-basket-shopping fa-xl"></i>-->
     </div>
 

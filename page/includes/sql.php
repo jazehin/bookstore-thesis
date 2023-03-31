@@ -4,15 +4,15 @@ function GetResultSetOfSingleColumn($column, $table)
 {
     $con = GetConnection();
     $sql = "SELECT DISTINCT " . $column . " FROM " . $table . ";";
-    $resultset = mysqli_query($con, $sql);
+    $rs = mysqli_query($con, $sql);
     mysqli_close($con);
-    return $resultset;
+    return $rs;
 }
 
-function GetArrayFromResultSet($resultset)
+function GetArrayFromResultSet($rs)
 {
     $array = array();
-    while ($row = mysqli_fetch_row($resultset)) {
+    while ($row = mysqli_fetch_row($rs)) {
         array_push($array, $row[0]);
     }
 
@@ -21,44 +21,44 @@ function GetArrayFromResultSet($resultset)
 
 function GetPublishers()
 {
-    $resultset = GetResultSetOfSingleColumn("publisher", "publishers");
-    return GetArrayFromResultSet($resultset);
+    $rs = GetResultSetOfSingleColumn("publisher", "publishers");
+    return GetArrayFromResultSet($rs);
 }
 
 function GetCoverTypes()
 {
-    $resultset = GetResultSetOfSingleColumn("cover", "covers");
-    return GetArrayFromResultSet($resultset);
+    $rs = GetResultSetOfSingleColumn("cover", "covers");
+    return GetArrayFromResultSet($rs);
 }
 
 function GetLanguages()
 {
-    $resultset = GetResultSetOfSingleColumn("language", "languages");
-    return GetArrayFromResultSet($resultset);
+    $rs = GetResultSetOfSingleColumn("language", "languages");
+    return GetArrayFromResultSet($rs);
 }
 
 function GetSerieses()
 {
-    $resultset = GetResultSetOfSingleColumn("series", "serieses");
-    return GetArrayFromResultSet($resultset);
+    $rs = GetResultSetOfSingleColumn("series", "serieses");
+    return GetArrayFromResultSet($rs);
 }
 
 function GetGenres()
 {
-    $resultset = GetResultSetOfSingleColumn("genre", "genres");
-    return GetArrayFromResultSet($resultset);
+    $rs = GetResultSetOfSingleColumn("genre", "genres");
+    return GetArrayFromResultSet($rs);
 }
 
 function GetWriters()
 {
-    $resultset = GetResultSetOfSingleColumn("writer", "writers");
-    return GetArrayFromResultSet($resultset);
+    $rs = GetResultSetOfSingleColumn("writer", "writers");
+    return GetArrayFromResultSet($rs);
 }
 
 function GetISBNs()
 {
-    $resultset = GetResultSetOfSingleColumn("isbn", "books");
-    return GetArrayFromResultSet($resultset);
+    $rs = GetResultSetOfSingleColumn("isbn", "books");
+    return GetArrayFromResultSet($rs);
 }
 
 function InsertBook($bookdata)
@@ -326,7 +326,7 @@ function SetPreference($username, $genre, $add)
 function GetGenrePreferencesByUsername($username)
 {
     $con = GetConnection();
-    $sql = "SELECT genre FROM genres INNER JOIN user_preferences ON genres.genre_id = user_preferences.genre_id WHERE user_preferences.user_id = (SELECT user_id FROM login WHERE username = '" . $username . "');";
+    $sql = "SELECT genre FROM genres INNER JOIN preferences ON genres.genre_id = preferences.genre_id WHERE preferences.user_id = (SELECT user_id FROM login WHERE username = '" . $username . "');";
     $rs = mysqli_query($con, $sql);
     $array = [];
 
@@ -412,5 +412,119 @@ function GetCountyIdByCountyName($county) {
     mysqli_stmt_close($stmt);
     mysqli_close($con);
     return $id;
+}
+
+function CompleteOrder($books, $address_id, $user_id, $used_points) {
+    $price_sum = GetPriceSum($books) - $used_points;
+
+    $con = GetConnection();
+    $sql = "SELECT CompleteOrder(?, ?, ?);";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "iii", $user_id, $address_id, $price_sum);
+    mysqli_execute($stmt);
+    $rs = mysqli_stmt_get_result($stmt);
+    
+    $order_id = 0;
+    while ($row = mysqli_fetch_row($rs)) {
+        $order_id = $row[0];
+    }
+
+    mysqli_stmt_close($stmt);
+
+    $isbns = array_keys($books);
+    $item_count = count($isbns);
+    for ($i = 0; $i < $item_count; $i++) {
+        $bookdata = GetBookByISBN($isbns[$i]);
+        $price = 0;
+        if (is_null($bookdata["discounted_price"])) {
+            $price = $bookdata["price"];
+        } else {
+            $price = $bookdata["discounted_price"];
+        }
+        
+        AddOrderDetail($con, $order_id, $isbns[$i], $books[$isbns[$i]], $price);
+
+        $sql = "UPDATE books SET stock = stock - ? WHERE isbn = ?;";
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "is", $books[$isbns[$i]], $isbns[$i]);
+        mysqli_execute($stmt);
+    }
+    
+    $sql = "UPDATE users SET points = points - ? WHERE user_id = ?;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "ii", $used_points, $user_id);
+    mysqli_execute($stmt);
+
+    $points_to_add = floor(($price_sum - $used_points) / 10);
+    $sql = "UPDATE users SET points = points + ? WHERE user_id = ?;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "ii", $points_to_add, $user_id);
+    mysqli_execute($stmt);
+
+    mysqli_close($con);
+}
+
+function GetPriceSum($books) {
+    $price_sum = 0;
+    $isbns = array_keys($books);
+    $item_count = count($isbns);
+    for ($i = 0; $i < $item_count; $i++) {
+        $bookdata = GetBookByISBN($isbns[$i]);
+        $price = 0;
+        if (is_null($bookdata["discounted_price"])) {
+            $price = $bookdata["price"];
+        } else {
+            $price = $bookdata["discounted_price"];
+        }
+        $price_sum += $price * $books[$isbns[$i]];
+    }
+    return $price_sum;
+}
+
+function AddOrderDetail($con, $order_id, $isbn, $quantity, $price) {
+    $sql = "INSERT INTO order_details (order_id, isbn, quantity, price) VALUES (?, ?, ?, ?);";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "isii", $order_id, $isbn, $quantity, $price);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+}
+
+function SearchBooks($query, $page, $books_per_page) {
+    $offset = ($page - 1) * $books_per_page;
+    $con = GetConnection();
+    $sql = "SELECT DISTINCT isbn FROM books WHERE title LIKE \"%$query%\" LIMIT $offset, $books_per_page;";
+    $rs = mysqli_query($con, $sql);
+    mysqli_close($con);
+    return GetArrayFromResultSet($rs);
+}
+
+function GetNumberOfSearchResults($query) {
+    $con = GetConnection();
+    $sql = "SELECT COUNT(isbn) FROM books WHERE title LIKE \"%$query%\";";
+    $rs = mysqli_query($con, $sql);
+    $count = 0;
+    while ($row = mysqli_fetch_row($rs)) {
+        $count = $row[0];
+    }
+    mysqli_close($con);
+    return $count;
+}
+
+function GetCommentsByISBN($isbn) {
+    $con = GetConnection();
+    $sql = "CALL GetCommentsByISBN($isbn)";
+    $rs = mysqli_query($con, $sql);
+    mysqli_close($con);
+    return $rs;
+}
+
+function PostComment($user_id, $isbn, $comment) {
+    $con = GetConnection();
+    $sql = "INSERT INTO comments (user_id, isbn, comment_text) VALUES (?, ?, ?);";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "iss", $user_id, $isbn, $comment);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
 }
 ?>

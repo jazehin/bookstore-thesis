@@ -1,8 +1,8 @@
 - könyv oldal/adatlap
-    -> komment szekció: minden kommentet betölt, de rejtettek, megvalósítható a pagination js-tel
+    -> komment szekció: minden kommentet betölt, de rejtettek, megvalósítható a pagination js-sel
         -> adminnak/modoknak: új kommentek oldal?
     -> értékelések
-    -> rendelés (kosár ✅), rendelés összesítés ✅, rendelés véglegesítés
+    -> rendelés (kosár ✅), rendelés összesítés ✅, rendelés véglegesítés ✅
 - user adatlap ✅
     -> könyvajánlások
 - szerző adatlap
@@ -13,6 +13,7 @@
     -> bestsellers
     -> műfajokra bontva
     -> véletlen könyv ✅
+- keresés ✅
 
 nem működik:
 bookpage.php: \r\n -> <br> ✅
@@ -24,4 +25,6 @@ restructure ajax files ✅
 redesign user profile icon to be more obvious who is logged in - folyamatban
 kosár implementation - folyamatban
     -> amikor üres, akkor oldal újratöltése / ..?
+
+
 

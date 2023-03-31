@@ -1,0 +1,4 @@
+továbbfejlesztési lehetőségek:
+- keresés író alapján
+- könyv módosítás formban keresés cím alapján
+- 

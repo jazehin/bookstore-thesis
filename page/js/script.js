@@ -566,3 +566,11 @@ function validateAddress() {
         document.getElementById("submit-button").classList.remove("disabled");
     }
 }
+
+function onPointsUsedSliderChanged(slider) {
+    document.getElementById("used").innerText = slider.value;
+}
+
+function updateForm(size, textbox) {
+    document.getElementById(`form-${size}`).setAttribute("action", `/search/${textbox.value.replaceAll(' ', '+')}/1`);
+}

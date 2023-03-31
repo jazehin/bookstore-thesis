@@ -12,6 +12,7 @@ RewriteRule ^signout$ /?p=signout [L]
 
 RewriteRule ^profile$ /?p=profile [L]
 
+RewriteRule ^search/([^/]+)/([^/]+)/?$ index.php?p=search&q=$1&page=$2 [L,QSA]
 RewriteRule ^search$ /?p=search [L]
 
 RewriteRule ^basket$ /?p=basket [L]
@@ -19,6 +20,7 @@ RewriteRule ^basket$ /?p=basket [L]
 RewriteRule ^order-address$ /?p=order-address [L]
 RewriteRule ^order-payment$ /?p=order-payment [L]
 RewriteRule ^add-address$ /?p=add-address [L]
+RewriteRule ^order-success$ /?p=order-success [L]
 
 RewriteRule ^books$ /?p=books [L]
 RewriteRule ^books/([0-9]+)/?$ /?p=book&isbn=$1 [NC,L]
