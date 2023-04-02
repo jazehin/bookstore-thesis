@@ -20,7 +20,7 @@
 
     $writers = "";
     for ($i = 0; $i < count($bookdata["writers"]); $i++) {
-        $writers = $writers . $bookdata["writers"][$i][1];
+        $writers = $writers . '<a class="link-dark" href="/authors/' . str_replace(' ', '+', $bookdata["writers"][$i][1]) . '/1">' . $bookdata["writers"][$i][1] . '</a>';
         if ($i < count($bookdata["writers"]) - 1)
             $writers = $writers . ', ';
     }
@@ -29,6 +29,8 @@
         PostComment($_SESSION["user"]["id"], $bookdata["isbn"], $_POST["comment"]);
     }
 
+    if (isset($_POST["delete-comment"]))
+        DeleteComment($_POST["comment-id"]);
     ?>
 
     <div class="modal fade" id="deleteCommentModal" tabindex="-1" aria-labelledby="deleteCommentModalLabel" aria-hidden="true">
@@ -45,10 +47,11 @@
                     <span class="txt-danger">Figyelem! Ez a művelet nem vonható vissza!</span>
                 </div>
 
-                <div class="modal-footer">
+                <form action="" method="post" class="modal-footer">
                     <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Mégse">
-                    <input type="button" class="btn btn-danger" value="Törlés" onclick="">
-                </div>
+                    <input type="submit" class="btn btn-danger" name="delete-comment" value="Törlés">
+                    <input type="hidden" name="comment-id" id="comment-id">
+                </form>
             </div>
         </div>
     </div>
@@ -77,21 +80,12 @@
         </div>
     </div>
 
-    <div class="card p-3">
-        <!--
-    <div class="row">
-        <span class="fw-bold fs-5 lh-1">
-                    <?php echo $bookdata["title"]; ?>
-        </span>
-        <span> · </span>
-        <span class="fst-italic"><?php echo $writers ?></span>
-    </div>
-    -->
+    <div class=" p-3">
         <div class="row">
             <div class="col-md-4 col-lg-3">
                 <div>
-                    <p>
-                        <span id="title" class="fw-bold fs-5 lh-1">
+                    <p class="mb-1">
+                        <span id="title" class="fw-bold fs-5 ">
                             <?php echo $bookdata["title"]; ?>
                         </span>
                         <script>
@@ -103,12 +97,30 @@
                         </span>
                     </p>
                 </div>
+                <?php if ($_SESSION["logged_in"]) { ?>
+                <div class="rating mb-2">
+                <!--
+                    <?php $avg_rating = 0; ?>
+                    <?php if ($i < $avg_rating) { ?>
+                        <?php } elseif (1 > $i - $avg_rating) { ?>
+                            <i class="fa-solid fa-star-half-stroke" id="rating-<?php echo $i; ?>"></i>
+                            <?php } else { ?>
+                                <i class="fa-regular fa-star" id="rating-<?php echo $i; ?>"></i>
+                                <?php } ?>
+                            -->
+                    <?php for ($i = 1; $i < 6; $i++) { ?> 
+                        <i class="fa-solid fa-star rating-star" id="rating-<?php echo $i; ?>" onmouseenter="setRatingLook(this);" onmouseover="setRatingLook(this);" onmousemove="setRatingLook(this);" onclick="setRating('<?php echo $bookdata['isbn']; ?>', <?php echo $i; ?>);" style="min-width: 20px;"></i>
+                    <?php } ?>
+                </div>
+                <?php } ?>
                 <img class="img-fluid" src="<?php echo '/' . $folder . $img ?>" alt="">
                 <div class="book-info">
                     <div class="row pt-1">
                         <span class="col-5 my-auto fw-bold">Kiadó:</span>
                         <span class="col-7 my-auto">
-                            <?php echo $bookdata["publisher"]; ?>
+                            <a class="link-dark" href="/publishers/<?php echo str_replace(' ', '+', $bookdata["publisher"]); ?>/1">
+                                <?php echo $bookdata["publisher"]; ?>
+                            </a>
                         </span>
                     </div>
 
@@ -223,36 +235,16 @@
 
         <div class="row mt-3 pt-3">
             <span class="fs-5 fw-bold">Kommentek</span>
-            <?php $comments = GetCommentsByISBN($bookdata["isbn"]); ?>
-            <?php $comments_count = 0; ?>
             <div id="comments">
-                <?php while ($row = mysqli_fetch_row($comments)) { ?>
-                    <div class="row comment mb-3">
-                        <div class="comment-info w-100">
-                            <span class="comment-id text-secondary small">#
-                                <?php echo $row[0]; ?>
-                            </span>
-                            <span class="fw-bold">
-                                <?php echo $row[1]; ?>
-                            </span> <span class="small">
-                                <?php echo $row[3]; ?>
-                            </span>
-                            <?php if ($_SESSION["logged_in"] && ($_SESSION["user"]["username"] == $row[1] || $_SESSION["user"]["type"] == "administrator" || $_SESSION["user"]["type"] == "moderator")) { ?>
-                                <span class="float-end text-end">
-                                    <a href="" class="text-danger fw-normal">Törlés</a>
-                                </span>
-                            <?php } ?>
-                        </div>
-                        <span class="comment-text">
-                            <?php echo $row[2]; ?>
-                        </span>
-                    </div>
-                <?php } ?>
+                
             </div>
+            <script id="script">
+                loadComments(<?php echo $bookdata["isbn"]; ?>, 1);
+            </script>
             <?php if ($_SESSION["logged_in"]) { ?>
                 <form id="comment-on-book" method="post">
                     <label for="comment">
-                        <?php if ($comments_count > 0) { ?>
+                        <?php if (GetNumberOfComments($bookdata["isbn"]) > 0) { ?>
                             Csatlakozzon Ön is a beszélgetéshez!
                         <?php } else { ?>
                             Ossza meg véleményét a könyvvel kapcsolatban!

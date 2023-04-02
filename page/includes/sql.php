@@ -510,14 +510,28 @@ function GetNumberOfSearchResults($query) {
     return $count;
 }
 
-function GetCommentsByISBN($isbn) {
+function GetComments($isbn, $comments_per_page, $page) {
+    $offset = ($page - 1) * $comments_per_page;
     $con = GetConnection();
-    $sql = "CALL GetCommentsByISBN($isbn)";
+    $sql = "SELECT comment_id, username, comment_text, comment_date 
+            FROM comments INNER JOIN login ON comments.user_id = login.user_id 
+            WHERE isbn = '$isbn' 
+            ORDER BY comment_date DESC 
+            LIMIT $offset, $comments_per_page;";
     $rs = mysqli_query($con, $sql);
     mysqli_close($con);
     return $rs;
 }
 
+/*
+function GetComments($isbn, $comments_per_page, $page) {
+    $con = GetConnection();
+    $sql = "CALL GetCommentsByISBN($isbn, $comments_per_page, $page)";
+    $rs = mysqli_query($con, $sql);
+    mysqli_close($con);
+    return $rs;
+}
+*/
 function PostComment($user_id, $isbn, $comment) {
     $con = GetConnection();
     $sql = "INSERT INTO comments (user_id, isbn, comment_text) VALUES (?, ?, ?);";
@@ -526,5 +540,129 @@ function PostComment($user_id, $isbn, $comment) {
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
     mysqli_close($con);
+}
+
+function DeleteComment($comment_id) {
+    $con = GetConnection();
+    $sql = "DELETE FROM comments WHERE comment_id = ?;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $comment_id);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+}
+
+function GetNumberOfComments($isbn) {
+    $con = GetConnection();
+    $sql = "SELECT COUNT(isbn) FROM comments WHERE isbn LIKE \"%$isbn%\";";
+    $rs = mysqli_query($con, $sql);
+    $count = 0;
+    while ($row = mysqli_fetch_row($rs)) {
+        $count = $row[0];
+    }
+    mysqli_close($con);
+    return $count;
+}
+
+function SetRating($user_id, $isbn, $rating) {
+    $con = GetConnection();
+    $sql = "CALL SetRating(?, ?, ?);";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "isi", $user_id, $isbn, $rating);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+}
+
+function GetAvgRatingByISBN($isbn) {
+    $con = GetConnection();
+    $sql = "SELECT AVG(rating), COUNT(rating) FROM ratings WHERE isbn = ?;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $isbn);
+    mysqli_stmt_bind_result($stmt, $rating, $count);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_fetch($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+    return [$rating, $count];
+}
+
+function GetOrdersByUserId($user_id) {
+    $con = GetConnection();
+    $sql = "SELECT order_date, price_sum FROM orders WHERE user_id = ? ORDER BY order_date DESC;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $user_id);
+    mysqli_execute($stmt);
+    return mysqli_stmt_get_result($stmt);
+}
+
+function GetNumberOfAuthorsBooks($author) {
+    $con = GetConnection();
+    $sql = "SELECT COUNT(books.isbn) FROM books 
+            INNER JOIN books_writers ON books.isbn = books_writers.isbn 
+            INNER JOIN writers ON books_writers.writer_id = writers.writer_id 
+            WHERE writer = ?;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $author);
+    mysqli_execute($stmt);
+    $rs = mysqli_stmt_get_result($stmt);
+    mysqli_stmt_close($stmt);
+    $count = 0;
+    while ($row = mysqli_fetch_row($rs)) {
+        $count = $row[0];
+    }
+    mysqli_close($con);
+    return $count;
+}
+
+function GetAuthorsBooks($author, $page, $books_per_page) {
+    $offset = ($page - 1) * $books_per_page;
+    $con = GetConnection();
+    $sql = "SELECT DISTINCT books.isbn FROM books 
+            INNER JOIN books_writers ON books.isbn = books_writers.isbn 
+            INNER JOIN writers ON books_writers.writer_id = writers.writer_id 
+            WHERE writer = ? 
+            LIMIT ?, ?;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "sii", $author, $offset, $books_per_page);
+    mysqli_execute($stmt);
+    $rs = mysqli_stmt_get_result($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+    return GetArrayFromResultSet($rs);
+}
+
+function GetNumberOfPublishersBooks($publisher) {
+    $con = GetConnection();
+    $sql = "SELECT COUNT(isbn) FROM books 
+            INNER JOIN publishers ON books.publisher_id = publishers.publisher_id 
+            WHERE publisher = ?;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $publisher);
+    mysqli_execute($stmt);
+    $rs = mysqli_stmt_get_result($stmt);
+    mysqli_stmt_close($stmt);
+    $count = 0;
+    while ($row = mysqli_fetch_row($rs)) {
+        $count = $row[0];
+    }
+    mysqli_close($con);
+    return $count;
+}
+
+function GetPublishersBooks($publisher, $page, $books_per_page) {
+    $offset = ($page - 1) * $books_per_page;
+    $con = GetConnection();
+    $sql = "SELECT DISTINCT books.isbn FROM books 
+            INNER JOIN publishers ON books.publisher_id = publishers.publisher_id 
+            WHERE publisher = ? 
+            LIMIT ?, ?;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "sii", $publisher, $offset, $books_per_page);
+    mysqli_execute($stmt);
+    $rs = mysqli_stmt_get_result($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+    return GetArrayFromResultSet($rs);
 }
 ?>

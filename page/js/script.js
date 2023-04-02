@@ -503,7 +503,7 @@ function deleteAddressCon(address_id) {
 }
 
 function onAddressChoose(index) {
-    
+
     if (document.getElementById(`company-${index}`) !== null)
         document.getElementById('company').value = document.getElementById(`company-${index}`).innerText;
     else
@@ -573,4 +573,53 @@ function onPointsUsedSliderChanged(slider) {
 
 function updateForm(size, textbox) {
     document.getElementById(`form-${size}`).setAttribute("action", `/search/${textbox.value.replaceAll(' ', '+')}/1`);
+}
+
+function setDeleteCommentModal(id) {
+    document.getElementById("comment-id").value = id;
+}
+
+function loadComments(isbn, page) {
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.onload = function () {
+        const result = this.responseText;
+
+        document.getElementById("comments").innerHTML = result;
+        document.getElementById("script").remove();
+    }
+    xmlhttp.open("GET", `/pages/ajax/loadcomments.php?isbn=${isbn}&page=${page}`);
+    xmlhttp.send();
+}
+
+function setRatingLook(star) {
+    const rating = Number(star.id.substring(star.id.length - 1));
+
+    for (let i = 1; i <= rating; i++) {
+
+        const element = document.getElementById(`rating-${i}`);
+        for (let j = 0; j < element.classList.length; j++) {
+            if (element.classList[j] != "rating-star") element.classList.remove(element.classList[j]);
+        }
+        element.classList.add("fa-solid");
+        element.classList.add("fa-star");
+    }
+
+    for (let i = rating + 1; i < 6; i++) {
+
+        const element = document.getElementById(`rating-${i}`);
+        for (let j = 0; j < element.classList.length; j++) {
+            if (element.classList[j] != "rating-star") element.classList.remove(element.classList[j]);
+        }
+        element.classList.add("fa-regular");
+        element.classList.add("fa-star");
+    }
+}
+
+function setRating(isbn, rating) {
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.onload = function () {
+        const result = this.responseText;
+    }
+    xmlhttp.open("GET", `/pages/ajax/setrating.php?isbn=${isbn}&rating=${rating}`);
+    xmlhttp.send();
 }

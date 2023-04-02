@@ -179,6 +179,31 @@
                     </p>
                 </div>
             </div>
+            <?php $orders = GetOrdersByUserId($_SESSION["user"]["id"]); ?>
+            <?php $order_count = mysqli_num_rows($orders); ?>
+            <?php if($order_count > 0) { ?>
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h2 class="fs-5">Korábbi rendelések</h2>
+                    <table class="table">
+                        <thead class="table-head-brown">
+                            <th>Rendelés dátuma</th>
+                            <th>Fizetett összeg</th>
+                        </thead>
+                        <tbody>
+                            <?php while ($row = mysqli_fetch_row($orders)) { ?>
+                                <tr>
+                                    <?php $datetime = date_create_from_format("Y-m-d H:i:s", $row[0]); ?>
+                                    <?php $datetime_formatted = date_format($datetime, "Y.m.d. H:i:s"); ?>
+                                    <td><?php echo $datetime_formatted; ?></td>
+                                    <td><?php echo $row[1]; ?> Ft</td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <?php } ?>
         </div>
     </div>
 

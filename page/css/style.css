@@ -127,8 +127,12 @@ nav i {
     text-decoration: none;
 }
 
-.bookcard-rating {
+.bookcard-rating, .rating {
     color: rgba(139, 94, 60, 1);
+}
+
+.rating-star {
+    cursor: pointer;
 }
 
 .btn-brown,

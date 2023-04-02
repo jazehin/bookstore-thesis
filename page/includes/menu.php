@@ -42,6 +42,12 @@ switch ($p) {
     case 'book':
         $content = 'pages/bookpage.php';
         break;
+    case 'author':
+        $content = 'pages/author.php';
+        break;
+    case 'publisher':
+        $content = 'pages/publisher.php';
+        break;
     case 'books':
         $content = 'pages/books.php';
         break;

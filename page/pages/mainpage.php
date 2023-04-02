@@ -2,9 +2,6 @@
 $books = GetISBNs();
 ?>
 
-
-
-
 <div class="bookcard-container d-flex flex-lg-wrap overflow-scroll mt-4">
     <?php for ($i = 0; $i < count($books); $i++) {
         $bookdata = GetBookByISBN($books[$i]);
@@ -25,6 +22,8 @@ $books = GetISBNs();
             if ($j < count($bookdata["writers"]) - 1)
                 $writers = $writers . ', ';
         }
+
+        $bookdata["rating"] = GetAvgRatingByISBN($bookdata["isbn"]);
         ?>
 
         <div class="bookcard m-2 p-2">
@@ -42,25 +41,31 @@ $books = GetISBNs();
                         <span class="bookcard-writer fst-italic">
                             <?php echo $writers ?>
                         </span>
-                        <span class="bookcard-rating d-block my-2">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star-half-stroke"></i>
-                            <i class="fa-regular fa-star"></i>
-                        </span>
+                        <div class="my-2">
+                            <span class="bookcard-rating">
+                                <?php for ($k = 1; $k < 6; $k++) { ?>
+                                    <?php if ($k <= $bookdata["rating"][0]) { ?>
+                                        <i class="fa-solid fa-star"></i>
+                                    <?php } elseif (0.5 == $k - $bookdata["rating"][0]) { ?>
+                                        <i class="fa-solid fa-star-half-stroke"></i>
+                                    <?php } else { ?>
+                                        <i class="fa-regular fa-star"></i>
+                                    <?php } ?>
+                                <?php } ?>
+                            </span>
+                            <span class="rating-count small text-secondary fst-italic ms-2"><?php echo $bookdata["rating"][1] ?> értékelés</span>
+                        </div>
                         <span class="bookcard-description mb-2">
                             <?php echo stripslashes($bookdata["description"]); ?>
                         </span>
-                        <span
-                            class="bookcard-price <?php if (!is_null($bookdata["discounted_price"]))
-                                echo "text-decoration-line-through" ?>"><?php echo $bookdata["price"]; ?> Ft</span>
+                        <span class="bookcard-price <?php if (!is_null($bookdata["discounted_price"]))
+                            echo "text-decoration-line-through" ?>"><?php echo $bookdata["price"]; ?> Ft</span>
                         <?php if (!is_null($bookdata["discounted_price"])) { ?>
                             helyett <span class="bookcard-discounted-price text-danger fw-bold">
                                 <?php echo $bookdata["discounted_price"]; ?> Ft
                             </span>
                             <span class="discount-percent">
-                                (-<?php echo round(((1-($bookdata["discounted_price"] / $bookdata["price"])) * 100), 0); ?>%)
+                                (-<?php echo round(((1 - ($bookdata["discounted_price"] / $bookdata["price"])) * 100), 0); ?>%)
                             </span>
                         <?php } ?>
                     </div>

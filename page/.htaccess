@@ -15,6 +15,9 @@ RewriteRule ^profile$ /?p=profile [L]
 RewriteRule ^search/([^/]+)/([^/]+)/?$ index.php?p=search&q=$1&page=$2 [L,QSA]
 RewriteRule ^search$ /?p=search [L]
 
+RewriteRule ^authors/([^/]+)/([^/]+)/?$ index.php?p=author&author=$1&page=$2 [L,QSA]
+RewriteRule ^publishers/([^/]+)/([^/]+)/?$ index.php?p=publisher&publisher=$1&page=$2 [L,QSA]
+
 RewriteRule ^basket$ /?p=basket [L]
 
 RewriteRule ^order-address$ /?p=order-address [L]

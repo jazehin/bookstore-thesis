@@ -1,17 +1,17 @@
 <?php
-$query = $_GET["q"];
+$publisher = $_GET["publisher"];
 $page = $_GET["page"];
 
 $books_per_page = 10;
-$number_of_search_results = GetNumberOfSearchResults($query);
-$number_of_pages = ceil($number_of_search_results / $books_per_page);
-$books = SearchBooks($query, $page, $books_per_page);
+$number_of_books = GetNumberOfPublishersBooks($publisher);
+$number_of_pages = ceil($number_of_books / $books_per_page);
+$books = GetPublishersBooks($publisher, $page, $books_per_page);
 ?>
 
 <?php if (count($books) == 0) { ?>
-    <h2 class="fs-3">Nincs találat a keresett kifejezésre!</h2>
+    <h2 class="fs-3">A(z) <?php echo $publisher; ?>-nak/nek nincsen könyve az adatbázisunkban!</h2>
 <?php } else { ?>
-    <h2 class="fs-3">Találatok a(z) "<?php echo $query ?>" kifejezésre:</h2>
+    <h2 class="fs-3">A(z) <?php echo $publisher; ?> könyvei:</h2>
 
     <div class="bookcard-container d-flex flex-wrap overflow-scroll mt-4">
         <?php for ($i = 0; $i < count($books); $i++) {
@@ -96,34 +96,34 @@ $books = SearchBooks($query, $page, $books_per_page);
                 <a class="page-link <?php if ($page == 1)
                     echo 'disabled'; ?>" <?php if ($page == 1)
                           echo 'tabindex="-1"'; ?>
-                    href="/search/<?php echo urlencode($query); ?>/<?php echo $page - 1; ?>" aria-label="Previous">
+                    href="/publishers/<?php echo urlencode($publisher); ?>/<?php echo $page - 1; ?>" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
             <?php if ($page - 2 > 0) { ?>
                 <li class="page-item"><a class="page-link"
-                        href="/search/<?php echo urlencode($query); ?>/<?php echo $page - 2; ?>"><?php echo $page - 2; ?></a></li>
+                        href="/publishers/<?php echo urlencode($publisher); ?>/<?php echo $page - 2; ?>"><?php echo $page - 2; ?></a></li>
             <?php } ?>
             <?php if ($page - 1 > 0) { ?>
                 <li class="page-item"><a class="page-link"
-                        href="/search/<?php echo urlencode($query); ?>/<?php echo $page - 1; ?>"><?php echo $page - 1; ?></a></li>
+                        href="/publishers/<?php echo urlencode($publisher); ?>/<?php echo $page - 1; ?>"><?php echo $page - 1; ?></a></li>
             <?php } ?>
             <li class="page-item active" aria-current="page"><a class="page-link" href="">
                     <?php echo $page; ?>
                 </a></li>
             <?php if ($page < $number_of_pages) { ?>
                 <li class="page-item"><a class="page-link"
-                        href="/search/<?php echo urlencode($query); ?>/<?php echo $page + 1; ?>"><?php echo $page + 1; ?></a></li>
+                        href="/publishers/<?php echo urlencode($publisher); ?>/<?php echo $page + 1; ?>"><?php echo $page + 1; ?></a></li>
             <?php } ?>
             <?php if ($page + 1 < $number_of_pages) { ?>
                 <li class="page-item"><a class="page-link"
-                        href="/search/<?php echo urlencode($query); ?>/<?php echo $page + 2; ?>"><?php echo $page + 2; ?></a></li>
+                        href="/publishers/<?php echo urlencode($publisher); ?>/<?php echo $page + 2; ?>"><?php echo $page + 2; ?></a></li>
             <?php } ?>
             <li class="page-item">
                 <a class="page-link <?php if ($page == $number_of_pages)
                     echo 'disabled'; ?>" <?php if ($page == $number_of_pages)
                           echo 'tabindex="-1"'; ?>
-                    href="/search/<?php echo urlencode($query); ?>/<?php echo $page + 1; ?>" aria-label="Next">
+                    href="/publishers/<?php echo urlencode($publisher); ?>/<?php echo $page + 1; ?>" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

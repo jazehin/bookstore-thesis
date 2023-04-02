@@ -1,18 +1,18 @@
 - könyv oldal/adatlap
-    -> komment szekció: minden kommentet betölt, de rejtettek, megvalósítható a pagination js-sel
-        -> adminnak/modoknak: új kommentek oldal?
-    -> értékelések
+    -> komment szekció: minden kommentet betölt, de rejtettek, megvalósítható a pagination js-sel ✅
+        -> adminnak/modoknak: új kommentek oldal? -> továbbfejlesztési lehetőség
+    -> értékelések ✅
     -> rendelés (kosár ✅), rendelés összesítés ✅, rendelés véglegesítés ✅
 - user adatlap ✅
-    -> könyvajánlások
-- szerző adatlap
-- kiadó adatlap
+    -> könyvajánlások -> külön oldalon
+- szerző adatlap ✅
+- kiadó adatlap ✅
 - menüpontok:
     -> új könyvek
     -> nemsoká megjelenik
     -> bestsellers
     -> műfajokra bontva
-    -> véletlen könyv ✅
+    -> véletlen könyv ✅ (megjeleníteni)
 - keresés ✅
 
 nem működik:
