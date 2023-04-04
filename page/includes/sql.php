@@ -15,7 +15,6 @@ function GetArrayFromResultSet($rs)
     while ($row = mysqli_fetch_row($rs)) {
         array_push($array, $row[0]);
     }
-
     return $array;
 }
 
