@@ -1,10 +1,7 @@
 <?php
 function GetConnection()
 {
-	$hostname = "localhost";
-	$username = "jazehin";
-	$password = "VízPronto6395";
-	$database = "bookstore";
+	include("env.php");
 
 	// Create connection
 	$con = mysqli_connect($hostname, $username, $password, $database);
