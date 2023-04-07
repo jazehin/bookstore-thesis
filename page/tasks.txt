@@ -8,11 +8,11 @@
 - szerző adatlap ✅
 - kiadó adatlap ✅
 - menüpontok:
-    -> új könyvek
-    -> nemsoká megjelenik
-    -> bestsellers
+    -> új könyvek ✅
+    -> nemsoká megjelenik ✅
+    -> bestsellers ✅
     -> műfajokra bontva
-    -> véletlen könyv ✅ (megjeleníteni)
+    -> véletlen könyv ✅
 - keresés ✅
 
 nem működik:

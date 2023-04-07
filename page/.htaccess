@@ -29,7 +29,15 @@ RewriteRule ^books$ /?p=books [L]
 RewriteRule ^books/([0-9]+)/?$ /?p=book&isbn=$1 [NC,L]
 
 RewriteRule ^random$ /?p=random [L]
+RewriteRule ^new/([0-9]+)/?$ index.php?p=new&page=$1 [L,QSA]
+RewriteRule ^soon/([0-9]+)/?$ index.php?p=soon&page=$1 [L,QSA]
+RewriteRule ^bestsellers/([0-9]+)/?$ index.php?p=bestsellers&page=$1 [L,QSA]
 
 RewriteRule ^addbook$ /?p=addbook [L]
 RewriteRule ^modifybook/([0-9]+)/?$ /?p=modifybook&isbn=$1 [NC,L]
 RewriteRule ^modifybook$ /?p=modifybook [L]
+
+RewriteRule ^comments/([0-9]+)/?$ index.php?p=comments&page=$1 [L,QSA]
+
+RewriteCond %{REQUEST_URI} !\.(css|js|png|jpeg|jpg)$
+RewriteRule ^(.*)$ index.php?p=error [QSA,L]

@@ -1,1 +1,0 @@
-neked ajánlott

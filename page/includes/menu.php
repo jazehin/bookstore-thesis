@@ -7,7 +7,7 @@ if (isset($_GET['p'])) {
 
 switch ($p) {
     case 'main':
-        $content = 'pages/mainpage.php';
+        $content = 'pages/main.php';
         break;
     case 'login':
         $content = 'pages/login.php';
@@ -40,7 +40,7 @@ switch ($p) {
         $content = 'pages/search.php';
         break;
     case 'book':
-        $content = 'pages/bookpage.php';
+        $content = 'pages/book.php';
         break;
     case 'author':
         $content = 'pages/author.php';
@@ -51,15 +51,30 @@ switch ($p) {
     case 'books':
         $content = 'pages/books.php';
         break;
+    case 'new':
+        $content = 'pages/new.php';
+        break;
+    case 'soon':
+        $content = 'pages/soon.php';
+        break;
+    case 'bestsellers':
+        $content = 'pages/bestsellers.php';
+        break;
     case 'addbook':
         $content = 'pages/addbook.php';
         break;
     case 'modifybook':
         $content = 'pages/modifybook.php';
         break;
+    case 'comments':
+        $content = 'pages/comments.php';
+        break;
     case 'random':
         $isbns = GetISBNs();
         header("Location: /books/" . $isbns[array_rand($isbns)]);
+        break;
+    case 'error':
+        $content = 'pages/error.php';
         break;
     default:
         header("Location: /");

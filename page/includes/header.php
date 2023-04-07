@@ -39,7 +39,7 @@ $genres = GetGenres();
     <script src="/js/script.js"></script>
 </head>
 
-<body>
+<body class="d-flex flex-column">
     <header class="navbar" style="background-color: rgba(225, 211, 180, 1);">
         <div class="container">
             <div class="row align-items-center w-100 mx-auto">
@@ -125,9 +125,24 @@ $genres = GetGenres();
         <div class="container ps-3">
             <div class="collapse navbar-collapse py-1" id="navbar">
                 <ul class="navbar-nav">
+                    
                     <li class="nav-item">
-                        <a class="nav-link" href="/books/9789635841523">Könyv</a>
+                        <a class="nav-link" href="/bestsellers/1">Bestsellerek</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/new/1">Újdonságok</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/soon/1">Hamarosan megjelenik</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/random">Véletlen könyv</a>
+                    </li>
+                    <?php if ($_SESSION["logged_in"] && ($_SESSION["user"]["type"] === "moderator" || $_SESSION["user"]["type"] === "administrator")) { ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/comments/1">Kommentek</a>
+                        </li>
+                    <?php } ?>
                     <?php if ($_SESSION["logged_in"] && $_SESSION["user"]["type"] === "administrator") { ?>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -247,4 +262,4 @@ $genres = GetGenres();
         </div>
     </div>
 
-    <main class="container">
+    <main class="container flex-fill">

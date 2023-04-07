@@ -123,7 +123,7 @@ function signUp() {
         xmlhttp.onload = function () {
             const result = this.responseText;
 
-            if (result.length != 0) {
+            if (result !== "success") {
                 alert("Regisztráció sikertelen.");
             } else {
                 window.location.href = window.location.href;

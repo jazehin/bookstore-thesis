@@ -414,6 +414,7 @@ function GetCountyIdByCountyName($county) {
 }
 
 function CompleteOrder($books, $address_id, $user_id, $used_points) {
+    if (is_null($user_id)) $used_points = 0;
     $price_sum = GetPriceSum($books) - $used_points;
 
     $con = GetConnection();
@@ -422,13 +423,12 @@ function CompleteOrder($books, $address_id, $user_id, $used_points) {
     mysqli_stmt_bind_param($stmt, "iii", $user_id, $address_id, $price_sum);
     mysqli_execute($stmt);
     $rs = mysqli_stmt_get_result($stmt);
-    
+    mysqli_stmt_close($stmt);
+
     $order_id = 0;
     while ($row = mysqli_fetch_row($rs)) {
         $order_id = $row[0];
     }
-
-    mysqli_stmt_close($stmt);
 
     $isbns = array_keys($books);
     $item_count = count($isbns);
@@ -447,18 +447,23 @@ function CompleteOrder($books, $address_id, $user_id, $used_points) {
         $stmt = mysqli_prepare($con, $sql);
         mysqli_stmt_bind_param($stmt, "is", $books[$isbns[$i]], $isbns[$i]);
         mysqli_execute($stmt);
+        mysqli_stmt_close($stmt);
     }
     
-    $sql = "UPDATE users SET points = points - ? WHERE user_id = ?;";
-    $stmt = mysqli_prepare($con, $sql);
-    mysqli_stmt_bind_param($stmt, "ii", $used_points, $user_id);
-    mysqli_execute($stmt);
+    if (!is_null($user_id)) {
+        $sql = "UPDATE users SET points = points - ? WHERE user_id = ?;";
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "ii", $used_points, $user_id);
+        mysqli_execute($stmt);
+        mysqli_stmt_close($stmt);
 
-    $points_to_add = floor(($price_sum - $used_points) / 10);
-    $sql = "UPDATE users SET points = points + ? WHERE user_id = ?;";
-    $stmt = mysqli_prepare($con, $sql);
-    mysqli_stmt_bind_param($stmt, "ii", $points_to_add, $user_id);
-    mysqli_execute($stmt);
+        $points_to_add = floor(($price_sum - $used_points) / 10);
+        $sql = "UPDATE users SET points = points + ? WHERE user_id = ?;";
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "ii", $points_to_add, $user_id);
+        mysqli_execute($stmt);
+        mysqli_stmt_close($stmt);
+    }
 
     mysqli_close($con);
 }
@@ -663,5 +668,53 @@ function GetPublishersBooks($publisher, $page, $books_per_page) {
     mysqli_stmt_close($stmt);
     mysqli_close($con);
     return GetArrayFromResultSet($rs);
+}
+
+function GetBooksForPage($page, $books_per_page, $sql, $types, $vars) {
+    $con = GetConnection();
+    $stmt = mysqli_prepare($con, $sql);
+    if ($types !== "")
+        mysqli_stmt_bind_param($stmt, $types, $vars);
+    mysqli_execute($stmt);
+    $rs = mysqli_stmt_get_result($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+    return GetArrayFromResultSet($rs);
+}
+
+function GetNumberBooksForPage($sql, $types, ...$vars) {
+    $con = GetConnection();
+    $stmt = mysqli_prepare($con, $sql);
+    if ($types !== "")
+        mysqli_stmt_bind_param($stmt, $types, $vars);
+    mysqli_execute($stmt);
+    $rs = mysqli_stmt_get_result($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+    return mysqli_num_rows($rs);
+}
+
+function GetNumberOfAllComments() {
+    $con = GetConnection();
+    $sql = "SELECT COUNT(comment_id) FROM comments;";
+    $rs = mysqli_query($con, $sql);
+    $count = 0;
+    while ($row = mysqli_fetch_row($rs)) {
+        $count = $row[0];
+    }
+    mysqli_close($con);
+    return $count;
+}
+
+function GetAllComments($comments_per_page, $page) {
+    $offset = ($page - 1) * $comments_per_page;
+    $con = GetConnection();
+    $sql = "SELECT comment_id, username, comment_text, comment_date 
+            FROM comments INNER JOIN login ON comments.user_id = login.user_id 
+            ORDER BY comment_date DESC 
+            LIMIT $offset, $comments_per_page;";
+    $rs = mysqli_query($con, $sql);
+    mysqli_close($con);
+    return $rs;
 }
 ?>

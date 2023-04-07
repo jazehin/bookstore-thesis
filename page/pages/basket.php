@@ -46,8 +46,8 @@ $price_sum = 0;
         </div>
     </div>
     
-    <h1 class="fs-3">Kosarának tartalma:</h1>
     <div id="sum-table" class="table-responsive">
+        <h1 class="fs-3">Kosarának tartalma:</h1>
 
         <table class="table">
             <thead class="table-head-brown text-center-phones">
@@ -122,20 +122,20 @@ $price_sum = 0;
             <tfoot class="table-foot-brown">
                 <td></td>
                 <td>Összesen:</td>
-                <td class="fw-bold"><?php echo round($price_sum, -1) . " Ft"; ?></td>
+                <td class="fw-bold"><?php echo $price_sum . " Ft"; ?></td>
             </tfoot>
         </table>
+        <div class="text-end">
+            <a 
+                <?php if ($_SESSION["logged_in"] && mysqli_num_rows(GetAddressesByUsername($_SESSION["user"]["username"])) > 0) { ?>
+                    href="/order-address"
+                <?php } else { ?>
+                    href="/add-address"
+                <?php } ?>
+             class="btn btn-brown">Tovább a szállítási cím megadásához</a>
+        </div>
     </div>
 
-    <div class="text-end">
-        <a 
-            <?php if ($_SESSION["logged_in"] && mysqli_num_rows(GetAddressesByUsername($_SESSION["user"]["username"])) > 0) { ?>
-                href="/order-address"
-            <?php } else { ?>
-                href="/add-address"
-            <?php } ?>
-         class="btn btn-brown">Tovább a szállítási cím megadásához</a>
-    </div>
 <?php } else { //if it's empty... ?>
     <h1 class="fs-3">A kosara üres.</h1>
     <!-- Ezek a könyvek érdekelhetik szekció -->

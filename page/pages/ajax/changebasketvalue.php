@@ -20,6 +20,10 @@ $item_count = count($keys);
 $price_sum = 0;
 ?>
 
+<?php if ($item_count == 0) { ?>
+    <h1 class="fs-3">A kosara üres.</h1>
+<?php } else { ?>
+    <h1 class="fs-3">Kosarának tartalma:</h1>
 <table class="table">
             <thead class="table-head-brown text-center-phones">
                 <tr>
@@ -97,3 +101,13 @@ $price_sum = 0;
                 <td class="fw-bold"><?php echo round($price_sum, -1) . " Ft"; ?></td>
             </tfoot>
         </table>
+        <div class="text-end">
+            <a 
+                <?php if ($_SESSION["logged_in"] && mysqli_num_rows(GetAddressesByUsername($_SESSION["user"]["username"])) > 0) { ?>
+                    href="/order-address"
+                <?php } else { ?>
+                    href="/add-address"
+                <?php } ?>
+             class="btn btn-brown">Tovább a szállítási cím megadásához</a>
+        </div>
+        <?php } ?>

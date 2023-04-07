@@ -25,12 +25,9 @@ $user_id = $_SESSION["logged_in"] ? $_SESSION["user"]["id"] : null;
     <h1 class="fs-3">Válasszon fizetési módot:</h1>
     <input type="radio" name="payment-type" id="cash-on-delivery" value="cash-on-delivery" onclick="onAddressChoose();" checked>
     <label for="cash-on-delivery">Utánvételes fizetés (az egyetlen működő opció a pillanatban)</label><br>
-
     
-    <?php
-    if ($_SESSION["logged_in"] && $_SESSION["user"]["points"] > 0) { ?>
+    <div class="points <?php if (!$_SESSION["logged_in"] || $_SESSION["user"]["points"] <= 0) echo 'd-none'; ?>">
     <h2 class="fs-3 mt-3">Válassza ki, hány pontot szeretne felhasználni:</h2>
-    <div class="points">
         <div class="row">
             <div class="col-3 text-start">0</div>
             <div class="col-6 text-center">Felhasznált pontok: <span id="used" class="fw-bold">0</span></div>
@@ -38,7 +35,6 @@ $user_id = $_SESSION["logged_in"] ? $_SESSION["user"]["id"] : null;
         </div>
         <input type="range" min="0" max="<?php echo $_SESSION["user"]["points"]; ?>" value="0" class="form-range slider" id="points" name="points" oninput="onPointsUsedSliderChanged(this);" onchange="onPointsUsedSliderChanged(this);">
     </div>
-    <?php } ?>
 
     <input type="submit" class="btn btn-brown mt-2" value="Rendelés véglegesítése">
 </form>
