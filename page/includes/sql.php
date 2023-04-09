@@ -337,6 +337,89 @@ function GetGenrePreferencesByUsername($username)
     return $array;
 }
 
+function GetAuthorsPurchasedFromByUsername($username)
+{
+    $con = GetConnection();
+    $sql = "SELECT DISTINCT writer
+            FROM writers
+            INNER JOIN books_writers ON writers.writer_id = books_writers.writer_id
+            INNER JOIN books ON books.isbn = books_writers.isbn
+            INNER JOIN order_details ON books.isbn = order_details.isbn
+            INNER JOIN orders ON order_details.order_id = orders.order_id
+            INNER JOIN login ON orders.user_id = login.user_id
+            WHERE username = \"" . $username . "\";";
+    $rs = mysqli_query($con, $sql);
+    $array = [];
+
+    while ($row = mysqli_fetch_row($rs)) {
+        array_push($array, $row[0]);
+    }
+
+    mysqli_close($con);
+    return $array;
+}
+
+function GetSeriesesPurchasedFromByUsername($username)
+{
+    $con = GetConnection();
+    $sql = "SELECT DISTINCT series
+            FROM serieses
+            INNER JOIN books ON books.series_id = serieses.series_id
+            INNER JOIN order_details ON order_details.isbn = books.isbn
+            INNER JOIN orders ON order_details.order_id = orders.order_id
+            INNER JOIN login ON orders.user_id = login.user_id
+            WHERE series IS NOT NULL AND username = \"" . $username . "\";";
+    $rs = mysqli_query($con, $sql);
+    $array = [];
+
+    while ($row = mysqli_fetch_row($rs)) {
+        array_push($array, $row[0]);
+    }
+
+    mysqli_close($con);
+    return $array;
+}
+
+function GetGenresPurchasedByUsername($username)
+{
+    $con = GetConnection();
+    $sql = "SELECT DISTINCT genre
+            FROM genres
+            INNER JOIN books_genres ON genres.genre_id = books_genres.genre_id
+            INNER JOIN books ON books.isbn = books_genres.isbn
+            INNER JOIN order_details ON books.isbn = order_details.isbn
+            INNER JOIN orders ON order_details.order_id = orders.order_id
+            INNER JOIN login ON orders.user_id = login.user_id
+            WHERE username = \"" . $username . "\";";
+    $rs = mysqli_query($con, $sql);
+    $array = [];
+
+    while ($row = mysqli_fetch_row($rs)) {
+        array_push($array, $row[0]);
+    }
+
+    mysqli_close($con);
+    return $array;
+}
+
+function GetReadISBNs($username) {
+    $con = GetConnection();
+    $sql = "SELECT DISTINCT isbn
+            FROM order_details
+            INNER JOIN orders ON order_details.order_id = orders.order_id
+            INNER JOIN login ON orders.user_id = login.user_id
+            WHERE username = \"" . $username . "\";";
+    $rs = mysqli_query($con, $sql);
+    $array = [];
+
+    while ($row = mysqli_fetch_row($rs)) {
+        array_push($array, $row[0]);
+    }
+
+    mysqli_close($con);
+    return $array;
+}
+
 function SaveUserData($username, $family_name, $given_name, $gender, $birthdate, $phone_number)
 {
     $con = GetConnection();
@@ -715,6 +798,109 @@ function GetAllComments($comments_per_page, $page) {
             LIMIT $offset, $comments_per_page;";
     $rs = mysqli_query($con, $sql);
     mysqli_close($con);
+    return $rs;
+}
+
+function GetMostPurchasedBooksByAge($user_id) {
+    $con = GetConnection();
+    $sql = "CALL GetMostPurchasedBooksByAge(?);";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $user_id);
+    mysqli_stmt_execute($stmt);
+    $rs = mysqli_stmt_get_result($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    $array = [];
+    while ($row = mysqli_fetch_row($rs)) {
+        array_push($array, $row[0]);
+    }
+    
+    return $array;
+}
+
+function GetMostPurchasedBooksByGender($user_id) {
+    $con = GetConnection();
+    $sql = "CALL GetMostPurchasedBooksByGender(?);";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $user_id);
+    mysqli_stmt_execute($stmt);
+    $rs = mysqli_stmt_get_result($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    $array = [];
+    while ($row = mysqli_fetch_row($rs)) {
+        array_push($array, $row[0]);
+    }
+    
+    return $array;
+}
+
+function GetRecommendations($username, $user_id) {
+    $all_books = array_fill_keys(GetISBNs(), 0);
+    $read_books = array_fill_keys(GetReadISBNs($_SESSION["user"]["username"]), 0);
+    $books = array_diff_key($all_books, $read_books);
+
+    $preferences = GetGenrePreferencesByUsername($username);
+    $genres_purchased = GetGenresPurchasedByUsername($username);
+    $authors_purchased_from = GetAuthorsPurchasedFromByUsername($username);
+    $serieses_purchased_from = GetSeriesesPurchasedFromByUsername($username);
+
+    $most_purchased_books_by_age = GetMostPurchasedBooksByAge($user_id);
+    $most_purchased_books_by_gender = GetMostPurchasedBooksByGender($user_id);
+
+    foreach ($books as $isbn => $value) {
+        $bookdata = GetBookByISBN($isbn);
+
+        $publication_date = strtotime($bookdata["date_published"]);
+        $current_time = time();
+        $is_book_available = $bookdata["stock"] > 0 && $publication_date <= $current_time;
+        if (!$is_book_available) {
+            continue;
+        }
+
+        for ($i = 0; $i < count($bookdata["genres"]); $i++) { 
+            if (in_array($bookdata["genres"][$i][1], $preferences)) {
+                $books[$isbn] += 2;
+            }
+        }
+
+        for ($i = 0; $i < count($bookdata["genres"]); $i++) { 
+            if (in_array($bookdata["genres"][$i][1], $genres_purchased)) {
+                $books[$isbn] += 1;
+            }
+        }
+
+        for ($i = 0; $i < count($bookdata["writers"]); $i++) { 
+            if (in_array($bookdata["writers"][$i][1], $authors_purchased_from)) {
+                $books[$isbn] += 1;
+            }
+        }
+
+        if (!is_null($bookdata["series"]) && in_array($bookdata["series"], $serieses_purchased_from)) {
+            $books[$isbn] += 3;
+        }
+
+        if (in_array($isbn, $most_purchased_books_by_age)) {
+            $books[$isbn] += 2;
+        }
+
+        if (in_array($isbn, $most_purchased_books_by_gender)) {
+            $books[$isbn] += 2;
+        }
+    }
+
+    $books = array_filter($books);
+    arsort($books);
+
+    return array_keys($books);
+}
+
+function GetStatistics($view) {
+    $con = GetConnection();
+    $sql = "SELECT * FROM $view LIMIT 30";
+    $rs = mysqli_query($con, $sql);
     return $rs;
 }
 ?>

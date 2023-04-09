@@ -47,7 +47,7 @@ $price_sum = 0;
     </div>
     
     <div id="sum-table" class="table-responsive">
-        <h1 class="fs-3">Kosarának tartalma:</h1>
+        <h2 class="fs-3">Kosarának tartalma:</h2>
 
         <table class="table">
             <thead class="table-head-brown text-center-phones">

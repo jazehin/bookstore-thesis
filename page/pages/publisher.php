@@ -66,6 +66,7 @@ $books = GetPublishersBooks($publisher, $page, $books_per_page);
                                     <?php } ?>
                                 <?php } ?>
                             </span>
+                            <br class="d-md-none d-block">
                             <span class="rating-count small text-secondary fst-italic ms-2"><?php echo $bookdata["rating"][1] ?> értékelés</span>
                         </div>
                             <span class="bookcard-description mb-2">

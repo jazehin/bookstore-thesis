@@ -1,23 +1,4 @@
-<?php
-ini_set('session.gc_maxlifetime', 60 * 60 * 24); // 24 hours
-session_start();
-
-if (!isset($_SESSION["logged_in"])) {
-    $_SESSION["logged_in"] = false;
-} else if ($_SESSION["logged_in"]) {
-    $_SESSION["user"] = GetUserById($_SESSION["user"]["id"]);
-}
-
-if (!isset($_SESSION["user"])) {
-    $_SESSION["user"] = [];
-}
-
-if (!isset($_SESSION["basket"])) {
-    $_SESSION["basket"] = [];
-}
-
-$genres = GetGenres();
-?>
+<?php $genres = GetGenres(); ?>
 
 <!DOCTYPE html>
 <html lang="hu">
@@ -127,20 +108,20 @@ $genres = GetGenres();
                 <ul class="navbar-nav">
                     
                     <li class="nav-item">
-                        <a class="nav-link" href="/bestsellers/1">Bestsellerek</a>
+                        <a class="nav-link" href="/bestsellers">Bestsellerek</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/new/1">Újdonságok</a>
+                        <a class="nav-link" href="/new">Újdonságok</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/soon/1">Hamarosan megjelenik</a>
+                        <a class="nav-link" href="/soon">Hamarosan megjelenik</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/random">Véletlen könyv</a>
                     </li>
                     <?php if ($_SESSION["logged_in"] && ($_SESSION["user"]["type"] === "moderator" || $_SESSION["user"]["type"] === "administrator")) { ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="/comments/1">Kommentek</a>
+                            <a class="nav-link" href="/comments">Kommentek</a>
                         </li>
                     <?php } ?>
                     <?php if ($_SESSION["logged_in"] && $_SESSION["user"]["type"] === "administrator") { ?>
@@ -152,6 +133,7 @@ $genres = GetGenres();
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="/addbook">Könyv hozzáadása</a></li>
                                 <li><a class="dropdown-item" href="/modifybook">Könyv módosítása/törlése</a></li>
+                                <li><a class="dropdown-item" href="/statistics">Statisztikák</a></li>
                             </ul>
                         </li>
                     <?php } ?>

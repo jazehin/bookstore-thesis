@@ -69,6 +69,7 @@ $books = GetBooksForPage($page, $books_per_page, $sqlbooks, $types, $vars);
                                     <?php } ?>
                                 <?php } ?>
                             </span>
+                            <br class="d-md-none d-block">
                             <span class="rating-count small text-secondary fst-italic ms-2">
                                 <?php echo $bookdata["rating"][1] ?> értékelés
                             </span>

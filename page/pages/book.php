@@ -193,12 +193,13 @@
                         else
                             echo "fs-5"; ?>"><?php echo $bookdata["price"]; ?> Ft</span>
                         <?php if (!is_null($bookdata["discounted_price"])) { ?>
-                            &nbsp;helyett&nbsp;<span class="bookcard-discounted-price text-danger fw-bold fs-5">
+                            <br class="d-md-none d-block">
+                            <?php echo " helyett "; ?>
+                            <span class="bookcard-discounted-price text-danger fw-bold fs-5">
                                 <?php echo $bookdata["discounted_price"]; ?> Ft
                             </span>
                             <span class="discount-percent fs-5">
-                                (-
-                                <?php echo round(((1 - ($bookdata["discounted_price"] / $bookdata["price"])) * 100), 0); ?>%)
+                                <?php echo "(-" . round(((1 - ($bookdata["discounted_price"] / $bookdata["price"])) * 100), 0) . "%)"; ?>
                             </span>
                         <?php } ?>
                         <br>
@@ -250,9 +251,9 @@
                             Ossza meg véleményét a könyvvel kapcsolatban!
                         <?php } ?>
                     </label>
-                    <textarea name="comment" id="comment" class="form-control" rows="5"></textarea>
+                    <textarea name="comment" id="comment" class="form-control" rows="5" onkeyup="enablePostButton(this);"></textarea>
                     <div class="w-100 text-end">
-                        <input type="submit" value="Posztolás" class="btn btn-brown mt-3" name="post-comment">
+                        <input type="submit" value="Posztolás" class="btn btn-brown mt-3" id="post-comment" name="post-comment" disabled>
                     </div>
                 </form>
             <?php } else { ?>

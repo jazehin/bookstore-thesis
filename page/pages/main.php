@@ -1,8 +1,18 @@
 <?php
-$books = GetISBNs();
+$page = $_GET["page"];
+
+$books_per_page = 10;
+
+$number_of_books = count($books);
+$number_of_pages = ceil($number_of_books / $books_per_page);
+
+$offset = ($page - 1) * $books_per_page;
+$books = array_slice($books, $offset, $books_per_page);
 ?>
 
-<div class="bookcard-container d-flex flex-lg-wrap overflow-scroll mt-4">
+<h2 class="fs-3">Önnek ajánljuk</h2>
+
+<div class="bookcard-container d-flex flex-wrap overflow-scroll mt-4">
     <?php for ($i = 0; $i < count($books); $i++) {
         $bookdata = GetBookByISBN($books[$i]);
 
@@ -15,6 +25,8 @@ $books = GetISBNs();
         } else if (file_exists($folder . $bookdata["isbn"] . ".png")) {
             $img = $bookdata["isbn"] . ".png";
         }
+
+
 
         $writers = "";
         for ($j = 0; $j < count($bookdata["writers"]); $j++) {
@@ -53,7 +65,10 @@ $books = GetISBNs();
                                     <?php } ?>
                                 <?php } ?>
                             </span>
-                            <span class="rating-count small text-secondary fst-italic ms-2"><?php echo $bookdata["rating"][1] ?> értékelés</span>
+                            <br class="d-md-none d-block">
+                            <span class="rating-count small text-secondary fst-italic ms-2">
+                                <?php echo $bookdata["rating"][1] ?> értékelés
+                            </span>
                         </div>
                         <span class="bookcard-description mb-2">
                             <?php echo stripslashes($bookdata["description"]); ?>
@@ -65,7 +80,8 @@ $books = GetISBNs();
                                 <?php echo $bookdata["discounted_price"]; ?> Ft
                             </span>
                             <span class="discount-percent">
-                                (-<?php echo round(((1 - ($bookdata["discounted_price"] / $bookdata["price"])) * 100), 0); ?>%)
+                                (-
+                                <?php echo round(((1 - ($bookdata["discounted_price"] / $bookdata["price"])) * 100), 0); ?>%)
                             </span>
                         <?php } ?>
                     </div>
@@ -73,31 +89,45 @@ $books = GetISBNs();
                 <a href="/books/<?php echo $bookdata["isbn"]; ?>" class="stretched-link"></a>
             </div>
         </div>
-
-
-
-        <!--
-        <div class="bookcard flex-column position-relative m-2 p-2 ms-0 shadow-sm">
-            <img class="bookcard-cover" src="<?php echo $folder . $img ?>" alt="<?php echo $folder . $img ?>"
-                title="<?php echo $bookdata["title"]; ?> borító">
-
-            <div class="bookcard-info m-2">
-                <span class="bookcard-title fw-bold fs-5 lh-1 mb-0">
-                                <?php echo $bookdata["title"]; ?>
-                </span><br>
-                <span class="fst-italic"><?php echo $writers ?></span>
-                <div class="flex-row pt-2">
-                    <span class="text-decoration-line-through">
-                                    <?php echo $bookdata["price"] ?> Ft
-                    </span>
-
-                    <span class="text-danger fw-bold">
-                                    <?php echo $bookdata["discounted_price"] ?> Ft
-                    </span>
-                </div>
-                <a href="/books/<?php echo $bookdata["isbn"]; ?>" class="btn w-100 stretched-link" style="background-color: #8B5E3C; color: white;">Megnézem</a>
-            </div>
-        </div>
-    -->
     <?php } ?>
 </div>
+
+<?php if ($number_of_pages > 1) { ?>
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link <?php if ($page == 1)
+                echo 'disabled'; ?>" <?php if ($page == 1)
+                      echo 'tabindex="-1"'; ?>
+                href="/main/<?php echo $page - 1; ?>" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <?php if ($page - 2 > 0) { ?>
+            <li class="page-item"><a class="page-link"
+                    href="/main/<?php echo $page - 2; ?>"><?php echo $page - 2; ?></a></li>
+        <?php } ?>
+        <?php if ($page - 1 > 0) { ?>
+            <li class="page-item"><a class="page-link"
+                    href="/main/<?php echo $page - 1; ?>"><?php echo $page - 1; ?></a></li>
+        <?php } ?>
+        <li class="page-item active" aria-current="page"><a class="page-link" href="">
+                <?php echo $page; ?>
+            </a></li>
+        <?php if ($page < $number_of_pages) { ?>
+            <li class="page-item"><a class="page-link"
+                    href="/main/<?php echo $page + 1; ?>"><?php echo $page + 1; ?></a></li>
+        <?php } ?>
+        <?php if ($page + 1 < $number_of_pages) { ?>
+            <li class="page-item"><a class="page-link"
+                    href="/main/<?php echo $page + 2; ?>"><?php echo $page + 2; ?></a></li>
+        <?php } ?>
+        <li class="page-item">
+            <a class="page-link <?php if ($page == $number_of_pages)
+                echo 'disabled'; ?>" <?php if ($page == $number_of_pages)
+                      echo 'tabindex="-1"'; ?>
+                href="/main/<?php echo $page + 1; ?>" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+<?php } ?>

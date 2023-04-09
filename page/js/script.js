@@ -623,3 +623,10 @@ function setRating(isbn, rating) {
     xmlhttp.open("GET", `/pages/ajax/setrating.php?isbn=${isbn}&rating=${rating}`);
     xmlhttp.send();
 }
+
+function enablePostButton(textarea) {
+    if (textarea.value !== "") 
+        document.getElementById('post-comment').removeAttribute("disabled");
+    else 
+        document.getElementById('post-comment').setAttribute("disabled", "");
+}

@@ -1,4 +1,20 @@
 <?php
+session_start();
+
+if (!isset($_SESSION["logged_in"])) {
+    $_SESSION["logged_in"] = false;
+} else if ($_SESSION["logged_in"]) {
+    $_SESSION["user"] = GetUserById($_SESSION["user"]["id"]);
+}
+
+if (!isset($_SESSION["user"])) {
+    $_SESSION["user"] = [];
+}
+
+if (!isset($_SESSION["basket"])) {
+    $_SESSION["basket"] = [];
+}
+
 if (isset($_GET['p'])) {
     $p = $_GET['p'];
 } else {
@@ -7,7 +23,20 @@ if (isset($_GET['p'])) {
 
 switch ($p) {
     case 'main':
-        $content = 'pages/main.php';
+        if ($_SESSION["logged_in"] && $_SESSION["user"]["type"] === "administrator") {
+            header("Location: /statistics");
+        }
+
+        $books = GetRecommendations($_SESSION["user"]["username"], $_SESSION["user"]["id"]);
+        if ($_SESSION["logged_in"] && count($books) > 0) {
+            if (isset($_GET["page"])) {
+                $content = "pages/main.php";
+            } else {
+                header("Location: /main/1");
+            }
+        } else {
+            header("Location: /bestsellers/1");
+        }
         break;
     case 'login':
         $content = 'pages/login.php';
@@ -68,6 +97,9 @@ switch ($p) {
         break;
     case 'comments':
         $content = 'pages/comments.php';
+        break;
+    case 'statistics':
+        $content = 'pages/statistics.php';
         break;
     case 'random':
         $isbns = GetISBNs();
