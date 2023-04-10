@@ -31,9 +31,17 @@ $user_id = $_SESSION["logged_in"] ? $_SESSION["user"]["id"] : null;
         <div class="row">
             <div class="col-3 text-start">0</div>
             <div class="col-6 text-center">Felhasznált pontok: <span id="used" class="fw-bold">0</span></div>
-            <div class="col-3 text-end"><?php echo $_SESSION["user"]["points"]; ?></div>
+            <?php 
+                $usable_points = 0;
+                if ($_SESSION["user"]["points"] <= round(GetPriceSum($_SESSION["basket"]) * 0.7)) {
+                    $usable_points = $_SESSION["user"]["points"];
+                } else {
+                    $usable_points = round(GetPriceSum($_SESSION["basket"]) * 0.7);
+                }
+            ?>
+            <div class="col-3 text-end"><?php echo $usable_points; ?></div>
         </div>
-        <input type="range" min="0" max="<?php echo $_SESSION["user"]["points"]; ?>" value="0" class="form-range slider" id="points" name="points" oninput="onPointsUsedSliderChanged(this);" onchange="onPointsUsedSliderChanged(this);">
+        <input type="range" min="0" max="<?php echo $usable_points; ?>" value="0" class="form-range slider" id="points" name="points" oninput="onPointsUsedSliderChanged(this);" onchange="onPointsUsedSliderChanged(this);">
     </div>
 
     <input type="submit" class="btn btn-brown mt-2" value="Rendelés véglegesítése">
