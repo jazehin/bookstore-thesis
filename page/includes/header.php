@@ -157,9 +157,6 @@
                     <input type="password" name="password" id="login-password" class="form-control"
                         onkeydown="if(event.key == 'Enter') login();">
                     <div class="mt-2">
-                        <a href="/forgotten">Elfelejtette jelszavát?</a>
-                    </div>
-                    <div class="mt-2">
                         <span>Még nincs fiókja? </span>
                         <a href="" data-bs-toggle="modal" data-bs-target="#signupModal">Regisztráljon most!</a>
                     </div>

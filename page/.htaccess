@@ -5,8 +5,6 @@ RewriteRule ^main/([0-9]+)/?$ index.php?p=main&page=$1 [L,QSA]
 
 RewriteRule ^login$ /?p=login [L]
 
-RewriteRule ^forgotten$ /?p=forgotten-password [L]
-
 RewriteRule ^signup$ /?p=signup [L]
 
 RewriteRule ^signout$ /?p=signout [L]
@@ -28,7 +26,6 @@ RewriteRule ^order-payment$ /?p=order-payment [L]
 RewriteRule ^add-address$ /?p=add-address [L]
 RewriteRule ^order-success$ /?p=order-success [L]
 
-RewriteRule ^books$ /?p=books [L]
 RewriteRule ^books/([0-9]+)/?$ /?p=book&isbn=$1 [NC,L]
 
 RewriteRule ^random$ /?p=random [L]

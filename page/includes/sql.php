@@ -64,7 +64,6 @@ function InsertBook($bookdata)
 {
     $con = GetConnection();
 
-    // simple data
     $isbn = mysqli_real_escape_string($con, $bookdata["isbn"]);
     $pages = mysqli_real_escape_string($con, $bookdata["pages"]);
     $publisher = (empty($bookdata["publisher"]) ? null : mysqli_real_escape_string($con, $bookdata["publisher"]));
@@ -97,7 +96,6 @@ function InsertBook($bookdata)
     $genres = mysqli_real_escape_string($con, $genres);
     $writers = mysqli_real_escape_string($con, $writers);
 
-    // prepare sta
     $sql = "CALL InsertBook(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, "sisissssiisisss", $isbn, $pages, $publisher, $weight, $title, $series, $cover, $datePublished, $price, $discountedPrice, $language, $stock, $description, $genres, $writers);
@@ -205,7 +203,7 @@ function DoesBookExist($isbn): bool
     return $count > 0;
 }
 
-function Login($username, $password): int|null
+function Login($username, $password)
 {
     $con = GetConnection();
     $username = mysqli_real_escape_string($con, $username);

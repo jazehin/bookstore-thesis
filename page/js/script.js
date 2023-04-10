@@ -28,7 +28,6 @@ function removeField(fieldName) {
     } else {
         alert("Legalább egy mezőnek maradnia kell!");
     }
-
 }
 
 function login() {
