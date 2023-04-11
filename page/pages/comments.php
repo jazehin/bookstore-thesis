@@ -1,6 +1,11 @@
 <?php if ($_SESSION["logged_in"] && ($_SESSION["user"]["type"] === "moderator" || $_SESSION["user"]["type"] === "administrator")) { ?>
 
     <?php
+    if (isset($_POST["delete-comment"]))
+        DeleteComment($_POST["comment-id"]);
+    ?>
+
+    <?php
     $page = $_GET["page"];
 
     $comments_per_page = 25;
@@ -11,6 +16,29 @@
     $offset = ($page - 1) * $comments_per_page;
     $comments = GetAllComments($comments_per_page, $page);
     ?>
+
+    <div class="modal fade" id="deleteCommentModal" tabindex="-1" aria-labelledby="deleteCommentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteCommentModalLabel">
+                        Komment törlése
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <span class="txt-danger">Figyelem! Ez a művelet nem vonható vissza!</span>
+                </div>
+
+                <form action="" method="post" class="modal-footer">
+                    <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Mégse">
+                    <input type="submit" class="btn btn-danger" name="delete-comment" value="Törlés">
+                    <input type="hidden" name="comment-id" id="comment-id">
+                </form>
+            </div>
+        </div>
+    </div>
 
     <h2 class="fs-3">Kommentek</h2>
 
