@@ -99,15 +99,6 @@
                 </div>
                 <?php if ($_SESSION["logged_in"]) { ?>
                 <div class="rating mb-2">
-                <!--
-                    <?php $avg_rating = 0; ?>
-                    <?php if ($i < $avg_rating) { ?>
-                        <?php } elseif (1 > $i - $avg_rating) { ?>
-                            <i class="fa-solid fa-star-half-stroke" id="rating-<?php echo $i; ?>"></i>
-                            <?php } else { ?>
-                                <i class="fa-regular fa-star" id="rating-<?php echo $i; ?>"></i>
-                                <?php } ?>
-                            -->
                     <?php for ($i = 1; $i < 6; $i++) { ?> 
                         <i class="fa-solid fa-star rating-star" id="rating-<?php echo $i; ?>" onmouseenter="setRatingLook(this);" onmouseover="setRatingLook(this);" onmousemove="setRatingLook(this);" onclick="setRating('<?php echo $bookdata['isbn']; ?>', <?php echo $i; ?>);" style="min-width: 20px;"></i>
                     <?php } ?>
@@ -260,7 +251,6 @@
                 <span>Jelentkezzen be, hogy hozzászólhasson a beszélgetéshez!</span>
             <?php } ?>
         </div>
-        <!--<i class="fa-solid fa-basket-shopping fa-xl"></i>-->
     </div>
 
 

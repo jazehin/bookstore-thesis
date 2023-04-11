@@ -20,6 +20,7 @@ To install the application, follow these steps:
 3. Create a new database and import the sample data from the **'bookstore.sql'** file in the *database* folder.
 4. Configure the **'env.php'** file with your database credentials in the *page/includes* folder.
 5. Open the **'index.php'** file in your web browser and start using the application.
+Warning! The *page/covers* folder is not uploaded, so the images to the books **will not** load.
 
 ## Credits
 This project was developed by Jazehin (Bence Kiss). Special thanks to my consulent teachers for their valuable feedback and support.

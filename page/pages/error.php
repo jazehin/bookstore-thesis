@@ -1,1 +1,1 @@
-<h1 class="fs-3">Hiba 404: Nem található ilyen oldal a szerveren!</h1>
+<h2 class="fs-3">Hiba 404: Nem található ilyen oldal a szerveren!</h2>
