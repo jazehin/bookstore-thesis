@@ -41,7 +41,7 @@ $user_id = $_SESSION["logged_in"] ? $_SESSION["user"]["id"] : null;
             ?>
             <div class="col-3 text-end"><?php echo $usable_points; ?></div>
         </div>
-        <input type="range" min="0" max="<?php echo $usable_points; ?>" value="0" class="form-range slider" id="points" name="points" oninput="onPointsUsedSliderChanged(this);" onchange="onPointsUsedSliderChanged(this);">
+        <input type="range" min="0" max="<?php echo $usable_points; ?>" value="0" class="form-range" id="points" name="points" oninput="onPointsUsedSliderChanged(this);" onchange="onPointsUsedSliderChanged(this);">
     </div>
 
     <input type="submit" class="btn btn-brown mt-2" value="Rendelés véglegesítése">

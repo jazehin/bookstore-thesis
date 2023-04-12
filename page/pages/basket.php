@@ -137,6 +137,5 @@ $price_sum = 0;
     </div>
 
 <?php } else { //if it's empty... ?>
-    <h1 class="fs-3">A kosara üres.</h1>
-    <!-- Ezek a könyvek érdekelhetik szekció -->
+    <h2 class="fs-3">A kosara üres.</h2>
 <?php } ?>

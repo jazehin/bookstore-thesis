@@ -13,7 +13,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://kit.fontawesome.com/fea0ed64d7.js" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" type="text/css" href="/css/style.css">
@@ -51,16 +50,9 @@
                                 </i>
 
                             </a>
-                        </div>
+                    </div>
                         <a class="btn border-0" href="/basket">
                             <i class="fa-solid fa-basket-shopping fs-2"></i>
-                            <!-- Needs a compatible design
-                        <?php if (count($_SESSION["basket"]) != 0) { ?>
-                        <span id="basket-counter">
-                            <?php echo count($_SESSION["basket"]); ?>
-                        </span>
-                        <?php } ?>
-                        -->
                     </a>
 
                 </div>
@@ -74,34 +66,6 @@
             </form>
         </div>
     </header>
-    <!--
-    <nav class="navbar">
-        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel"
-            style="background-color: rgba(225, 211, 180, 1);">
-            <div class="offcanvas-header">
-                <a class="navbar-brand" id="offcanvasLabel" href="/">Könyváruház</a>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/books/9789635841523">Könyv</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Admin
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/addbook">Könyv hozzáadása</a></li>
-                            <li><a class="dropdown-item" href="#">Könyv módosítása</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    -->
     <nav class="navbar navbar-expand-lg py-0 mb-3" style="background-color: rgba(225, 211, 180, 0.5);">
         <div class="container ps-3">
             <div class="collapse navbar-collapse py-1" id="navbar">
