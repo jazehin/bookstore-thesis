@@ -8,6 +8,15 @@ body {
     text-align: center;
 }
 
+.bookcard-container::-webkit-scrollbar {
+    display: none;
+}
+
+.bookcard-container {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
 .bookcard-cover {
     max-width: 7rem;
     box-shadow: 3px 3px 1px 1px rgba(0, 0, 255, .2);

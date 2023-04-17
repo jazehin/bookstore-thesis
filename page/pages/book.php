@@ -104,7 +104,7 @@
                     <?php } ?>
                 </div>
                 <?php } ?>
-                <img class="img-fluid" src="<?php echo '/' . $folder . $img ?>" alt="">
+                <img class="img-fluid" src="<?php echo "/" . $folder . $img ?>" alt="">
                 <div class="book-info">
                     <div class="row pt-1">
                         <span class="col-5 my-auto fw-bold">Kiadó:</span>

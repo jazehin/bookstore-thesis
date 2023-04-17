@@ -21,6 +21,8 @@ if (isset($_GET['p'])) {
     $p = 'main';
 }
 
+$title = "Könyváruház";
+
 switch ($p) {
     case 'main':
         if ($_SESSION["logged_in"] && $_SESSION["user"]["type"] === "administrator") {
@@ -31,6 +33,7 @@ switch ($p) {
         if ($_SESSION["logged_in"] && count($books) > 0) {
             if (isset($_GET["page"])) {
                 $content = "pages/main.php";
+                $title = "Főoldal";
             } else {
                 header("Location: /main/1");
             }
@@ -38,68 +41,77 @@ switch ($p) {
             header("Location: /bestsellers/1");
         }
         break;
-    case 'login':
-        $content = 'pages/login.php';
-        break;
     case 'profile':
         $content = 'pages/profile.php';
+        $title = "Profil";
         break;
     case 'basket':
         $content = 'pages/basket.php';
+        $title = "Kosár";
         break;
     case 'order-address':
         $content = 'pages/orderaddress.php';
+        $title = "Szállítási cím választása";
         break;
     case 'order-payment':
         $content = 'pages/orderpayment.php';
+        $title = "Fizetési mód választása";
         break;
     case 'order-success':
         $content = 'pages/ordersuccess.php';
+        $title = "Sikeres rendelés";
         break;
     case 'add-address':
         $content = 'pages/addaddress.php';
+        $title = "Szállítási cím megadása";
         break;
     case 'signout':
         $content = 'pages/signout.php';
-        break;
-    case 'forgotten-password':
-        $content = 'pages/forgottenpassword.php';
+        $title = "Kilépés...";
         break;
     case 'search':
         $content = 'pages/search.php';
+        $title = "Keresés";
         break;
     case 'book':
         $content = 'pages/book.php';
+        // I set the title with JS based on the #title of the page
         break;
     case 'author':
         $content = 'pages/author.php';
+        // I set the title with JS based on the #title of the page
         break;
     case 'publisher':
         $content = 'pages/publisher.php';
-        break;
-    case 'books':
-        $content = 'pages/books.php';
+        // I set the title with JS based on the #title of the page
         break;
     case 'new':
         $content = 'pages/new.php';
+        $title = "Újdonságaink";
         break;
     case 'soon':
         $content = 'pages/soon.php';
+        $title = "Hamarosan megjelenik";
         break;
     case 'bestsellers':
         $content = 'pages/bestsellers.php';
+        $title = "Bestsellerek";
         break;
     case 'addbook':
         $content = 'pages/addbook.php';
+        $title = "Könyv hozzáadása";
         break;
     case 'modifybook':
         $content = 'pages/modifybook.php';
+        $title = "Könyv módosítása/törlése";
         break;
     case 'comments':
         $content = 'pages/comments.php';
+        $title = "Kommentek";
         break;
     case 'statistics':
         $content = 'pages/statistics.php';
+        $title = "Statisztikák";
         break;
     case 'random':
         $isbns = GetISBNs();
@@ -107,6 +119,7 @@ switch ($p) {
         break;
     case 'error':
         $content = 'pages/error.php';
+        $title = "Hiba";
         break;
     default:
         header("Location: /");

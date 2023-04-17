@@ -9,9 +9,12 @@ $books = GetAuthorsBooks($author, $page, $books_per_page);
 ?>
 
 <?php if (count($books) == 0) { ?>
-    <h2 class="fs-3"><?php echo $author; ?>-nak/nek nincsen könyve az adatbázisunkban!</h2>
+    <h2 class="fs-3"><span id="title"><?php echo $author; ?></span>-nak/nek nincsen könyve az adatbázisunkban!</h2>
 <?php } else { ?>
-    <h2 class="fs-3"><?php echo $author; ?> könyvei:</h2>
+    <h2 class="fs-3"><span id="title"><?php echo $author; ?></span> könyvei:</h2>
+    <script>
+        document.title = document.getElementById("title").innerText;
+    </script>
 
     <div class="bookcard-container d-flex flex-wrap overflow-scroll mt-4">
         <?php for ($i = 0; $i < count($books); $i++) {

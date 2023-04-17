@@ -9,9 +9,12 @@ $books = GetPublishersBooks($publisher, $page, $books_per_page);
 ?>
 
 <?php if (count($books) == 0) { ?>
-    <h2 class="fs-3">A(z) <?php echo $publisher; ?>-nak/nek nincsen könyve az adatbázisunkban!</h2>
+    <h2 class="fs-3">A(z) <span id="title"><?php echo $publisher; ?></span>-nak/nek nincsen könyve az adatbázisunkban!</h2>
 <?php } else { ?>
-    <h2 class="fs-3">A(z) <?php echo $publisher; ?> könyvei:</h2>
+    <h2 class="fs-3">A(z) <span id="title"><?php echo $publisher; ?></span> könyvei:</h2>
+    <script>
+        document.title = document.getElementById("title").innerText;
+    </script>
 
     <div class="bookcard-container d-flex flex-wrap overflow-scroll mt-4">
         <?php for ($i = 0; $i < count($books); $i++) {
