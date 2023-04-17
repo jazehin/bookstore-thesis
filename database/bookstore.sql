@@ -28,13 +28,13 @@ DELIMITER $$
 --
 -- Eljárások
 --
-CREATE DEFINER=`jazehin`@`localhost` PROCEDURE `DeleteBook` (`_isbn` VARCHAR(13))  BEGIN
+CREATE PROCEDURE `DeleteBook` (`_isbn` VARCHAR(13))  BEGIN
 	DELETE FROM books_genres WHERE isbn = _isbn;
     DELETE FROM books_writers WHERE isbn = _isbn;
     DELETE FROM books WHERE isbn = _isbn;
 END$$
 
-CREATE DEFINER=`jazehin`@`localhost` PROCEDURE `GetBookByISBN` (IN `_isbn` VARCHAR(13))  BEGIN
+CREATE PROCEDURE `GetBookByISBN` (IN `_isbn` VARCHAR(13))  BEGIN
     SELECT 
 		isbn,
 		pages,
@@ -59,7 +59,7 @@ CREATE DEFINER=`jazehin`@`localhost` PROCEDURE `GetBookByISBN` (IN `_isbn` VARCH
 		isbn = _isbn;
 END$$
 
-CREATE DEFINER=`jazehin`@`localhost` PROCEDURE `GetGenresByISBN` (IN `_isbn` VARCHAR(13))  BEGIN
+CREATE PROCEDURE `GetGenresByISBN` (IN `_isbn` VARCHAR(13))  BEGIN
     SELECT 
 		genres.genre_id,
         genre
@@ -70,7 +70,7 @@ CREATE DEFINER=`jazehin`@`localhost` PROCEDURE `GetGenresByISBN` (IN `_isbn` VAR
 		isbn = _isbn;
 END$$
 
-CREATE DEFINER=`jazehin`@`localhost` PROCEDURE `GetMostPurchasedBooksByAge` (IN `_user_id` INT)  BEGIN
+CREATE PROCEDURE `GetMostPurchasedBooksByAge` (IN `_user_id` INT)  BEGIN
 	DECLARE age INT DEFAULT TIMESTAMPDIFF(YEAR, (SELECT users.birthdate FROM users WHERE users.user_id = _user_id), CURDATE());
     SELECT order_details.isbn, SUM(order_details.quantity)
     FROM order_details
@@ -83,7 +83,7 @@ CREATE DEFINER=`jazehin`@`localhost` PROCEDURE `GetMostPurchasedBooksByAge` (IN 
     LIMIT 30;
 END$$
 
-CREATE DEFINER=`jazehin`@`localhost` PROCEDURE `GetMostPurchasedBooksByGender` (`_user_id` INT)  BEGIN
+CREATE PROCEDURE `GetMostPurchasedBooksByGender` (`_user_id` INT)  BEGIN
 	DECLARE gender VARCHAR(10) DEFAULT (SELECT users.gender FROM users WHERE users.user_id = _user_id);
     SELECT order_details.isbn, SUM(order_details.quantity)
     FROM order_details
@@ -96,7 +96,7 @@ CREATE DEFINER=`jazehin`@`localhost` PROCEDURE `GetMostPurchasedBooksByGender` (
     LIMIT 30;
 END$$
 
-CREATE DEFINER=`jazehin`@`localhost` PROCEDURE `GetUserById` (IN `_user_id` INT)  BEGIN
+CREATE PROCEDURE `GetUserById` (IN `_user_id` INT)  BEGIN
     SELECT
         username,
         email,
@@ -114,7 +114,7 @@ CREATE DEFINER=`jazehin`@`localhost` PROCEDURE `GetUserById` (IN `_user_id` INT)
     WHERE user_id = _user_id;
 END$$
 
-CREATE DEFINER=`jazehin`@`localhost` PROCEDURE `GetWritersByISBN` (IN `_isbn` VARCHAR(13))  BEGIN
+CREATE PROCEDURE `GetWritersByISBN` (IN `_isbn` VARCHAR(13))  BEGIN
     SELECT 
 		writers.writer_id,
         writer
@@ -125,7 +125,7 @@ CREATE DEFINER=`jazehin`@`localhost` PROCEDURE `GetWritersByISBN` (IN `_isbn` VA
 		isbn = _isbn;
 END$$
 
-CREATE DEFINER=`jazehin`@`localhost` PROCEDURE `InsertBook` (`_isbn` VARCHAR(13), `_pages` INT, `_publisher` TEXT, `_weight` INT, `_title` VARCHAR(255), `_series` TEXT, `_cover` TEXT, `_date_published` DATE, `_price` INT, `_discounted_price` INT, `_language` TEXT, `_stock` INT, `_description` TEXT, `_genres` TEXT, `_writers` TEXT)  BEGIN
+CREATE PROCEDURE `InsertBook` (`_isbn` VARCHAR(13), `_pages` INT, `_publisher` TEXT, `_weight` INT, `_title` VARCHAR(255), `_series` TEXT, `_cover` TEXT, `_date_published` DATE, `_price` INT, `_discounted_price` INT, `_language` TEXT, `_stock` INT, `_description` TEXT, `_genres` TEXT, `_writers` TEXT)  BEGIN
 	DECLARE delimiter_string CHAR(1) DEFAULT '@';
     DECLARE _genre, _writer TEXT;
     DECLARE i, begin, length INT;
@@ -219,13 +219,13 @@ CREATE DEFINER=`jazehin`@`localhost` PROCEDURE `InsertBook` (`_isbn` VARCHAR(13)
     INSERT INTO books_writers (isbn, writer_id) VALUES (_isbn, (SELECT writer_id FROM writers WHERE writer = _writer));
 END$$
 
-CREATE DEFINER=`jazehin`@`localhost` PROCEDURE `RemovePreference` (IN `_username` VARCHAR(20), IN `_genre` VARCHAR(255))  BEGIN
+CREATE PROCEDURE `RemovePreference` (IN `_username` VARCHAR(20), IN `_genre` VARCHAR(255))  BEGIN
 	DECLARE _user_id INT DEFAULT (SELECT user_id FROM login WHERE username = _username);
     DECLARE _genre_id INT DEFAULT (SELECT genre_id FROM genres WHERE genre = _genre);
     DELETE FROM preferences WHERE user_id = _user_id AND genre_id = _genre_id;
 END$$
 
-CREATE DEFINER=`jazehin`@`localhost` PROCEDURE `SaveAddress` (IN `_username` VARCHAR(20), IN `_company` VARCHAR(100), IN `_county_id` INT, IN `_city` VARCHAR(50), IN `_public_space` VARCHAR(50), IN `_zip_code` CHAR(4), IN `_note` VARCHAR(50))  BEGIN
+CREATE PROCEDURE `SaveAddress` (IN `_username` VARCHAR(20), IN `_company` VARCHAR(100), IN `_county_id` INT, IN `_city` VARCHAR(50), IN `_public_space` VARCHAR(50), IN `_zip_code` CHAR(4), IN `_note` VARCHAR(50))  BEGIN
 	DECLARE id INT DEFAULT 0;
     SET id = (SELECT address_id FROM addresses WHERE company = _company AND county_id = _county_id AND city = _city AND public_space = _public_space AND zip_code = _zip_code AND note = _note); 
     
@@ -237,13 +237,13 @@ CREATE DEFINER=`jazehin`@`localhost` PROCEDURE `SaveAddress` (IN `_username` VAR
     INSERT INTO users_addresses (user_id, address_id) VALUES ((SELECT user_id FROM login WHERE username = _username), id);
 END$$
 
-CREATE DEFINER=`jazehin`@`localhost` PROCEDURE `SetPreference` (IN `_username` VARCHAR(20), IN `_genre` VARCHAR(255))  BEGIN
+CREATE PROCEDURE `SetPreference` (IN `_username` VARCHAR(20), IN `_genre` VARCHAR(255))  BEGIN
 	DECLARE _user_id INT DEFAULT (SELECT user_id FROM login WHERE username = _username);
     DECLARE _genre_id INT DEFAULT (SELECT genre_id FROM genres WHERE genre = _genre);
 	INSERT INTO preferences (user_id, genre_id) VALUES (_user_id, _genre_id);
 END$$
 
-CREATE DEFINER=`jazehin`@`localhost` PROCEDURE `SetRating` (`_user_id` INT, `_isbn` VARCHAR(13), `_rating` INT)  BEGIN
+CREATE PROCEDURE `SetRating` (`_user_id` INT, `_isbn` VARCHAR(13), `_rating` INT)  BEGIN
 	IF ((SELECT rating FROM ratings WHERE user_id = _user_id AND isbn = _isbn) IS NULL) THEN
     	INSERT INTO ratings (user_id, isbn, rating) VALUES (_user_id, _isbn, _rating);
     ELSE
@@ -251,14 +251,14 @@ CREATE DEFINER=`jazehin`@`localhost` PROCEDURE `SetRating` (`_user_id` INT, `_is
     END IF;
 END$$
 
-CREATE DEFINER=`jazehin`@`localhost` PROCEDURE `SignUp` (`_username` VARCHAR(20), `_password` CHAR(64), `_email` VARCHAR(255), `_salt` CHAR(10))  BEGIN
+CREATE PROCEDURE `SignUp` (`_username` VARCHAR(20), `_password` CHAR(64), `_email` VARCHAR(255), `_salt` CHAR(10))  BEGIN
 	DECLARE id INT DEFAULT 0;
     INSERT INTO users (type_id) VALUES (3);
     SET id = last_insert_id();
     INSERT INTO login (user_id, username, email, password, salt) VALUES (id, _username, _email, _password, _salt);
 END$$
 
-CREATE DEFINER=`jazehin`@`localhost` PROCEDURE `UpdateBook` (`_isbn` VARCHAR(13), `_pages` INT, `_publisher` TEXT, `_weight` INT, `_title` VARCHAR(255), `_series` TEXT, `_cover` TEXT, `_date_published` DATE, `_price` INT, `_discounted_price` INT, `_language` TEXT, `_stock` INT, `_description` TEXT, `_genres` TEXT, `_writers` TEXT)  BEGIN
+CREATE PROCEDURE `UpdateBook` (`_isbn` VARCHAR(13), `_pages` INT, `_publisher` TEXT, `_weight` INT, `_title` VARCHAR(255), `_series` TEXT, `_cover` TEXT, `_date_published` DATE, `_price` INT, `_discounted_price` INT, `_language` TEXT, `_stock` INT, `_description` TEXT, `_genres` TEXT, `_writers` TEXT)  BEGIN
 	DECLARE delimiter_string CHAR(1) DEFAULT '@';
     DECLARE _genre, _writer TEXT;
     DECLARE i, begin, length INT;
@@ -344,12 +344,12 @@ END$$
 --
 -- Függvények
 --
-CREATE DEFINER=`jazehin`@`localhost` FUNCTION `CompleteOrder` (`_user_id` INT, `_address_id` INT, `_price_sum` INT) RETURNS INT BEGIN
+CREATE FUNCTION `CompleteOrder` (`_user_id` INT, `_address_id` INT, `_price_sum` INT) RETURNS INT BEGIN
 	INSERT INTO orders (user_id, address_id, price_sum) VALUES (_user_id, _address_id, _price_sum);
     RETURN last_insert_id();
 END$$
 
-CREATE DEFINER=`jazehin`@`localhost` FUNCTION `GetAddressId` (`_company` VARCHAR(100), `_county_id` INT, `_city` VARCHAR(50), `_public_space` VARCHAR(50), `_zip_code` CHAR(4), `_note` VARCHAR(50)) RETURNS INT BEGIN
+CREATE FUNCTION `GetAddressId` (`_company` VARCHAR(100), `_county_id` INT, `_city` VARCHAR(50), `_public_space` VARCHAR(50), `_zip_code` CHAR(4), `_note` VARCHAR(50)) RETURNS INT BEGIN
 	DECLARE id INT DEFAULT (SELECT address_id FROM addresses WHERE company = _company AND county_id = _county_id AND city = _city AND public_space = _public_space AND zip_code = _zip_code AND note = _note); 
    
     IF (id IS NULL) THEN
@@ -1005,7 +1005,7 @@ INSERT INTO `writers` (`writer_id`, `writer`) VALUES
 --
 DROP TABLE IF EXISTS `bestsellers`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`jazehin`@`localhost` SQL SECURITY DEFINER VIEW `bestsellers`  AS SELECT `books`.`isbn` AS `isbn`, sum(`order_details`.`quantity`) AS `sum(order_details.quantity)` FROM (`books` join `order_details` on((`books`.`isbn` = `order_details`.`isbn`))) GROUP BY `books`.`isbn` ORDER BY sum(`order_details`.`quantity`) DESC ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `bestsellers`  AS SELECT `books`.`isbn` AS `isbn`, sum(`order_details`.`quantity`) AS `sum(order_details.quantity)` FROM (`books` join `order_details` on((`books`.`isbn` = `order_details`.`isbn`))) GROUP BY `books`.`isbn` ORDER BY sum(`order_details`.`quantity`) DESC ;
 
 -- --------------------------------------------------------
 
@@ -1014,7 +1014,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`jazehin`@`localhost` SQL SECURITY DEFINER VI
 --
 DROP TABLE IF EXISTS `new_books`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`jazehin`@`localhost` SQL SECURITY DEFINER VIEW `new_books`  AS SELECT `books`.`isbn` AS `isbn` FROM `books` WHERE ((`books`.`date_published` <= curdate()) AND (`books`.`date_published` >= (curdate() - interval 1 month))) ORDER BY `books`.`date_published` DESC ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `new_books`  AS SELECT `books`.`isbn` AS `isbn` FROM `books` WHERE ((`books`.`date_published` <= curdate()) AND (`books`.`date_published` >= (curdate() - interval 1 month))) ORDER BY `books`.`date_published` DESC ;
 
 -- --------------------------------------------------------
 
@@ -1023,7 +1023,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`jazehin`@`localhost` SQL SECURITY DEFINER VI
 --
 DROP TABLE IF EXISTS `not_yet_published`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`jazehin`@`localhost` SQL SECURITY DEFINER VIEW `not_yet_published`  AS SELECT `books`.`isbn` AS `isbn` FROM `books` WHERE (`books`.`date_published` > curdate()) ORDER BY `books`.`date_published` ASC ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `not_yet_published`  AS SELECT `books`.`isbn` AS `isbn` FROM `books` WHERE (`books`.`date_published` > curdate()) ORDER BY `books`.`date_published` ASC ;
 
 -- --------------------------------------------------------
 
@@ -1032,7 +1032,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`jazehin`@`localhost` SQL SECURITY DEFINER VI
 --
 DROP TABLE IF EXISTS `sales_by_genres`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`jazehin`@`localhost` SQL SECURITY DEFINER VIEW `sales_by_genres`  AS SELECT `genres`.`genre` AS `genre`, sum(`order_details`.`quantity`) AS `SUM(quantity)`, sum((`order_details`.`quantity` * `order_details`.`price`)) AS `SUM(quantity * order_details.price)` FROM (((`genres` join `books_genres` on((`genres`.`genre_id` = `books_genres`.`genre_id`))) join `books` on((`books`.`isbn` = `books_genres`.`isbn`))) join `order_details` on((`order_details`.`isbn` = `books`.`isbn`))) GROUP BY `genres`.`genre` HAVING (sum((`order_details`.`quantity` * `order_details`.`price`)) > 0) ORDER BY sum((`order_details`.`quantity` * `order_details`.`price`)) DESC ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `sales_by_genres`  AS SELECT `genres`.`genre` AS `genre`, sum(`order_details`.`quantity`) AS `SUM(quantity)`, sum((`order_details`.`quantity` * `order_details`.`price`)) AS `SUM(quantity * order_details.price)` FROM (((`genres` join `books_genres` on((`genres`.`genre_id` = `books_genres`.`genre_id`))) join `books` on((`books`.`isbn` = `books_genres`.`isbn`))) join `order_details` on((`order_details`.`isbn` = `books`.`isbn`))) GROUP BY `genres`.`genre` HAVING (sum((`order_details`.`quantity` * `order_details`.`price`)) > 0) ORDER BY sum((`order_details`.`quantity` * `order_details`.`price`)) DESC ;
 
 -- --------------------------------------------------------
 
@@ -1041,7 +1041,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`jazehin`@`localhost` SQL SECURITY DEFINER VI
 --
 DROP TABLE IF EXISTS `sales_by_publishers`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`jazehin`@`localhost` SQL SECURITY DEFINER VIEW `sales_by_publishers`  AS SELECT `publishers`.`publisher` AS `publisher`, sum(`order_details`.`quantity`) AS `SUM(quantity)`, sum((`order_details`.`quantity` * `order_details`.`price`)) AS `SUM(quantity * order_details.price)` FROM ((`publishers` join `books` on((`publishers`.`publisher_id` = `books`.`publisher_id`))) join `order_details` on((`order_details`.`isbn` = `books`.`isbn`))) WHERE (`publishers`.`publisher` is not null) GROUP BY `publishers`.`publisher` HAVING (sum((`order_details`.`quantity` * `order_details`.`price`)) > 0) ORDER BY sum((`order_details`.`quantity` * `order_details`.`price`)) DESC ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `sales_by_publishers`  AS SELECT `publishers`.`publisher` AS `publisher`, sum(`order_details`.`quantity`) AS `SUM(quantity)`, sum((`order_details`.`quantity` * `order_details`.`price`)) AS `SUM(quantity * order_details.price)` FROM ((`publishers` join `books` on((`publishers`.`publisher_id` = `books`.`publisher_id`))) join `order_details` on((`order_details`.`isbn` = `books`.`isbn`))) WHERE (`publishers`.`publisher` is not null) GROUP BY `publishers`.`publisher` HAVING (sum((`order_details`.`quantity` * `order_details`.`price`)) > 0) ORDER BY sum((`order_details`.`quantity` * `order_details`.`price`)) DESC ;
 
 -- --------------------------------------------------------
 
@@ -1050,7 +1050,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`jazehin`@`localhost` SQL SECURITY DEFINER VI
 --
 DROP TABLE IF EXISTS `sales_by_writers`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`jazehin`@`localhost` SQL SECURITY DEFINER VIEW `sales_by_writers`  AS SELECT `writers`.`writer` AS `writer`, sum(`order_details`.`quantity`) AS `SUM(quantity)`, sum((`order_details`.`quantity` * `order_details`.`price`)) AS `SUM(quantity * order_details.price)` FROM (((`writers` join `books_writers` on((`writers`.`writer_id` = `books_writers`.`writer_id`))) join `books` on((`books`.`isbn` = `books_writers`.`isbn`))) join `order_details` on((`order_details`.`isbn` = `books`.`isbn`))) GROUP BY `writers`.`writer` HAVING (sum((`order_details`.`quantity` * `order_details`.`price`)) > 0) ORDER BY sum((`order_details`.`quantity` * `order_details`.`price`)) DESC ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `sales_by_writers`  AS SELECT `writers`.`writer` AS `writer`, sum(`order_details`.`quantity`) AS `SUM(quantity)`, sum((`order_details`.`quantity` * `order_details`.`price`)) AS `SUM(quantity * order_details.price)` FROM (((`writers` join `books_writers` on((`writers`.`writer_id` = `books_writers`.`writer_id`))) join `books` on((`books`.`isbn` = `books_writers`.`isbn`))) join `order_details` on((`order_details`.`isbn` = `books`.`isbn`))) GROUP BY `writers`.`writer` HAVING (sum((`order_details`.`quantity` * `order_details`.`price`)) > 0) ORDER BY sum((`order_details`.`quantity` * `order_details`.`price`)) DESC ;
 
 -- --------------------------------------------------------
 
@@ -1059,7 +1059,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`jazehin`@`localhost` SQL SECURITY DEFINER VI
 --
 DROP TABLE IF EXISTS `sales_of_last_month`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`jazehin`@`localhost` SQL SECURITY DEFINER VIEW `sales_of_last_month`  AS SELECT `books`.`isbn` AS `isbn`, `books`.`title` AS `title`, sum(`order_details`.`quantity`) AS `sum(order_details.quantity)`, sum((`order_details`.`quantity` * `order_details`.`price`)) AS `sum(order_details.quantity * order_details.price)` FROM ((`books` join `order_details` on((`order_details`.`isbn` = `books`.`isbn`))) join `orders` on((`order_details`.`order_id` = `orders`.`order_id`))) WHERE (`orders`.`order_date` >= (curdate() - interval 1 month)) GROUP BY `books`.`isbn` HAVING (sum((`order_details`.`quantity` * `order_details`.`price`)) > 0) ORDER BY sum((`order_details`.`quantity` * `order_details`.`price`)) DESC ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `sales_of_last_month`  AS SELECT `books`.`isbn` AS `isbn`, `books`.`title` AS `title`, sum(`order_details`.`quantity`) AS `sum(order_details.quantity)`, sum((`order_details`.`quantity` * `order_details`.`price`)) AS `sum(order_details.quantity * order_details.price)` FROM ((`books` join `order_details` on((`order_details`.`isbn` = `books`.`isbn`))) join `orders` on((`order_details`.`order_id` = `orders`.`order_id`))) WHERE (`orders`.`order_date` >= (curdate() - interval 1 month)) GROUP BY `books`.`isbn` HAVING (sum((`order_details`.`quantity` * `order_details`.`price`)) > 0) ORDER BY sum((`order_details`.`quantity` * `order_details`.`price`)) DESC ;
 
 -- --------------------------------------------------------
 
@@ -1068,7 +1068,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`jazehin`@`localhost` SQL SECURITY DEFINER VI
 --
 DROP TABLE IF EXISTS `sales_of_last_quarter`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`jazehin`@`localhost` SQL SECURITY DEFINER VIEW `sales_of_last_quarter`  AS SELECT `books`.`isbn` AS `isbn`, `books`.`title` AS `title`, sum(`order_details`.`quantity`) AS `SUM(order_details.quantity)`, sum((`order_details`.`quantity` * `order_details`.`price`)) AS `SUM(order_details.quantity * order_details.price)` FROM ((`books` join `order_details` on((`order_details`.`isbn` = `books`.`isbn`))) join `orders` on((`order_details`.`order_id` = `orders`.`order_id`))) WHERE (`orders`.`order_date` >= (curdate() - interval 3 month)) GROUP BY `books`.`isbn` HAVING (sum((`order_details`.`quantity` * `order_details`.`price`)) > 0) ORDER BY sum((`order_details`.`quantity` * `order_details`.`price`)) DESC ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `sales_of_last_quarter`  AS SELECT `books`.`isbn` AS `isbn`, `books`.`title` AS `title`, sum(`order_details`.`quantity`) AS `SUM(order_details.quantity)`, sum((`order_details`.`quantity` * `order_details`.`price`)) AS `SUM(order_details.quantity * order_details.price)` FROM ((`books` join `order_details` on((`order_details`.`isbn` = `books`.`isbn`))) join `orders` on((`order_details`.`order_id` = `orders`.`order_id`))) WHERE (`orders`.`order_date` >= (curdate() - interval 3 month)) GROUP BY `books`.`isbn` HAVING (sum((`order_details`.`quantity` * `order_details`.`price`)) > 0) ORDER BY sum((`order_details`.`quantity` * `order_details`.`price`)) DESC ;
 
 -- --------------------------------------------------------
 
@@ -1077,7 +1077,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`jazehin`@`localhost` SQL SECURITY DEFINER VI
 --
 DROP TABLE IF EXISTS `sales_of_last_week`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`jazehin`@`localhost` SQL SECURITY DEFINER VIEW `sales_of_last_week`  AS SELECT `books`.`isbn` AS `isbn`, `books`.`title` AS `title`, sum(`order_details`.`quantity`) AS `SUM(order_details.quantity)`, sum((`order_details`.`quantity` * `order_details`.`price`)) AS `SUM(order_details.quantity * order_details.price)` FROM ((`books` join `order_details` on((`order_details`.`isbn` = `books`.`isbn`))) join `orders` on((`order_details`.`order_id` = `orders`.`order_id`))) WHERE (`orders`.`order_date` >= (curdate() - interval 7 day)) GROUP BY `books`.`isbn` HAVING (sum((`order_details`.`quantity` * `order_details`.`price`)) > 0) ORDER BY sum((`order_details`.`quantity` * `order_details`.`price`)) DESC ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `sales_of_last_week`  AS SELECT `books`.`isbn` AS `isbn`, `books`.`title` AS `title`, sum(`order_details`.`quantity`) AS `SUM(order_details.quantity)`, sum((`order_details`.`quantity` * `order_details`.`price`)) AS `SUM(order_details.quantity * order_details.price)` FROM ((`books` join `order_details` on((`order_details`.`isbn` = `books`.`isbn`))) join `orders` on((`order_details`.`order_id` = `orders`.`order_id`))) WHERE (`orders`.`order_date` >= (curdate() - interval 7 day)) GROUP BY `books`.`isbn` HAVING (sum((`order_details`.`quantity` * `order_details`.`price`)) > 0) ORDER BY sum((`order_details`.`quantity` * `order_details`.`price`)) DESC ;
 
 -- --------------------------------------------------------
 
@@ -1086,7 +1086,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`jazehin`@`localhost` SQL SECURITY DEFINER VI
 --
 DROP TABLE IF EXISTS `sales_of_last_year`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`jazehin`@`localhost` SQL SECURITY DEFINER VIEW `sales_of_last_year`  AS SELECT `books`.`isbn` AS `isbn`, `books`.`title` AS `title`, sum(`order_details`.`quantity`) AS `SUM(order_details.quantity)`, sum((`order_details`.`quantity` * `order_details`.`price`)) AS `SUM(order_details.quantity * order_details.price)` FROM ((`books` join `order_details` on((`order_details`.`isbn` = `books`.`isbn`))) join `orders` on((`order_details`.`order_id` = `orders`.`order_id`))) WHERE (`orders`.`order_date` >= (curdate() - interval 1 year)) GROUP BY `books`.`isbn` HAVING (sum(`order_details`.`quantity`) > 0) ORDER BY sum(`order_details`.`quantity`) DESC ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `sales_of_last_year`  AS SELECT `books`.`isbn` AS `isbn`, `books`.`title` AS `title`, sum(`order_details`.`quantity`) AS `SUM(order_details.quantity)`, sum((`order_details`.`quantity` * `order_details`.`price`)) AS `SUM(order_details.quantity * order_details.price)` FROM ((`books` join `order_details` on((`order_details`.`isbn` = `books`.`isbn`))) join `orders` on((`order_details`.`order_id` = `orders`.`order_id`))) WHERE (`orders`.`order_date` >= (curdate() - interval 1 year)) GROUP BY `books`.`isbn` HAVING (sum(`order_details`.`quantity`) > 0) ORDER BY sum(`order_details`.`quantity`) DESC ;
 
 --
 -- Indexek a kiírt táblákhoz
